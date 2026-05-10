@@ -221,10 +221,10 @@ onMounted(() => {
   row-gap: 360px;
 }
 
-/* Ajustar a 3 columnas exactas */
+/* Ajustar a 4 columnas exactas */
 @media (min-width: 1024px) {
   .cosmetics-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 48px 48px;
     row-gap: 240px;
   }
@@ -232,7 +232,7 @@ onMounted(() => {
 
 @media (max-width: 1023px) and (min-width: 768px) {
   .cosmetics-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 40px 40px;
     row-gap: 210px;
   }
