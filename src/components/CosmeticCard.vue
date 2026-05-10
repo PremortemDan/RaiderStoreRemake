@@ -2,12 +2,13 @@
   <div class="cosmetic-card">
     <div class="card-image-container">
       <img :src="cosmetic.imageUrl" :alt="cosmetic.name" class="card-image" />
-      <div v-if="cosmetic.isNew" class="badge-new">NUEVO</div>
+      <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
+      <h3 class="card-title">{{ cosmetic.name }}</h3>
       <div class="price-badge">{{ cosmetic.price }}</div>
+      <div class="fade-image"></div>
+      
     </div>
     <div class="card-content">
-      <h3 class="card-title">{{ cosmetic.name }}</h3>
-      <p class="card-type">{{ cosmetic.type }}</p>
     </div>
   </div>
 </template>
@@ -68,32 +69,46 @@ defineProps({
 
 .badge-new {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: linear-gradient(135deg, #ff006e, #ff3c87);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: bold;
+  bottom: 100px;
+  left: 10px;
+  background: #F7FF19;
+  color: rgb(0, 0, 0);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Arial Black', sans-serif;
+  font-weight: 1000;
   text-transform: uppercase;
+  transform: skewX(-10deg) rotate(0deg);
+  z-index: 2;
 }
 
 .price-badge {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  background: rgba(170, 59, 255, 0.9);
+  bottom: 1px;
+  left: 0px;
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f3f4f6;
+  line-height: 1.3;
   display: flex;
   align-items: center;
   gap: 4px;
+  z-index: 2;
 }
 
+.fade-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #003B8C);
+  z-index: 1;
+}
 .card-content {
   padding: 16px;
   display: flex;
@@ -104,10 +119,24 @@ defineProps({
 
 .card-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 25px;
   font-weight: 600;
   color: #f3f4f6;
   line-height: 1.3;
+  
+  position: absolute;
+  /* Posicionamiento corregido */
+  bottom: 35px;       /* En lugar de top 85%, usa bottom para más precisión */
+  left: 12px;         /* Empieza desde la izquierda */
+  right: 12px;        /* Deja un margen a la derecha, permitiendo que se estire */
+  
+  z-index: 2;
+
+  /* Control de filas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Máximo 2 filas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;     /* Corta el texto si es muy largo y pone puntos suspensivos */
 }
 
 .card-type {
