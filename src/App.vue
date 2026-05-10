@@ -1,4 +1,5 @@
 <script setup>
+import CosmeticStore from './components/CosmeticStore.vue';
 </script>
 
 <template>
@@ -34,7 +35,7 @@
       </div>
     </nav>
     <main class="main-content">
-      <h1>Bienvenido a RaiderStore</h1>
+      <CosmeticStore />
     </main>
   </div>
 </template>
