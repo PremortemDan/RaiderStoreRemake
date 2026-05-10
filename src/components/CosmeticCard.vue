@@ -28,7 +28,7 @@ defineProps({
 .cosmetic-card {
 
   background: linear-gradient(180deg, #001637, #003B8D 100%);
-  border-radius: 12px;
+  border-radius: 25px;
   overflow: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -115,8 +115,8 @@ defineProps({
   height: 50%;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #003B8C);
   z-index: 1;
-  border-bottom-right-radius: 12px;
-  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
 }
 .card-content {
   padding: 16px;

@@ -2,7 +2,7 @@
   <section class="store-section">
     <div class="store-header">
       <h2>Tienda de Cosméticos</h2>
-      <p class="store-subtitle">Descubre los últimos artículos disponibles</p>
+      <p class="store-subtitle">LO MAS NUEVO</p>
     </div>
 
     <div v-if="loading" class="loading">
@@ -194,9 +194,24 @@ onMounted(() => {
 }
 
 .store-subtitle {
-  margin: 0;
-  color: #9ca3af;
-  font-size: 16px;
+  margin: 0; 
+  padding-bottom: 50px;
+  
+  /* 2. Forzamos a que el texto NO rompa línea */
+  white-space: nowrap; 
+  
+  color: #ffffff;
+  font-size: 50px;
+  
+  /* 3. El peso máximo estándar es 900 */
+  font-weight: 900; 
+  letter-spacing: -2px;       /* Junta un poco las letras */
+  line-height: 1;
+  font-style: oblique;
+  
+  /* 4. Opcional: Centrarlo si es necesario */
+  text-align: left;
+  width: 100%;
 }
 
 .cosmetics-grid {
