@@ -25,7 +25,7 @@ defineProps({
 <style scoped>
 .cosmetic-card {
 
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(180deg, #001637, #003B8D 100%);
   border-radius: 12px;
   overflow: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -37,29 +37,29 @@ defineProps({
 }
 
 .cosmetic-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(170, 59, 255, 0.3);
+  box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
 }
 
 .card-image-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.2;
-  overflow: visible;
-  background: rgba(170, 59, 255, 0);
-  margin-top: -60px;
-  margin-left: -16px;
+  aspect-ratio: 0.6;
+  overflow: hidden;
+  background: rgba(250, 0, 0, 0);
+  margin-top: -70px;
+  margin-left: 0px;
   margin-right: -16px;
-  padding-top: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-top: -15px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .card-image {
-  width: 100%;
+  width: 150%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
+  margin-left: -25%;
 }
 
 .cosmetic-card:hover .card-image {
@@ -149,26 +149,4 @@ defineProps({
   color: #f472b6;
 }
 
-.card-button {
-  margin-top: auto;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #aa3bff, #c084fc);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-}
-
-.card-button:hover {
-  background: linear-gradient(135deg, #c084fc, #e9d5ff);
-  transform: scale(1.02);
-}
-
-.card-button:active {
-  transform: scale(0.98);
-}
 </style>

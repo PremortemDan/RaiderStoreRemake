@@ -203,7 +203,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 48px 48px;
-  row-gap: 80px;
+  row-gap: 360px;
 }
 
 /* Ajustar a 3 columnas exactas */
@@ -211,7 +211,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 48px 48px;
-    row-gap: 80px;
+    row-gap: 240px;
   }
 }
 
@@ -219,7 +219,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px 40px;
-    row-gap: 70px;
+    row-gap: 210px;
   }
 }
 
@@ -227,7 +227,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: 1fr;
     gap: 32px 32px;
-    row-gap: 60px;
+    row-gap: 180px;
   }
 
   .store-header h2 {
