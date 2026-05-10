@@ -205,7 +205,7 @@ onMounted(() => {
   
   /* 3. El peso máximo estándar es 900 */
   font-weight: 900; 
-  letter-spacing: -2px;       /* Junta un poco las letras */
+  letter-spacing: -4px;       /* Junta un poco las letras */
   line-height: 1;
   font-style: oblique;
   

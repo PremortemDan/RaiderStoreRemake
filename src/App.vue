@@ -7,7 +7,7 @@ import CosmeticStore from './components/CosmeticStore.vue';
     <nav class="navbar">
       <div class="navbar-container-right">
         <div class="logo">
-          <span class="title">RaiderStore</span>
+          <img src="./assets/RaiderStore.png" alt="RaiderStore Logo" width="300" height="50">
         </div>
       </div>
       <div class="navbar-container">
@@ -42,7 +42,7 @@ import CosmeticStore from './components/CosmeticStore.vue';
 
 <style scoped>
 .navbar {
-  background-color: #111;
+  background-color: #111111c3;
   display: flex;
   padding: 0 0px;
   position: sticky;
