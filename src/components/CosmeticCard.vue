@@ -4,11 +4,12 @@
       <img :src="cosmetic.imageUrl" :alt="cosmetic.name" class="card-image" />
       <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
       <h3 class="card-title">{{ cosmetic.name }}</h3>
-      <div class="price-badge">{{ cosmetic.price }}</div>
+      <div class="price-badge">
+        <svg class="pavos-icon" width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="80" fill="white"/>
+          <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
+        {{ cosmetic.price }}</div>
       <div class="fade-image"></div>
-      
-    </div>
-    <div class="card-content">
     </div>
   </div>
 </template>
@@ -56,11 +57,11 @@ defineProps({
 }
 
 .card-image {
-  width: 150%;
+  width: 140%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
-  margin-left: -25%;
+  margin-left: -23%;
 }
 
 .cosmetic-card:hover .card-image {
@@ -83,21 +84,27 @@ defineProps({
   z-index: 2;
 }
 
+/* Ajustes en el badge para que el icono luzca bien */
 .price-badge {
   position: absolute;
-  bottom: 1px;
+  bottom: 8px; /* Ajustado un poco hacia arriba */
   left: 0px;
   color: white;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: 4px;
   font-size: 20px;
   font-weight: 600;
-  color: #f3f4f6;
-  line-height: 1.3;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px; /* Espacio entre el logo y el precio */
   z-index: 2;
+}
+
+/* Estilo específico para el icono SVG */
+.pavos-icon {
+  width: 26px;  /* Tamaño similar a la fuente */
+  height: 26px;
+  flex-shrink: 0;
 }
 
 .fade-image {
@@ -108,6 +115,8 @@ defineProps({
   height: 50%;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #003B8C);
   z-index: 1;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
 }
 .card-content {
   padding: 16px;
