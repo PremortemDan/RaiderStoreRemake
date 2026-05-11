@@ -43,7 +43,7 @@ const groupedBySeriesCosmetics = computed(() => {
   const grouped = {};
   
   cosmetics.value.forEach(cosmetic => {
-    const seriesName = cosmetic.series || 'Sin Serie';
+    const seriesName = cosmetic.series || cosmetic.layout || '';
     if (!grouped[seriesName]) {
       grouped[seriesName] = [];
     }
@@ -70,7 +70,7 @@ const fetchCosmetics = async () => {
     // Mapear y filtrar cosméticos con imágenes
     const mappedCosmetics = entries
       .filter(entry => entry.brItems && entry.brItems.length > 0)
-      .slice(0, 60) // Limitar a 60 items
+      .slice(0, 500) // Limitar a 60 items
       .map(entry => {
         const item = entry.brItems[0];
         return {
@@ -78,7 +78,7 @@ const fetchCosmetics = async () => {
           name: item.name,
           type: item.type.value,
           series: item.series?.value || '',
-          layout: item.layout?.name || '',
+          layout: entry.layout?.name || '',
           rarity: item.rarity?.displayValue || 'Común',
           price: entry.finalPrice,
           imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
@@ -90,6 +90,7 @@ const fetchCosmetics = async () => {
       });
 
     cosmetics.value = mappedCosmetics;
+    
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
     error.value = 'No se pudieron cargar los cosméticos. Por favor, intenta de nuevo.';
