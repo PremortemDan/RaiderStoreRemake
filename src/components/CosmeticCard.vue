@@ -1,14 +1,18 @@
 <template>
   <div class="cosmetic-card">
     <div class="card-image-container">
-      <img :src="cosmetic.imageUrl" :alt="cosmetic.name" class="card-image" />
+      <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
+        'card-image': ['outfit', 'character', 'skin'].includes(cosmetic.type),
+        'card-image-small': !['outfit', 'character', 'skin'].includes(cosmetic.type)
+      }" />
       <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
       <h3 class="card-title">{{ cosmetic.name }}</h3>
       <div class="price-badge">
         <svg class="pavos-icon" width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <circle cx="100" cy="100" r="80" fill="white"/>
           <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
-        {{ cosmetic.price }}</div>
+        {{ cosmetic.price }}
+      </div>
       <div class="fade-image"></div>
     </div>
   </div>
@@ -63,9 +67,21 @@ defineProps({
   transition: transform 0.3s ease;
   margin-left: -23%;
 }
+.card-image-small {
+  width: 140%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  margin-left: -23%;
+  transform: scale(0.55);
+}
 
 .cosmetic-card:hover .card-image {
   transform: scale(1.05);
+}
+
+.cosmetic-card:hover .card-image-small{
+  transform: scale(0.60);
 }
 
 .badge-new {
