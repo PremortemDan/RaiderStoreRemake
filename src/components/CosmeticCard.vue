@@ -1,5 +1,5 @@
 <template>
-  <div class="cosmetic-card">
+  <div class="cosmetic-card" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`">
     <div class="card-image-container">
       <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
         'card-image': ['outfit', 'character', 'skin'].includes(cosmetic.type),
@@ -13,7 +13,7 @@
           <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
         {{ cosmetic.price }}
       </div>
-      <div class="fade-image"></div>
+      <div class="fade-image" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`" ></div>
     </div>
   </div>
 </template>
@@ -172,35 +172,53 @@ defineProps({
   letter-spacing: 0.5px;
 }
 
-
-.rarity-common {
-  background: rgba(150, 150, 150, 0.3);
-  color: #d1d5db;
+/* Estilos de rareza */
+.cosmetic-card.rarity-common {
+  background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
 }
 
-.rarity-uncommon {
-  background: rgba(34, 197, 94, 0.3);
-  color: #86efac;
+.cosmetic-card.rarity-uncommon {
+  background: linear-gradient(180deg, #1a4d1a, #2d7a2d 100%);
 }
 
-.rarity-rare {
-  background: rgba(59, 130, 246, 0.3);
-  color: #93c5fd;
+.cosmetic-card.rarity-rare {
+  background: linear-gradient(180deg, #001637, #003B8D 100%);
 }
 
-.rarity-epic {
-  background: rgba(168, 85, 247, 0.3);
-  color: #d8b4fe;
+.cosmetic-card.rarity-epic {
+  background: linear-gradient(180deg, #D96CF8, #953CAD 100%);
 }
 
-.rarity-legendary {
-  background: rgba(249, 115, 22, 0.3);
-  color: #fed7aa;
+.cosmetic-card.rarity-legendary {
+  background: linear-gradient(180deg, #5c3a1a, #c97f1c 100%);
 }
 
-.rarity-mythic {
-  background: rgba(236, 72, 153, 0.3);
-  color: #f472b6;
+.cosmetic-card.rarity-mythic {
+  background: linear-gradient(180deg, #1a3a5c, #1f7f9f 100%);
+}
+
+.fade-image.rarity-common {
+  background: linear-gradient(180deg, #2a2a2a00, #4a4a4a 100%);
+}
+
+.fade-image.rarity-uncommon {
+  background: linear-gradient(180deg, #1a4d1a00, #2d7a2d 100%);
+}
+
+.fade-image.rarity-rare {
+  background: linear-gradient(180deg, #00163700, #003B8D 100%);
+}
+
+.fade-image.rarity-epic {
+  background: linear-gradient(180deg, #da6cf800, #953CAD 100%);
+}
+
+.fade-image.rarity-legendary {
+  background: linear-gradient(180deg, #5c3a1a00, #c97f1c 100%);
+}
+
+.fade-image.rarity-mythic {
+  background: linear-gradient(180deg, #1a3a5c00, #1f7f9f 100%);
 }
 
 </style>
