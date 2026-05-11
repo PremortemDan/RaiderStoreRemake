@@ -37,6 +37,17 @@
           />
         </div>
       </section>
+
+      <section v-for="(series, seriesName) in musicCosmetics" :key="'music-' + seriesName" class="series-section">
+        <h2 class="series-title">{{ seriesName }}</h2>
+        <div class="cosmetics-grid">
+          <CosmeticCard
+            v-for="cosmetic in series"
+            :key="cosmetic.offerId"
+            :cosmetic="cosmetic"
+          />
+        </div>
+      </section>
     </div>
   </section>
 </template>
@@ -53,7 +64,27 @@ const groupedBySeriesCosmetics = computed(() => {
   const grouped = {};
   
   cosmetics.value.forEach(cosmetic => {
+    // Excluir música de las secciones normales
+    if (cosmetic.type === 'Music') return;
+    
     const seriesName = cosmetic.series || cosmetic.layout || '';
+    if (!grouped[seriesName]) {
+      grouped[seriesName] = [];
+    }
+    grouped[seriesName].push(cosmetic);
+  });
+  
+  return grouped;
+});
+
+const musicCosmetics = computed(() => {
+  const grouped = {};
+  
+  cosmetics.value.forEach(cosmetic => {
+    // Solo agrupar música
+    if (cosmetic.type !== 'Music') return;
+    
+    const seriesName = cosmetic.layout || 'Jam Tracks';
     if (!grouped[seriesName]) {
       grouped[seriesName] = [];
     }

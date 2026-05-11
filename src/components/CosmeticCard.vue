@@ -3,7 +3,7 @@
     <div class="card-image-container">
       <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
         'card-image': ['outfit', 'character', 'skin'].includes(cosmetic.type),
-        'card-image-small': !['outfit', 'character', 'skin'].includes(cosmetic.type)
+        'card-image-small': !['outfit', 'character'].includes(cosmetic.type)
       }" />
       <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
       <h3 class="card-title">{{ cosmetic.name }}</h3>
