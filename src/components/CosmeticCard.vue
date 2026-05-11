@@ -178,7 +178,7 @@ defineProps({
 }
 
 .cosmetic-card.rarity-uncommon {
-  background: linear-gradient(180deg, #1a4d1a, #2d7a2d 100%);
+  background: linear-gradient(180deg, #143b14, #2d7a2d 100%);
 }
 
 .cosmetic-card.rarity-rare {

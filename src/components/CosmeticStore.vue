@@ -16,23 +16,42 @@
       <p>{{ error }}</p>
     </div>
 
-    <div v-else class="cosmetics-grid">
-      <CosmeticCard
-        v-for="cosmetic in cosmetics"
-        :key="cosmetic.offerId"
-        :cosmetic="cosmetic"
-      />
+    <div v-else>
+      <section v-for="(series, seriesName) in groupedBySeriesCosmetics" :key="seriesName" class="series-section">
+        <h2 class="series-title">{{ seriesName }}</h2>
+        <div class="cosmetics-grid">
+          <CosmeticCard
+            v-for="cosmetic in series"
+            :key="cosmetic.offerId"
+            :cosmetic="cosmetic"
+          />
+        </div>
+      </section>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
 
 const cosmetics = ref([]);
 const loading = ref(true);
 const error = ref(null);
+
+const groupedBySeriesCosmetics = computed(() => {
+  const grouped = {};
+  
+  cosmetics.value.forEach(cosmetic => {
+    const seriesName = cosmetic.series || 'Sin Serie';
+    if (!grouped[seriesName]) {
+      grouped[seriesName] = [];
+    }
+    grouped[seriesName].push(cosmetic);
+  });
+  
+  return grouped;
+});
 
 const fetchCosmetics = async () => {
   try {
@@ -58,6 +77,8 @@ const fetchCosmetics = async () => {
           offerId: entry.offerId,
           name: item.name,
           type: item.type.value,
+          series: item.series?.value || '',
+          layout: item.layout?.name || '',
           rarity: item.rarity?.displayValue || 'Común',
           price: entry.finalPrice,
           imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
@@ -133,6 +154,27 @@ onMounted(() => {
 .store-subtitle {
   margin: 0; 
   padding-bottom: 50px;
+  
+  /* 2. Forzamos a que el texto NO rompa línea */
+  white-space: nowrap; 
+  
+  color: #ffffff;
+  font-size: 50px;
+  
+  /* 3. El peso máximo estándar es 900 */
+  font-weight: 900; 
+  letter-spacing: -4px;       /* Junta un poco las letras */
+  line-height: 1;
+  font-style: oblique;
+  
+  /* 4. Opcional: Centrarlo si es necesario */
+  text-align: left;
+  width: 100%;
+}
+
+.series-title {
+  margin: 0; 
+  padding-bottom: 70px;
   
   /* 2. Forzamos a que el texto NO rompa línea */
   white-space: nowrap; 
@@ -238,5 +280,23 @@ onMounted(() => {
 
 .error p {
   margin: 0;
+}
+
+/* Estilos para secciones de series */
+.series-section {
+  margin-bottom: 80px;
+}
+
+
+
+@media (max-width: 767px) {
+  .series-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .series-section {
+    margin-bottom: 50px;
+  }
 }
 </style>
