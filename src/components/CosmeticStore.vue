@@ -80,28 +80,70 @@ const fetchCosmetics = async () => {
     }
 
     const entries = data.data.entries;
+    const mappedCosmetics = [];
 
-    // Mapear y filtrar cosméticos con imágenes
-    const mappedCosmetics = entries
-      .filter(entry => entry.brItems && entry.brItems.length > 0)
-      .slice(0, 500) // Limitar a 60 items
-      .map(entry => {
-        const item = entry.brItems[0];
-        return {
-          offerId: entry.offerId,
-          name: item.name,
-          type: item.type.value,
-          series: item.series?.value || '',
-          layout: entry.layout?.name || '',
-          rarity: item.rarity?.displayValue || 'Común',
-          price: entry.finalPrice,
-          imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
-          regularPrice: entry.regularPrice,
-          isNew: entry.banner?.backendValue === 'New',
-          inDate: entry.inDate,
-          outDate: entry.outDate,
-        };
-      });
+    // Procesar todos los tipos de cosméticos
+    entries.slice(0, 500).forEach(entry => {
+      // Procesar brItems (outfits, emotes, etc.)
+      if (entry.brItems && entry.brItems.length > 0) {
+        entry.brItems.forEach(item => {
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: item.name,
+            type: item.type.value,
+            series: item.series?.value || '',
+            layout: entry.layout?.name || '',
+            rarity: item.rarity?.displayValue || 'Común',
+            price: entry.finalPrice,
+            imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
+          });
+        });
+      }
+
+      // Procesar cars/ruedas (wheels)
+      if (entry.cars && entry.cars.length > 0) {
+        entry.cars.forEach(car => {
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: car.name,
+            type: car.type.value,
+            series: car.series?.value || '',
+            layout: entry.layout?.name || entry.bundle?.name || '',
+            rarity: car.rarity?.displayValue || 'Común',
+            price: entry.finalPrice,
+            imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
+          });
+        });
+      }
+
+      // Procesar tracks (música)
+      if (entry.tracks && entry.tracks.length > 0) {
+        entry.tracks.forEach(track => {
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: track.title,
+            type: 'Music',
+            series: '',
+            layout: entry.layout?.name || 'Jam Tracks',
+            rarity: 'Uncommon',
+            price: entry.finalPrice,
+            imageUrl: track.albumArt || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
+          });
+        });
+      }
+    });
 
     cosmetics.value = mappedCosmetics;
     
