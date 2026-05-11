@@ -259,9 +259,20 @@ onMounted(() => {
   }
 
   .store-header {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
+  }
+
+  .Sponsor img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .Store-sponsor {
+    font-size: 10px;
+    padding-bottom: 6px;
   }
 }
+
 
 .loading,
 .error {

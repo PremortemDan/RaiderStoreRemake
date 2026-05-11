@@ -251,37 +251,41 @@ defineProps({
   }
 
   .card-title {
-    font-size: 10px;
-    bottom: 20px;
+    font-size: 7px;
+    font-weight: 900;
+    bottom: 18px;
     left: 4px;
     right: 4px;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     line-height: 1.2;
   }
 
   .price-badge {
-    font-size: 10px;
-    bottom: 4px;
+    font-size: 7px;
+    bottom: 0px;
     left: 0px;
-    padding: 1px 3px;
+    padding: 0px 3px;
     gap: 2px;
+    align-items: left;
   }
 
   .pavos-icon {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
+    padding: 0px 0px 5px 0px;
   }
 
   .badge-new {
-    font-size: 8px;
-    bottom: 52px;
+    font-size: 7px;
+    bottom: 48px;
     left: 3px;
-    padding: 1px 4px;
-    border-radius: 4px;
+    padding: 1px 3px;
+    border-radius: 3px;
   }
 
   .fade-image {
     height: 45%;
   }
+
 }
 </style>
