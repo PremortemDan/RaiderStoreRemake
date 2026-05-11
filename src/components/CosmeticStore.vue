@@ -245,17 +245,21 @@ onMounted(() => {
 
 @media (max-width: 767px) {
   .cosmetics-grid {
-    grid-template-columns: 1fr;
-    gap: 32px 20px;
-    row-gap: 180px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    row-gap: 70px;
   }
 
   .store-header h2 {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   .store-section {
-    padding: 20px 16px;
+    padding: 10px 8px;
+  }
+
+  .store-header {
+    margin-bottom: 16px;
   }
 }
 
@@ -306,12 +310,14 @@ onMounted(() => {
 
 @media (max-width: 767px) {
   .series-title {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 16px;
+    padding-bottom: 20px;
+    letter-spacing: -1px;
+    white-space: normal;
   }
   
   .series-section {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
 }
 </style>

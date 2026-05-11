@@ -221,4 +221,67 @@ defineProps({
   background: linear-gradient(180deg, #1a3a5c00, #1f7f9f 100%);
 }
 
+/* ========== MÓVIL: 4 columnas ========== */
+@media (max-width: 767px) {
+  .cosmetic-card {
+    border-radius: 6px;
+  }
+
+  .card-image-container {
+    margin-top: -20px;
+    margin-right: -6px;
+    aspect-ratio: 0.75;
+  }
+
+  .card-image {
+    width: 140%;
+    margin-left: -20%;
+  }
+  .card-image-small {
+    width: 140%;
+    margin-left: -20%;
+    transform: scale(0.75);
+  }
+
+  .cosmetic-card:hover .card-image {
+    transform: scale(1.03);
+  }
+  .cosmetic-card:hover .card-image-small {
+    transform: scale(0.78);
+  }
+
+  .card-title {
+    font-size: 10px;
+    bottom: 18px;
+    left: 4px;
+    right: 4px;
+    -webkit-line-clamp: 1;
+    line-height: 1.2;
+  }
+
+  .price-badge {
+    font-size: 10px;
+    bottom: 2px;
+    left: 0px;
+    padding: 1px 3px;
+    gap: 2px;
+  }
+
+  .pavos-icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .badge-new {
+    font-size: 8px;
+    bottom: 48px;
+    left: 3px;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+
+  .fade-image {
+    height: 40%;
+  }
+}
 </style>

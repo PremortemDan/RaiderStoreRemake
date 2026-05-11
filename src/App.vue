@@ -163,4 +163,53 @@ title {
   color: #f3f4f6;
   font-size: 32px;
 }
+
+/* ========== MÓVIL: Navbar compacto ========== */
+@media (max-width: 767px) {
+  .navbar {
+    flex-wrap: nowrap;
+    padding: 0 6px;
+    align-items: center;
+    height: 44px;
+  }
+
+  .navbar-container-right .logo img {
+    width: 80px;
+    height: auto;
+  }
+
+  .navbar-container {
+    flex: 1;
+    justify-content: flex-end;
+    height: 44px;
+    gap: 4px;
+  }
+
+  .navbar-container-right {
+    height: 44px;
+    width: auto;
+  }
+
+  .search-container {
+    flex: 1;
+    min-width: 0;
+    padding-left: 8px;
+  }
+
+  .search-input {
+    width: 60px;
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .world-icon {
+    width: 18px;
+    padding: 0 3px;
+  }
+
+  .cart-icon {
+    width: 18px;
+    padding: 0 3px;
+  }
+}
 </style>
