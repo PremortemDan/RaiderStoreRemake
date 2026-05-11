@@ -144,7 +144,7 @@ defineProps({
 
 .card-title {
   margin: 0;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: 600;
   color: #f3f4f6;
   line-height: 1.3;

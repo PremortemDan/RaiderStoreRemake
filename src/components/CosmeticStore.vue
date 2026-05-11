@@ -3,7 +3,7 @@
     <div class="store-header">
       <div class="Sponsor">
         <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
-      <p class="Store-sponsor">Power by epic Api</p>
+      <p class="Store-sponsor">Powered by Epic api</p>
       </div>
     </div>
     <div v-if="loading" class="loading">
@@ -195,13 +195,14 @@ onMounted(() => {
   white-space: nowrap; 
   
   color: #ffffff;
-  font-size: 50px;
+  font-size: 100px;
   
   /* 3. El peso máximo estándar es 900 */
   font-weight: 900; 
   letter-spacing: -4px;       /* Junta un poco las letras */
   line-height: 1;
   font-style: oblique;
+  text-transform: uppercase;
   
   /* 4. Opcional: Centrarlo si es necesario */
   text-align: left;
@@ -210,7 +211,7 @@ onMounted(() => {
 
 .Store-sponsor {
   margin: 0;
-  font-size: 14px;
+  font-size: 20px;
   color: #ffffff;
   letter-spacing: 0.5px;
   text-align: left;
@@ -233,6 +234,11 @@ onMounted(() => {
     gap: 20px 20px;
     row-gap: 240px;
   }
+  .series-title {
+    font-size: 40px;
+    padding: 50px 0 70px 0;
+    letter-spacing: -1px;
+  }
 }
 
 @media (max-width: 1023px) and (min-width: 768px) {
@@ -241,6 +247,11 @@ onMounted(() => {
     gap: 40px 20px;
     row-gap: 210px;
   }
+   .series-title {
+    font-size: 25px;
+    padding-bottom: 40px;
+    letter-spacing: -1px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -248,6 +259,11 @@ onMounted(() => {
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
     row-gap: 70px;
+  }
+   .series-title {
+    font-size: 18px;
+    padding-bottom: 40px;
+    letter-spacing: -1px;
   }
 
   .store-header h2 {
@@ -321,8 +337,8 @@ onMounted(() => {
 
 @media (max-width: 767px) {
   .series-title {
-    font-size: 16px;
-    padding-bottom: 20px;
+    font-size: 18px;
+    padding-bottom: 40px;
     letter-spacing: -1px;
     white-space: normal;
   }
