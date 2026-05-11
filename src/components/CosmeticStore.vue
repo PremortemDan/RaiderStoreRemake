@@ -5,7 +5,6 @@
         <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
       <p class="Store-sponsor">Power by epic Api</p>
       </div>
-      <p class="store-subtitle">LO MAS NUEVO</p>
     </div>
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
@@ -17,6 +16,17 @@
     </div>
 
     <div v-else>
+      <section v-if="newCosmetics.length > 0" class="series-section">
+        <h2 class="series-title">Lo Más Nuevo</h2>
+        <div class="cosmetics-grid">
+          <CosmeticCard
+            v-for="cosmetic in newCosmetics"
+            :key="cosmetic.offerId"
+            :cosmetic="cosmetic"
+          />
+        </div>
+      </section>
+
       <section v-for="(series, seriesName) in groupedBySeriesCosmetics" :key="seriesName" class="series-section">
         <h2 class="series-title">{{ seriesName }}</h2>
         <div class="cosmetics-grid">
@@ -51,6 +61,10 @@ const groupedBySeriesCosmetics = computed(() => {
   });
   
   return grouped;
+});
+
+const newCosmetics = computed(() => {
+  return cosmetics.value.filter(cosmetic => cosmetic.isNew === true);
 });
 
 const fetchCosmetics = async () => {
