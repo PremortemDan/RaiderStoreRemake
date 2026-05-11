@@ -1,10 +1,12 @@
 <template>
   <section class="store-section">
     <div class="store-header">
-      <h2>Tienda de Cosméticos</h2>
+      <div class="Sponsor">
+        <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
+      <p class="Store-sponsor">Power by epic Api</p>
+      </div>
       <p class="store-subtitle">LO MAS NUEVO</p>
     </div>
-
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
       <p>Cargando cosméticos...</p>
@@ -193,6 +195,13 @@ onMounted(() => {
   background-clip: text;
 }
 
+.Sponsor{
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    gap: 8px;
+}
+
 .store-subtitle {
   margin: 0; 
   padding-bottom: 50px;
@@ -212,6 +221,17 @@ onMounted(() => {
   /* 4. Opcional: Centrarlo si es necesario */
   text-align: left;
   width: 100%;
+}
+
+.Store-sponsor {
+  margin: 0;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  text-align: left;
+  font-weight: 800;
+  letter-spacing: 0px; 
+  padding-bottom: 20px;
 }
 
 .cosmetics-grid {
