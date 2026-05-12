@@ -56,14 +56,22 @@
             <span class="total-usd">${{ totalUSD }}</span>
           </div>
         </div>
-        <button class="checkout-btn">Proceder al Pago</button>
+        <button class="checkout-btn" @click="showCheckout = true">Proceder al Pago</button>
       </div>
     </div>
+
+    <!-- Modal de Checkout -->
+    <CheckoutModal
+      :isOpen="showCheckout"
+      :items="items"
+      @close="showCheckout = false"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import CheckoutModal from './CheckoutModal.vue';
 
 const props = defineProps({
   isOpen: {
@@ -77,6 +85,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'remove-item']);
+const showCheckout = ref(false);
 
 const closeCart = () => {
   emit('close');
