@@ -1,5 +1,32 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
+import ShoppingCart from './components/ShoppingCart.vue';
+
+const cartItems = ref([]);
+const showCart = ref(false);
+
+// Escuchar evento de agregar al carrito
+onMounted(() => {
+  window.addEventListener('add-to-cart', (event) => {
+    const cosmetic = event.detail;
+    cartItems.value.push(cosmetic);
+    // Opcional: mostrar notificación
+    console.log('Producto añadido al carrito:', cosmetic.name);
+  });
+});
+
+const toggleCart = () => {
+  showCart.value = !showCart.value;
+};
+
+const closeCart = () => {
+  showCart.value = false;
+};
+
+const removeFromCart = (index) => {
+  cartItems.value.splice(index, 1);
+};
 </script>
 
 <template>
@@ -27,16 +54,27 @@ import CosmeticStore from './components/CosmeticStore.vue';
           <line x1="2" y1="12" x2="22" y2="12"></line>
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
         </svg>
-         <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-           <circle cx="9" cy="21" r="1"></circle>
-           <circle cx="20" cy="21" r="1"></circle>
-           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-         </svg>
+        <div class="cart-button-wrapper">
+          <svg class="cart-icon" :class="{ 'cart-active': cartItems.length > 0 }" @click="toggleCart" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span v-if="cartItems.length > 0" class="cart-badge">{{ cartItems.length }}</span>
+        </div>
       </div>
     </nav>
     <main class="main-content">
       <CosmeticStore />
     </main>
+
+    <!-- Carrito de Compras -->
+    <ShoppingCart
+      :isOpen="showCart"
+      :items="cartItems"
+      @close="closeCart"
+      @remove-item="removeFromCart"
+    />
   </div>
 </template>
 
@@ -92,14 +130,52 @@ title {
   color: #fff;
   cursor: pointer;
 }
+
+.cart-button-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .cart-icon {
   width: 30px;  /* Cambia el valor al tamaño que necesites */
   padding: 0 10px;
   margin-right: auto;
+  transition: all 0.3s ease;
+  color: #9ca3af;
 }
+
 .cart-icon:hover {
-  color: #fff;
+  color: #FFD700;
   cursor: pointer;
+  transform: scale(1.1);
+}
+
+.cart-icon.cart-active {
+  color: #ffffff;
+}
+
+.cart-icon.cart-active:hover {
+  color: #FFD700;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #000000;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  z-index: 10;
 }
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="cosmetic-card-wrapper">
+  <div class="cosmetic-card-wrapper" @click="selectProduct">
     <div class="cosmetic-card" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`">
       <div class="card-image-container">
         <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
@@ -31,13 +31,19 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   cosmetic: {
     type: Object,
     required: true,
     validator: (obj) => obj.name && obj.price !== undefined
   }
 });
+
+const emit = defineEmits(['select']);
+
+const selectProduct = () => {
+  emit('select', props.cosmetic);
+};
 
 // Conversión: 100 V-Bucks = 7.5 MXN
 const calculatePriceMXN = (vbucks) => {
@@ -51,8 +57,12 @@ const calculatePriceUSD = (vbucks) => {
 </script>
 
 <style scoped>
-.cosmetic-card {
+.cosmetic-card-wrapper {
+  cursor: pointer;
+  user-select: none;
+}
 
+.cosmetic-card {
   background: linear-gradient(180deg, #001637, #003B8D 100%);
   border-radius: 15px;
   overflow: visible;

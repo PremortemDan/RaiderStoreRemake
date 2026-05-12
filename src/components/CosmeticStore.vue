@@ -23,6 +23,7 @@
             v-for="cosmetic in newCosmetics"
             :key="cosmetic.offerId"
             :cosmetic="cosmetic"
+            @select="openPurchaseModal"
           />
         </div>
       </section>
@@ -34,6 +35,7 @@
             v-for="cosmetic in series"
             :key="cosmetic.offerId"
             :cosmetic="cosmetic"
+            @select="openPurchaseModal"
           />
         </div>
       </section>
@@ -45,20 +47,32 @@
             v-for="cosmetic in series"
             :key="cosmetic.offerId"
             :cosmetic="cosmetic"
+            @select="openPurchaseModal"
           />
         </div>
       </section>
     </div>
+
+    <!-- Modal de Compra -->
+    <PurchaseModal
+      :isOpen="showPurchaseModal"
+      :cosmetic="selectedCosmetic"
+      @close="showPurchaseModal = false"
+      @add-to-cart="handleAddToCart"
+    />
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
+import PurchaseModal from './PurchaseModal.vue';
 
 const cosmetics = ref([]);
 const loading = ref(true);
 const error = ref(null);
+const showPurchaseModal = ref(false);
+const selectedCosmetic = ref(null);
 
 const groupedBySeriesCosmetics = computed(() => {
   const grouped = {};
@@ -97,6 +111,17 @@ const musicCosmetics = computed(() => {
 const newCosmetics = computed(() => {
   return cosmetics.value.filter(cosmetic => cosmetic.isNew === true);
 });
+
+const openPurchaseModal = (cosmetic) => {
+  selectedCosmetic.value = cosmetic;
+  showPurchaseModal.value = true;
+};
+
+const handleAddToCart = (cosmetic) => {
+  // Emitir evento hacia el componente padre (App.vue) con el producto
+  const event = new CustomEvent('add-to-cart', { detail: cosmetic });
+  window.dispatchEvent(event);
+};
 
 const fetchCosmetics = async () => {
   try {
