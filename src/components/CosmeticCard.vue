@@ -1,19 +1,31 @@
 <template>
-  <div class="cosmetic-card" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`">
-    <div class="card-image-container">
-      <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
-        'card-image': ['outfit', 'character', 'skin'].includes(cosmetic.type),
-        'card-image-small': !['outfit', 'character'].includes(cosmetic.type)
-      }" />
-      <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
-      <h3 class="card-title">{{ cosmetic.name }}</h3>
-      <div class="price-badge">
-        <svg class="pavos-icon" width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="100" cy="100" r="80" fill="white"/>
-          <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
-        {{ cosmetic.price }}
+  <div class="cosmetic-card-wrapper">
+    <div class="cosmetic-card" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`">
+      <div class="card-image-container">
+        <img :src="cosmetic.imageUrl" :alt="cosmetic.name" :class="{
+          'card-image': ['outfit', 'character', 'skin'].includes(cosmetic.type),
+          'card-image-small': !['outfit', 'character'].includes(cosmetic.type)
+        }" />
+        <div v-if="cosmetic.isNew" class="badge-new">¡NUEVO!</div>
+        <h3 class="card-title">{{ cosmetic.name }}</h3>
+        <div class="price-badge">
+          <svg class="pavos-icon" width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" fill="white"/>
+            <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
+          {{ cosmetic.price }}
+        </div>
+        <div class="fade-image" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`" ></div>
       </div>
-      <div class="fade-image" :class="`rarity-${cosmetic.rarity?.toLowerCase()}`" ></div>
+    </div>
+    <div class="price-info">
+      <div class="price-row">
+        <span class="currency-label">MXN:</span>
+        <span class="price-value">${{ calculatePriceMXN(cosmetic.price) }}</span>
+      </div>
+      <div class="price-row">
+        <span class="currency-label">USD:</span>
+        <span class="price-value">${{ calculatePriceUSD(cosmetic.price) }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +38,16 @@ defineProps({
     validator: (obj) => obj.name && obj.price !== undefined
   }
 });
+
+// Conversión: 100 V-Bucks = 7.5 MXN
+const calculatePriceMXN = (vbucks) => {
+  return ((vbucks / 100) * 7.5).toFixed(2);
+};
+
+// Conversión: 100 V-Bucks = 0.45 USD
+const calculatePriceUSD = (vbucks) => {
+  return ((vbucks / 100) * 0.45).toFixed(2);
+};
 </script>
 
 <style scoped>
@@ -221,6 +243,44 @@ defineProps({
   background: linear-gradient(180deg, #1a3a5c00, #1f7f9f 100%);
 }
 
+/* Estilos para el wrapper y precio */
+.cosmetic-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+  font-size: large;
+  font-family: 'Burbank Big Condensed', Arial, sans-serif;
+  text-align: center;
+}
+
+.price-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.currency-label {
+  font-weight: 700;
+  min-width: 40px;
+  color: #f3f4f6;
+}
+
+.price-value {
+  color: #ffffff;
+  font-weight: 700;
+}
+
 /* ========== MÓVIL: 4 columnas ========== */
 @media (max-width: 767px) {
   .cosmetic-card {
@@ -285,6 +345,14 @@ defineProps({
 
   .fade-image {
     height: 45%;
+  }
+
+  .price-row {
+    font-size: 12px;
+  }
+
+  .currency-label {
+    min-width: 30px;
   }
 
 }
