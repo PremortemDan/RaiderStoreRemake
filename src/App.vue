@@ -276,7 +276,17 @@ title {
 
   .cart-icon {
     width: 18px;
-    padding: 0 3px;
+    padding: 0 6px;
+  }
+
+  .cart-badge {
+  top: 30px;
+  right: -4px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #000000;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
   }
 }
 </style>
