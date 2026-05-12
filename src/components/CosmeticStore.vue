@@ -297,7 +297,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px 20px;
-  row-gap: 360px;
+  row-gap: 160px;
 }
 
 /* Ajustar a 4 columnas exactas */
@@ -305,7 +305,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px 20px;
-    row-gap: 240px;
+    row-gap: 100px;
   }
   .series-title {
     font-size: 40px;
@@ -318,7 +318,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 40px 20px;
-    row-gap: 210px;
+    row-gap: 80px;
   }
    .series-title {
     font-size: 25px;
@@ -331,7 +331,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    row-gap: 70px;
+    row-gap: 25px;
   }
    .series-title {
     font-size: 18px;

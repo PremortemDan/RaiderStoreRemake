@@ -88,6 +88,7 @@ const calculatePriceUSD = (vbucks) => {
   object-fit: cover;
   transition: transform 0.3s ease;
   margin-left: -23%;
+
 }
 .card-image-small {
   width: 140%;
@@ -270,6 +271,7 @@ const calculatePriceUSD = (vbucks) => {
   font-size: 35px;
   font-weight: 600;
   color: #ffffff;
+  line-height: 1;
 }
 
 .currency-label {
@@ -352,6 +354,7 @@ const calculatePriceUSD = (vbucks) => {
 
   .price-row {
     font-size: 12px;
+    line-height: 0.6;
   }
 
   .currency-label {
