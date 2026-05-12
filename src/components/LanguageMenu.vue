@@ -93,7 +93,7 @@ const closeMenu = (e) => {
 .language-dropdown {
   position: absolute;
   top: 50px;
-  left: 0;
+  right: 0;
   background: linear-gradient(135deg, #04154D 0%, #0771B8 100%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -146,6 +146,30 @@ const closeMenu = (e) => {
   color: #FFD700;
   border-left: 3px solid #FFD700;
   padding-left: 13px;
+}
+
+@media (max-width: 767px) {
+  .language-dropdown {
+    min-width: 140px;
+  }
+
+  .language-option {
+    gap: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .language-option:hover {
+    padding-left: 16px;
+  }
+
+  .language-option.active {
+    padding-left: 9px;
+  }
+
+  .flag {
+    font-size: 16px;
+  }
 }
 
 .flag {
