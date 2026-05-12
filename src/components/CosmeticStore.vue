@@ -378,7 +378,7 @@ onMounted(() => {
 
 @media (max-width: 767px) {
   .cosmetics-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
     row-gap: 25px;
   }
