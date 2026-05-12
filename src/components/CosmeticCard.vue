@@ -247,7 +247,7 @@ const calculatePriceUSD = (vbucks) => {
 .cosmetic-card-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .price-info {
@@ -256,8 +256,10 @@ const calculatePriceUSD = (vbucks) => {
   gap: 4px;
   padding: 0 4px;
   font-size: large;
-  font-family: 'Burbank Big Condensed', Arial, sans-serif;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  font-weight: 700;
   text-align: center;
+  letter-spacing: 0.05em;
 }
 
 .price-row {
@@ -265,7 +267,7 @@ const calculatePriceUSD = (vbucks) => {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  font-size: 18px;
+  font-size: 35px;
   font-weight: 600;
   color: #ffffff;
 }
@@ -279,6 +281,7 @@ const calculatePriceUSD = (vbucks) => {
 .price-value {
   color: #ffffff;
   font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 /* ========== MÓVIL: 4 columnas ========== */
