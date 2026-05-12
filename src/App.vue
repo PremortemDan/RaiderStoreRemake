@@ -161,12 +161,12 @@ title {
 
 .cart-badge {
   position: absolute;
-  top: -8px;
+  top: 25px;
   right: -8px;
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   color: #000000;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
