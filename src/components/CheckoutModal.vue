@@ -479,16 +479,121 @@ const proceedToWhatsApp = () => {
 
 @media (max-width: 768px) {
   .modal-content {
-    padding: 24px;
+    padding: 20px;
+    max-width: 100%;
+    width: 95%;
     max-height: 95vh;
+  }
+
+  .modal-body {
+    gap: 16px;
   }
 
   .modal-title {
     font-size: 22px;
   }
 
+  .products-summary h3 {
+    font-size: 16px;
+  }
+
   .products-list {
     max-height: 150px;
+    gap: 10px;
+  }
+
+  .product-summary-item {
+    padding: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .product-prices {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .username-input {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .checkbox-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 16px;
+    width: 100%;
+    margin: 10px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .products-summary h3 {
+    font-size: 14px;
+  }
+
+  .products-list {
+    max-height: 120px;
+  }
+
+  .product-name {
+    font-size: 12px;
+  }
+
+  .product-prices {
+    font-size: 11px;
+  }
+
+  .username-label {
+    font-size: 12px;
+  }
+
+  .username-input {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .important-message {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .checkbox-label {
+    font-size: 11px;
+    gap: 8px;
+  }
+
+  .checkbox-input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .total-row {
+    font-size: 12px;
   }
 }
 </style>

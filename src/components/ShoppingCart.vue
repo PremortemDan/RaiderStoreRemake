@@ -355,5 +355,102 @@ const totalUSD = computed(() => {
   .cart-panel {
     max-width: 100%;
   }
+
+  .cart-header h2 {
+    font-size: 20px;
+  }
+
+  .cart-content {
+    padding: 16px;
+  }
+
+  .cart-footer {
+    padding: 16px;
+  }
+
+  .item-image {
+    width: 70px;
+    height: 90px;
+  }
+
+  .item-name {
+    font-size: 13px;
+  }
+
+  .item-prices {
+    font-size: 11px;
+  }
+
+  .total-row {
+    font-size: 13px;
+  }
+
+  .checkout-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-panel {
+    max-width: 100%;
+  }
+
+  .cart-header h2 {
+    font-size: 18px;
+  }
+
+  .cart-content {
+    padding: 12px;
+  }
+
+  .cart-footer {
+    padding: 12px;
+  }
+
+  .cart-item {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .item-image {
+    width: 60px;
+    height: 80px;
+  }
+
+  .item-name {
+    font-size: 12px;
+  }
+
+  .item-prices {
+    font-size: 10px;
+  }
+
+  .total-section {
+    padding: 12px;
+  }
+
+  .total-row {
+    font-size: 12px;
+  }
+
+  .checkout-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .remove-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .empty-cart p {
+    font-size: 14px;
+  }
 }
 </style>

@@ -295,16 +295,83 @@ const calculatePriceUSD = (vbucks) => {
 
 @media (max-width: 768px) {
   .modal-content {
-    padding: 24px;
+    padding: 20px;
+    max-width: 100%;
+    width: 95%;
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+
+  .modal-body {
+    gap: 16px;
   }
 
   .product-name {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .product-image img {
-    max-width: 180px;
-    max-height: 220px;
+    max-width: 150px;
+    max-height: 200px;
+  }
+
+  .price-row {
+    font-size: 14px;
+  }
+
+  .price-label {
+    font-size: 13px;
+  }
+
+  .price-value {
+    font-size: 14px;
+  }
+
+  .account-message {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 16px;
+    width: 100%;
+    margin: 10px;
+  }
+
+  .product-name {
+    font-size: 18px;
+  }
+
+  .product-image img {
+    max-width: 120px;
+    max-height: 160px;
+  }
+
+  .prices-section {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .price-row {
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 }
 </style>
