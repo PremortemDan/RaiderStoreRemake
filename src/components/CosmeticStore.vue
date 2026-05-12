@@ -3,7 +3,7 @@
     <div class="store-header">
       
       <div class="Sponsor">
-        <img src="../assets/epiclogo.png" alt="Epic API Logo" width="100" height="100"/>
+        <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
       <p class="Store-sponsor">Powered by Epic api</p>
       </div>
       
