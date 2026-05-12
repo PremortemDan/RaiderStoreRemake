@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
+import ChatBot from './components/ChatBot.vue';
 
 const cartItems = ref([]);
 const showCart = ref(false);
@@ -75,6 +76,9 @@ const removeFromCart = (index) => {
       @close="closeCart"
       @remove-item="removeFromCart"
     />
+
+    <!-- ChatBot de Ayuda -->
+    <ChatBot />
   </div>
 </template>
 
