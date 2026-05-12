@@ -2,10 +2,12 @@
 import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
+import LanguageMenu from './components/LanguageMenu.vue';
 
 const cartItems = ref([]);
 const showCart = ref(false);
 const searchQuery = ref('');
+const currentLanguage = ref('es');
 
 // Escuchar evento de agregar al carrito
 onMounted(() => {
@@ -51,11 +53,7 @@ const removeFromCart = (index) => {
             placeholder="Buscar por nombre o categoría..."
           />
         </div>
-        <svg class="world-icon"  xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
+        <LanguageMenu v-model="currentLanguage" />
         <div class="cart-button-wrapper">
           <svg class="cart-icon" :class="{ 'cart-active': cartItems.length > 0 }" @click="toggleCart" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"></circle>
@@ -122,15 +120,6 @@ title {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.5px;
-}
-.world-icon {
-  width: 30px;  /* Cambia el valor al tamaño que necesites */
-  height: auto;
-  padding: 0 10px;
-}
-.world-icon:hover {
-  color: #fff;
-  cursor: pointer;
 }
 
 .cart-button-wrapper {
