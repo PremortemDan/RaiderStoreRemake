@@ -21,6 +21,7 @@
                   {{ item.price }}
                 </span>
                 <span class="real-price">${{ calculatePriceMXN(item.price) }} MXN</span>
+                <span class="real-price-usd">${{ calculatePriceUSD(item.price) }} USD</span>
               </div>
             </div>
           </div>
@@ -315,6 +316,12 @@ const proceedToWhatsApp = () => {
 
 .real-price {
   color: #90ee90;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.real-price-usd {
+  color: #87ceeb;
   font-size: 13px;
   font-weight: 700;
 }
