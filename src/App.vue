@@ -5,6 +5,7 @@ import ShoppingCart from './components/ShoppingCart.vue';
 
 const cartItems = ref([]);
 const showCart = ref(false);
+const searchQuery = ref('');
 
 // Escuchar evento de agregar al carrito
 onMounted(() => {
@@ -44,9 +45,10 @@ const removeFromCart = (index) => {
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input
+            v-model="searchQuery"
             type="text"
             class="search-input"
-            placeholder="Buscar..."
+            placeholder="Buscar por nombre o categoría..."
           />
         </div>
         <svg class="world-icon"  xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +67,7 @@ const removeFromCart = (index) => {
       </div>
     </nav>
     <main class="main-content">
-      <CosmeticStore />
+      <CosmeticStore :searchQuery="searchQuery" />
     </main>
 
     <!-- Carrito de Compras -->

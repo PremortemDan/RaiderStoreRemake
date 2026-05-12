@@ -74,10 +74,34 @@ const error = ref(null);
 const showPurchaseModal = ref(false);
 const selectedCosmetic = ref(null);
 
+const props = defineProps({
+  searchQuery: {
+    type: String,
+    default: ''
+  }
+});
+
+// Filtrar cosméticos por búsqueda
+const filteredCosmetics = computed(() => {
+  if (!props.searchQuery.trim()) {
+    return cosmetics.value;
+  }
+
+  const query = props.searchQuery.toLowerCase();
+  
+  return cosmetics.value.filter(cosmetic => {
+    const nameMatch = cosmetic.name.toLowerCase().includes(query);
+    const seriesMatch = (cosmetic.series || '').toLowerCase().includes(query);
+    const layoutMatch = (cosmetic.layout || '').toLowerCase().includes(query);
+    
+    return nameMatch || seriesMatch || layoutMatch;
+  });
+});
+
 const groupedBySeriesCosmetics = computed(() => {
   const grouped = {};
   
-  cosmetics.value.forEach(cosmetic => {
+  filteredCosmetics.value.forEach(cosmetic => {
     // Excluir música de las secciones normales
     if (cosmetic.type === 'Music') return;
     
@@ -94,7 +118,7 @@ const groupedBySeriesCosmetics = computed(() => {
 const musicCosmetics = computed(() => {
   const grouped = {};
   
-  cosmetics.value.forEach(cosmetic => {
+  filteredCosmetics.value.forEach(cosmetic => {
     // Solo agrupar música
     if (cosmetic.type !== 'Music') return;
     
@@ -109,7 +133,7 @@ const musicCosmetics = computed(() => {
 });
 
 const newCosmetics = computed(() => {
-  return cosmetics.value.filter(cosmetic => cosmetic.isNew === true);
+  return filteredCosmetics.value.filter(cosmetic => cosmetic.isNew === true);
 });
 
 const openPurchaseModal = (cosmetic) => {
