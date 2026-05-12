@@ -4,8 +4,8 @@
       class="world-icon" 
       @click="showMenu = !showMenu"
       xmlns="http://www.w3.org/2000/svg" 
-      width="100" 
-      height="100" 
+      width="24" 
+      height="24" 
       viewBox="0 0 24 24" 
       fill="none" 
       stroke="currentColor" 
@@ -77,9 +77,9 @@ const closeMenu = (e) => {
 }
 
 .world-icon {
-  width: 30px;
+  width: 24px;
   height: auto;
-  padding: 0 10px;
+  padding: 0 8px;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -149,6 +149,11 @@ const closeMenu = (e) => {
 }
 
 @media (max-width: 767px) {
+  .world-icon {
+    width: 20px;
+    padding: 0 6px;
+  }
+
   .language-dropdown {
     min-width: 140px;
   }
