@@ -119,10 +119,14 @@ defineEmits(['select']);
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap; /* Permite que se creen las filas necesarias */
   gap: 6px;
 }
 
+.items-list li {
+  white-space: nowrap; /* Evita que el nombre del item dé un salto de línea interno */
+}
 .item-name {
   color: #e0e0e0;
   font-size: 12px;
