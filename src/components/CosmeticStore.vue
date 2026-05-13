@@ -10,7 +10,7 @@
     </div>
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
-      <p>Cargando cosméticos...</p>
+      <p class="loading-text">Cargando cosméticos...</p>
     </div>
 
     <div v-else-if="error" class="error">
@@ -283,6 +283,12 @@ onMounted(() => {
   background-clip: text;
 }
 
+.loading-text {
+  margin: 0;
+  color: #ffffff;
+  font-size: 18px;
+}
+
 .Sponsor{
     display: flex;
     align-items: left;
@@ -382,7 +388,7 @@ onMounted(() => {
   .cosmetics-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    row-gap: 25px;
+    row-gap: 30px;
   }
    .series-title {
     font-size: 18px;
@@ -425,8 +431,8 @@ onMounted(() => {
 }
 
 .spinner {
-  border: 4px solid rgba(170, 59, 255, 0.2);
-  border-top: 4px solid #aa3bff;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #ffffff;
   border-radius: 50%;
   width: 40px;
   height: 40px;
