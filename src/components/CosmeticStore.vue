@@ -18,6 +18,18 @@
     </div>
 
     <div v-else>
+      <section v-if="bundles.length > 0" class="series-section">
+        <h2 class="series-title">Packs Destacados</h2>
+        <div class="cosmetics-grid">
+          <BundleCard
+            v-for="bundle in bundles"
+            :key="bundle.offerId"
+            :bundle="bundle"
+            @select="openPurchaseModal"
+          />
+        </div>
+      </section>
+
       <section v-if="newCosmetics.length > 0" class="series-section">
         <h2 class="series-title">Lo Más Nuevo</h2>
         <div class="cosmetics-grid">
@@ -55,11 +67,19 @@
       </section>
     </div>
 
-    <!-- Modal de Compra -->
+    <!-- Modal de Compra de Cosméticos -->
     <PurchaseModal
       :isOpen="showPurchaseModal"
       :cosmetic="selectedCosmetic"
       @close="showPurchaseModal = false"
+      @add-to-cart="handleAddToCart"
+    />
+
+    <!-- Modal de Compra de Bundles -->
+    <BundlePurchaseModal
+      :isOpen="showBundlePurchaseModal"
+      :bundle="selectedBundle"
+      @close="showBundlePurchaseModal = false"
       @add-to-cart="handleAddToCart"
     />
   </section>
@@ -69,12 +89,17 @@
 import { ref, onMounted, computed } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
 import PurchaseModal from './PurchaseModal.vue';
+import BundleCard from './BundleCard.vue';
+import BundlePurchaseModal from './BundlePurchaseModal.vue';
 
 const cosmetics = ref([]);
+const bundles = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const showPurchaseModal = ref(false);
+const showBundlePurchaseModal = ref(false);
 const selectedCosmetic = ref(null);
+const selectedBundle = ref(null);
 
 const props = defineProps({
   searchQuery: {
@@ -138,9 +163,17 @@ const newCosmetics = computed(() => {
   return filteredCosmetics.value.filter(cosmetic => cosmetic.isNew === true);
 });
 
-const openPurchaseModal = (cosmetic) => {
-  selectedCosmetic.value = cosmetic;
-  showPurchaseModal.value = true;
+const openPurchaseModal = (item) => {
+  // Detectar si es un bundle o un cosmético
+  if (item.items && Array.isArray(item.items)) {
+    // Es un bundle
+    selectedBundle.value = item;
+    showBundlePurchaseModal.value = true;
+  } else {
+    // Es un cosmético individual
+    selectedCosmetic.value = item;
+    showPurchaseModal.value = true;
+  }
 };
 
 const handleAddToCart = (cosmetic) => {
@@ -163,71 +196,95 @@ const fetchCosmetics = async () => {
 
     const entries = data.data.entries;
     const mappedCosmetics = [];
+    const mappedBundles = [];
 
     // Procesar todos los tipos de cosméticos
     entries.slice(0, 500).forEach(entry => {
-      // Procesar brItems (outfits, emotes, etc.)
-      if (entry.brItems && entry.brItems.length > 0) {
-        entry.brItems.forEach(item => {
-          mappedCosmetics.push({
-            offerId: entry.offerId,
+      // Detectar si es un bundle (pack)
+      if (entry.bundle && entry.brItems && entry.brItems.length > 1) {
+        // Es un pack - creamos un objeto bundle
+        mappedBundles.push({
+          offerId: entry.offerId,
+          name: entry.bundle.name,
+          imageUrl: entry.bundle.image,
+          price: entry.finalPrice,
+          regularPrice: entry.regularPrice,
+          items: entry.brItems.map(item => ({
             name: item.name,
             type: item.type.value,
-            series: item.series?.value || '',
-            layout: entry.layout?.name || '',
-            rarity: item.rarity?.displayValue || 'Común',
-            price: entry.finalPrice,
-            imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
-            regularPrice: entry.regularPrice,
-            isNew: entry.banner?.backendValue === 'New',
-            inDate: entry.inDate,
-            outDate: entry.outDate,
-          });
+            rarity: item.rarity?.displayValue || 'Común'
+          })),
+          isNew: entry.banner?.backendValue === 'New',
+          inDate: entry.inDate,
+          outDate: entry.outDate,
         });
-      }
+      } else {
+        // No es un bundle, procesar items normalmente
+        
+        // Procesar brItems (outfits, emotes, etc.)
+        if (entry.brItems && entry.brItems.length > 0) {
+          entry.brItems.forEach(item => {
+            mappedCosmetics.push({
+              offerId: entry.offerId,
+              name: item.name,
+              type: item.type.value,
+              series: item.series?.value || '',
+              layout: entry.layout?.name || '',
+              rarity: item.rarity?.displayValue || 'Común',
+              price: entry.finalPrice,
+              imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
+              regularPrice: entry.regularPrice,
+              isNew: entry.banner?.backendValue === 'New',
+              inDate: entry.inDate,
+              outDate: entry.outDate,
+            });
+          });
+        }
 
-      // Procesar cars/ruedas (wheels)
-      if (entry.cars && entry.cars.length > 0) {
-        entry.cars.forEach(car => {
-          mappedCosmetics.push({
-            offerId: entry.offerId,
-            name: car.name,
-            type: car.type.value,
-            series: car.series?.value || '',
-            layout: entry.layout?.name || entry.bundle?.name || '',
-            rarity: car.rarity?.displayValue || 'Común',
-            price: entry.finalPrice,
-            imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
-            regularPrice: entry.regularPrice,
-            isNew: entry.banner?.backendValue === 'New',
-            inDate: entry.inDate,
-            outDate: entry.outDate,
+        // Procesar cars/ruedas (wheels)
+        if (entry.cars && entry.cars.length > 0) {
+          entry.cars.forEach(car => {
+            mappedCosmetics.push({
+              offerId: entry.offerId,
+              name: car.name,
+              type: car.type.value,
+              series: car.series?.value || '',
+              layout: entry.layout?.name || entry.bundle?.name || '',
+              rarity: car.rarity?.displayValue || 'Común',
+              price: entry.finalPrice,
+              imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
+              regularPrice: entry.regularPrice,
+              isNew: entry.banner?.backendValue === 'New',
+              inDate: entry.inDate,
+              outDate: entry.outDate,
+            });
           });
-        });
-      }
+        }
 
-      // Procesar tracks (música)
-      if (entry.tracks && entry.tracks.length > 0) {
-        entry.tracks.forEach(track => {
-          mappedCosmetics.push({
-            offerId: entry.offerId,
-            name: track.title,
-            type: 'Music',
-            series: '',
-            layout: entry.layout?.name || 'Jam Tracks',
-            rarity: 'Uncommon',
-            price: entry.finalPrice,
-            imageUrl: track.albumArt || 'https://via.placeholder.com/200',
-            regularPrice: entry.regularPrice,
-            isNew: entry.banner?.backendValue === 'New',
-            inDate: entry.inDate,
-            outDate: entry.outDate,
+        // Procesar tracks (música)
+        if (entry.tracks && entry.tracks.length > 0) {
+          entry.tracks.forEach(track => {
+            mappedCosmetics.push({
+              offerId: entry.offerId,
+              name: track.title,
+              type: 'Music',
+              series: '',
+              layout: entry.layout?.name || 'Jam Tracks',
+              rarity: 'Uncommon',
+              price: entry.finalPrice,
+              imageUrl: track.albumArt || 'https://via.placeholder.com/200',
+              regularPrice: entry.regularPrice,
+              isNew: entry.banner?.backendValue === 'New',
+              inDate: entry.inDate,
+              outDate: entry.outDate,
+            });
           });
-        });
+        }
       }
     });
 
     cosmetics.value = mappedCosmetics;
+    bundles.value = mappedBundles;
     
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
