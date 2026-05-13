@@ -99,13 +99,13 @@ const addToCart = () => {
 };
 
 const calculatePriceMXN = (vbucks) => {
-  // 1 V-Buck = 0.13 MXN (aproximadamente)
-  return (vbucks * 0.13).toFixed(2);
+  // 100 V-Bucks = 7.5 MXN
+  return (vbucks * (7.5 / 100)).toFixed(2);
 };
 
 const calculatePriceUSD = (vbucks) => {
-  // 1 V-Buck = 0.01 USD (aproximadamente)
-  return (vbucks * 0.01).toFixed(2);
+  // 100 V-Bucks = 0.45 USD
+  return (vbucks * (0.45 / 100)).toFixed(2);
 };
 </script>
 
