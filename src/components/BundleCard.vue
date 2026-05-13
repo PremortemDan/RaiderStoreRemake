@@ -45,7 +45,7 @@ defineEmits(['select']);
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  grid-column: span 3;
+  grid-column: span 2;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -60,7 +60,7 @@ defineEmits(['select']);
 .bundle-header {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 320px;
   overflow: hidden;
   background: #0f3460;
 }
@@ -69,6 +69,7 @@ defineEmits(['select']);
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top; /* Ancla la imagen a la parte superior */
 }
 
 .bundle-badge {
