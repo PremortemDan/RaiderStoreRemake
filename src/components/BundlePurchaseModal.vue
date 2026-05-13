@@ -134,8 +134,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border: 2px solid #aa3bff;
+  background: linear-gradient(180deg, #001637, #003B8D 100%);
   border-radius: 12px;
   width: 90%;
   max-width: 600px;
@@ -143,7 +142,7 @@ const calculatePriceUSD = (vbucks) => {
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
-  box-shadow: 0 10px 50px rgba(170, 59, 255, 0.3);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes slideUp {
@@ -161,8 +160,8 @@ const calculatePriceUSD = (vbucks) => {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: rgba(170, 59, 255, 0.2);
-  border: 1px solid #aa3bff;
+  background: rgba(0, 149, 255, 0.2);
+  border: 1px solid #0095FF;
   color: #ffffff;
   width: 40px;
   height: 40px;
@@ -177,7 +176,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .close-btn:hover {
-  background: rgba(170, 59, 255, 0.4);
+  background: rgba(0, 149, 255, 0.4);
   transform: rotate(90deg);
 }
 
@@ -193,8 +192,8 @@ const calculatePriceUSD = (vbucks) => {
   height: 300px;
   border-radius: 8px;
   overflow: hidden;
-  background: #0f3460;
-  border: 1px solid rgba(170, 59, 255, 0.3);
+  background: #003B8D;
+  border: 1px solid rgba(0, 149, 255, 0.3);
 }
 
 .product-image img {
@@ -217,7 +216,7 @@ const calculatePriceUSD = (vbucks) => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: linear-gradient(135deg, #aa3bff, #c084fc);
+  background: linear-gradient(180deg, #0095FF, #003B8D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -227,12 +226,12 @@ const calculatePriceUSD = (vbucks) => {
   background: rgba(0, 0, 0, 0.3);
   padding: 15px;
   border-radius: 8px;
-  border-left: 3px solid #aa3bff;
+  border-left: 3px solid #0095FF;
 }
 
 .items-title {
   margin: 0 0 12px 0;
-  color: #aa3bff;
+  color: #0095FF;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -256,7 +255,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .item-icon {
-  color: #aa3bff;
+  color: #0095FF;
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -275,9 +274,9 @@ const calculatePriceUSD = (vbucks) => {
   flex-direction: column;
   gap: 12px;
   padding: 15px;
-  background: rgba(170, 59, 255, 0.1);
+  background: rgba(0, 149, 255, 0.1);
   border-radius: 8px;
-  border: 1px solid rgba(170, 59, 255, 0.3);
+  border: 1px solid rgba(0, 149, 255, 0.3);
 }
 
 .price-row {
@@ -327,14 +326,14 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .account-link {
-  color: #aa3bff;
+  color: #0095FF;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .account-link:hover {
-  color: #c084fc;
+  color: #00d4ff;
   text-decoration: underline;
 }
 
@@ -362,25 +361,25 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #aa3bff, #c084fc);
+  background: linear-gradient(180deg, #0095FF, #003B8D);
   color: #ffffff;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(170, 59, 255, 0.5);
+  box-shadow: 0 8px 20px rgba(0, 149, 255, 0.5);
 }
 
 .btn-secondary {
   background: transparent;
-  color: #aa3bff;
-  border: 2px solid #aa3bff;
+  color: #0095FF;
+  border: 2px solid #0095FF;
 }
 
 .btn-secondary:hover {
-  background: rgba(170, 59, 255, 0.1);
-  border-color: #c084fc;
-  color: #c084fc;
+  background: rgba(0, 149, 255, 0.1);
+  border-color: #0095FF;
+  color: #0095FF;
 }
 
 @media (max-width: 768px) {

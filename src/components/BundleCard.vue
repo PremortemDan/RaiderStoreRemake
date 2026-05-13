@@ -58,8 +58,7 @@ const formatPrice = (price) => {
 <style scoped>
 .bundle-card {
   position: relative;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border: 2px solid #aa3bff;
+  background: linear-gradient(180deg, #001637, #003B8D 100%);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -71,8 +70,7 @@ const formatPrice = (price) => {
 }
 
 .bundle-card:hover {
-  border-color: #c084fc;
-  box-shadow: 0 0 30px rgba(170, 59, 255, 0.6);
+  box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
   transform: translateY(-8px);
 }
 
@@ -81,7 +79,7 @@ const formatPrice = (price) => {
   width: 100%;
   height: 320px;
   overflow: hidden;
-  background: #0f3460;
+  background: #003B8D;
 }
 
 .bundle-image {
@@ -95,14 +93,14 @@ const formatPrice = (price) => {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: linear-gradient(135deg, #aa3bff, #c084fc);
-  color: white;
+  background: #F7FF19;
+  color: rgb(0, 0, 0);
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(170, 59, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .bundle-content {
@@ -128,7 +126,7 @@ const formatPrice = (price) => {
 
 .items-count {
   margin: 0 0 10px 0;
-  color: #aa3bff;
+  color: #0095FF;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -158,7 +156,7 @@ const formatPrice = (price) => {
   content: "→";
   position: absolute;
   left: 0;
-  color: #aa3bff;
+  color: #0095FF;
   font-weight: 700;
 }
 
@@ -167,7 +165,7 @@ const formatPrice = (price) => {
   flex-direction: column;
   gap: 8px;
   padding-top: 15px;
-  border-top: 1px solid rgba(170, 59, 255, 0.3);
+  border-top: 1px solid rgba(0, 149, 255, 0.3);
 }
 
 .price-label {
@@ -183,7 +181,7 @@ const formatPrice = (price) => {
 }
 
 .price-value {
-  background: linear-gradient(135deg, #aa3bff, #c084fc);
+  background: linear-gradient(180deg, #0095FF, #003B8D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
