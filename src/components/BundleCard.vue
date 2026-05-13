@@ -19,7 +19,13 @@
       
       <div class="bundle-price">
         <span class="price-label">Precio Bundle:</span>
-        <span class="price-value">{{ bundle.price }}</span>
+        <div class="price-container">
+          <span class="price-value">{{ bundle.price }} V-Bucks</span>
+          <div class="price-converted">
+            <span class="converted-price">${{ formatPrice(convertToMXN(bundle.price)) }} MXN</span>
+            <span class="converted-price">${{ formatPrice(convertToUSD(bundle.price)) }} USD</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -34,6 +40,19 @@ defineProps({
 });
 
 defineEmits(['select']);
+
+// Tasas de conversión: 100 vbucks = 7.5 MXN = 0.45 USD
+const convertToMXN = (vbucks) => {
+  return (vbucks / 100) * 7.5;
+};
+
+const convertToUSD = (vbucks) => {
+  return (vbucks / 100) * 0.45;
+};
+
+const formatPrice = (price) => {
+  return price.toFixed(2);
+};
 </script>
 
 <style scoped>
@@ -145,8 +164,8 @@ defineEmits(['select']);
 
 .bundle-price {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 15px;
   border-top: 1px solid rgba(170, 59, 255, 0.3);
 }
@@ -157,6 +176,12 @@ defineEmits(['select']);
   font-weight: 600;
 }
 
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .price-value {
   background: linear-gradient(135deg, #aa3bff, #c084fc);
   -webkit-background-clip: text;
@@ -164,6 +189,17 @@ defineEmits(['select']);
   background-clip: text;
   font-size: 24px;
   font-weight: 700;
+}
+
+.price-converted {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.converted-price {
+  color: #e0e0e0;
+  font-weight: 600;
 }
 
 @media (max-width: 1023px) {

@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false
@@ -94,7 +94,7 @@ const closeModal = () => {
 };
 
 const addToCart = () => {
-  emit('add-to-cart', bundle);
+  emit('add-to-cart', props.bundle);
   closeModal();
 };
 
