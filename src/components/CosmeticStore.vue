@@ -18,11 +18,11 @@
     </div>
 
     <div v-else>
-      <section v-if="bundles.length > 0" class="series-section">
+      <section v-if="filteredBundles.length > 0" class="series-section">
         <h2 class="series-title">Packs Destacados</h2>
         <div class="cosmetics-grid">
           <BundleCard
-            v-for="bundle in bundles"
+            v-for="bundle in filteredBundles"
             :key="bundle.offerId"
             :bundle="bundle"
             @select="openPurchaseModal"
@@ -122,6 +122,24 @@ const filteredCosmetics = computed(() => {
     const layoutMatch = (cosmetic.layout || '').toLowerCase().includes(query);
     
     return nameMatch || seriesMatch || layoutMatch;
+  });
+});
+
+// Filtrar bundles por búsqueda
+const filteredBundles = computed(() => {
+  if (!props.searchQuery.trim()) {
+    return bundles.value;
+  }
+
+  const query = props.searchQuery.toLowerCase();
+  
+  return bundles.value.filter(bundle => {
+    const nameMatch = bundle.name.toLowerCase().includes(query);
+    const itemsMatch = bundle.items.some(item => 
+      item.name.toLowerCase().includes(query)
+    );
+    
+    return nameMatch || itemsMatch;
   });
 });
 
