@@ -1,12 +1,12 @@
 <template>
   <section class="store-section">
     <div class="store-header">
-      
+      <!--
       <div class="Sponsor">
         <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
       <p class="Store-sponsor">Powered by Epic api</p>
       </div>
-      
+    -->
     </div>
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
