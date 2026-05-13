@@ -304,6 +304,32 @@ const fetchCosmetics = async () => {
     cosmetics.value = mappedCosmetics;
     bundles.value = mappedBundles;
     
+    // Detectar cosméticos repetidos y marcar los más caros con " - LOTE"
+    const cosmeticsByName = {};
+    
+    mappedCosmetics.forEach(cosmetic => {
+      if (!cosmeticsByName[cosmetic.name]) {
+        cosmeticsByName[cosmetic.name] = [];
+      }
+      cosmeticsByName[cosmetic.name].push(cosmetic);
+    });
+    
+    // Para cada nombre repetido, marcar los de mayor precio con " - LOTE"
+    Object.keys(cosmeticsByName).forEach(name => {
+      const group = cosmeticsByName[name];
+      if (group.length > 1) {
+        // Encontrar el precio máximo
+        const maxPrice = Math.max(...group.map(c => c.price));
+        
+        // Marcar los que tienen precio máximo y no tienen bundledItems
+        group.forEach(cosmetic => {
+          if (cosmetic.price === maxPrice && !cosmetic.bundledItems) {
+            cosmetic.name = cosmetic.name + ' - LOTE';
+          }
+        });
+      }
+    });
+    
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
     error.value = 'No se pudieron cargar los cosméticos. Por favor, intenta de nuevo.';
