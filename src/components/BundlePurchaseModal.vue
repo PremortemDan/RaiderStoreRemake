@@ -216,7 +216,7 @@ const calculatePriceUSD = (vbucks) => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: linear-gradient(180deg, #0095FF, #003B8D);
+  background: linear-gradient(180deg, #ffffff, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -312,10 +312,13 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .account-message {
-  background: rgba(0, 59, 141, 0.2);
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
   padding: 12px;
-  border-radius: 6px;
-  border-left: 3px solid #003b8d;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #e0e0e0;
+  line-height: 1.5;
 }
 
 .account-message p {
@@ -361,8 +364,8 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #0095FF, #003B8D);
-  color: #ffffff;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #000000;
 }
 
 .btn-primary:hover {
@@ -371,9 +374,9 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-secondary {
-  background: transparent;
-  color: #0095FF;
-  border: 2px solid #0095FF;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {

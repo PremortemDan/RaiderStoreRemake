@@ -9,7 +9,6 @@
       <h3 class="bundle-name">{{ bundle.name }}</h3>
       
       <div class="bundle-items">
-        <p class="items-count">{{ bundle.items.length }} items incluidos:</p>
         <ul class="items-list">
           <li v-for="item in bundle.items" :key="item.name" class="item-name">
             {{ item.name }}
@@ -18,7 +17,6 @@
       </div>
       
       <div class="bundle-price">
-        <span class="price-label">Precio Bundle:</span>
         <div class="price-container">
           <span class="price-value">{{ bundle.price }} V-Bucks</span>
           <div class="price-converted">
@@ -96,11 +94,13 @@ const formatPrice = (price) => {
   background: #F7FF19;
   color: rgb(0, 0, 0);
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 1px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  transform: skewX(-10deg) rotate(0deg);
 }
 
 .bundle-content {
@@ -124,13 +124,6 @@ const formatPrice = (price) => {
   margin-bottom: 15px;
 }
 
-.items-count {
-  margin: 0 0 10px 0;
-  color: #0095FF;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
 
 .items-list {
   list-style: none;
@@ -181,7 +174,7 @@ const formatPrice = (price) => {
 }
 
 .price-value {
-  background: linear-gradient(180deg, #0095FF, #003B8D);
+  background: linear-gradient(180deg, #ffffff, #ffffff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
