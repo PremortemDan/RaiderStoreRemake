@@ -229,7 +229,7 @@ const totalUSD = computed(() => {
 .item-image {
   width: 80px;
   height: 100px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 6px;
   flex-shrink: 0;
 }
