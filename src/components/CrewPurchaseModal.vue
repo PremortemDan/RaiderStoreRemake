@@ -11,6 +11,8 @@
 
         <!-- Información del Crew -->
         <div class="product-info">
+          <div class="months-display">{{ crew.name }}</div>
+          <h2 class="product-name">{{ crew.label }}</h2>
           
           <!-- Precios -->
           <div class="prices-section">
@@ -162,11 +164,22 @@ const addToCart = () => {
   gap: 20px;
 }
 
+.months-display {
+  font-size: 80px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  text-align: center;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  letter-spacing: -2px;
+}
+
 .product-name {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
+  color: #FFB347;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   text-align: center;
 }
