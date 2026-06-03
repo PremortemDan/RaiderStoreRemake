@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
+import PasesCard from './components/PasesCard.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
 import ChatBot from './components/ChatBot.vue';
@@ -9,13 +10,57 @@ const cartItems = ref([]);
 const showCart = ref(false);
 const searchQuery = ref('');
 const currentLanguage = ref('es');
+const activeTab = ref('skins');
+
+// Datos de pases
+const pases = ref([
+  {
+    id: 'bp',
+    name: 'Pase de Batalla',
+    price: 800,
+    mxn: '105.00',
+    usd: '6.07',
+    rarity: 'rare',
+    type: 'default',
+    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/bp_token_icon.png'
+  },
+  {
+    id: 'og',
+    name: 'Pase OG',
+    price: 800,
+    mxn: '105.00',
+    usd: '6.07',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/ogpasslvl1_icon.png'
+  },
+  {
+    id: 'lego',
+    name: 'Pase LEGO',
+    price: 1200,
+    mxn: '145.00',
+    usd: '8.39',
+    rarity: 'epic',
+    type: 'default',
+    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/legopass_banner.png'
+  },
+  {
+    id: 'festival',
+    name: 'Pase Festival',
+    price: 1200,
+    mxn: '145.00',
+    usd: '8.39',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/festival_icon.png'
+  }
+]);
 
 // Escuchar evento de agregar al carrito
 onMounted(() => {
   window.addEventListener('add-to-cart', (event) => {
     const cosmetic = event.detail;
     cartItems.value.push(cosmetic);
-    // Opcional: mostrar notificación
     console.log('Producto añadido al carrito:', cosmetic.name);
   });
 });
@@ -30,6 +75,11 @@ const closeCart = () => {
 
 const removeFromCart = (index) => {
   cartItems.value.splice(index, 1);
+};
+
+const addPaseToCart = (pase) => {
+  const event = new CustomEvent('add-to-cart', { detail: pase });
+  window.dispatchEvent(event);
 };
 </script>
 
@@ -65,8 +115,46 @@ const removeFromCart = (index) => {
         </div>
       </div>
     </nav>
-    <main class="main-content">
+
+    <!-- Banner con logo y tabs de servicios -->
+    <div class="services-banner">
+      <img src="./assets/RaiderLogo.png" alt="Raider Logo" class="raider-logo" />
+      <div class="services-tabs">
+        <button
+          class="service-tab"
+          :class="{ active: activeTab === 'skins' }"
+          @click="activeTab = 'skins'"
+        >
+          Skins y packs via regalo
+        </button>
+        <button
+          class="service-tab"
+          :class="{ active: activeTab === 'pases' }"
+          @click="activeTab = 'pases'"
+        >
+          Pases de batalla
+        </button>
+      </div>
+    </div>
+
+    <!-- Pestaña Skins y Packs (por defecto) -->
+    <main v-if="activeTab === 'skins'" class="main-content">
       <CosmeticStore :searchQuery="searchQuery" />
+    </main>
+
+    <!-- Pestaña Pases de Batalla -->
+    <main v-if="activeTab === 'pases'" class="main-content">
+      <section class="pases-section">
+        <h2 class="series-title">Pases de Batalla</h2>
+        <div class="cosmetics-grid">
+          <PasesCard
+            v-for="pase in pases"
+            :key="pase.id"
+            :pase="pase"
+            @select="addPaseToCart"
+          />
+        </div>
+      </section>
     </main>
 
     <!-- Carrito de Compras -->
@@ -92,14 +180,6 @@ const removeFromCart = (index) => {
   z-index: 100;
   width: 100%;
   box-sizing: border-box;
-}
-
-title {
-  font-family: 'Luckiest Guy', cursive;
-  letter-spacing: 1px; /* Para que se vea más compacta como el logo */
-  text-transform: uppercase; /* El estilo Fortnite siempre va en mayúsculas */
-  font-style: oblique;
-
 }
 
 .navbar-container {
@@ -133,7 +213,7 @@ title {
 }
 
 .cart-icon {
-  width: 30px;  /* Cambia el valor al tamaño que necesites */
+  width: 30px;
   padding: 0 10px;
   margin-right: auto;
   transition: all 0.3s ease;
@@ -173,11 +253,9 @@ title {
   z-index: 10;
 }
 
-
 .search-container {
   display: flex;
   padding: 0 0 0 10px;
-
   align-items: center;
   gap: 0;
   background-color: #222;
@@ -224,15 +302,140 @@ title {
   color: #fff;
 }
 
+/* ========== Banner de servicios ========== */
+.services-banner {
+  text-align: center;
+  padding: 15px 20px 5px 20px;
+}
+
+.raider-logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 8px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.services-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.service-tab {
+  padding: 10px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #b0b0b0;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.service-tab:hover {
+  border-color: rgba(255, 140, 0, 0.5);
+  color: #FF8C00;
+  background: rgba(255, 140, 0, 0.1);
+}
+
+.service-tab.active {
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  border-color: #FF8C00;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+/* ========== Contenido principal ========== */
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px 20px 40px 20px;
 }
 
 .main-content h1 {
   color: #f3f4f6;
   font-size: 32px;
+}
+
+/* ========== Sección de pases ========== */
+.pases-section {
+  padding: 20px 0;
+}
+
+.series-title {
+  margin: 0;
+  padding-bottom: 30px;
+  white-space: nowrap;
+  color: #ffffff;
+  font-size: 50px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  font-style: oblique;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+}
+
+.cosmetics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px 20px;
+  row-gap: 160px;
+}
+
+@media (min-width: 1024px) {
+  .cosmetics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 20px;
+    row-gap: 100px;
+  }
+  .series-title {
+    font-size: 40px;
+    padding: 20px 0 40px 0;
+    letter-spacing: -1px;
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .cosmetics-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 20px;
+    row-gap: 80px;
+  }
+  .series-title {
+    font-size: 25px;
+    padding-bottom: 20px;
+    letter-spacing: -1px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cosmetics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    row-gap: 30px;
+  }
+  .series-title {
+    font-size: 18px;
+    padding-bottom: 20px;
+    letter-spacing: -1px;
+    white-space: normal;
+  }
+  .service-tab {
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+  .raider-logo {
+    width: 140px;
+  }
 }
 
 /* ========== MÓVIL: Navbar compacto ========== */
@@ -284,13 +487,13 @@ title {
   }
 
   .cart-badge {
-  top: 30px;
-  right: -4px;
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
+    top: 30px;
+    right: -4px;
+    background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+    color: #ffffff;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
   }
 }
 </style>
