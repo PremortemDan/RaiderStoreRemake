@@ -143,6 +143,7 @@ const formatPrice = (price) => {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   text-transform: uppercase;
   transform: skewX(-10deg) rotate(0deg);
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .bundle-content {
@@ -159,6 +160,7 @@ const formatPrice = (price) => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .bundle-items {
@@ -222,6 +224,7 @@ const formatPrice = (price) => {
   background-clip: text;
   font-size: 24px;
   font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .price-converted {
@@ -233,6 +236,7 @@ const formatPrice = (price) => {
 .converted-price {
   color: #e0e0e0;
   font-weight: 600;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 @media (max-width: 1023px) {
