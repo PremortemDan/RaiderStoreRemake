@@ -99,12 +99,10 @@ const addToCart = () => {
 };
 
 const calculatePriceMXN = (vbucks) => {
-  // 100 V-Bucks = 7.5 MXN
   return (vbucks * (7.5 / 100)).toFixed(2);
 };
 
 const calculatePriceUSD = (vbucks) => {
-  // 100 V-Bucks = 0.45 USD
   return (vbucks * (0.45 / 100)).toFixed(2);
 };
 </script>
@@ -125,12 +123,8 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
@@ -143,26 +137,21 @@ const calculatePriceUSD = (vbucks) => {
   position: relative;
   animation: slideUp 0.3s ease;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+  padding: 40px;
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .close-btn {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: rgba(255, 107, 0, 0.2);
-  border: 1px solid #FF7B00;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -176,34 +165,28 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 107, 0, 0.4);
+  background: rgba(255, 255, 255, 0.2);
   transform: rotate(90deg);
 }
 
 .modal-body {
-  padding: 30px;
   display: flex;
-  gap: 30px;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .product-image {
-  flex-shrink: 0;
-  width: 250px;
-  height: 300px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #DC2F02;
-  border: 1px solid rgba(255, 107, 0, 0.3);
+  text-align: center;
 }
 
 .product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
 .product-info {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -216,10 +199,8 @@ const calculatePriceUSD = (vbucks) => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: linear-gradient(180deg, #ffffff, #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  text-align: center;
 }
 
 .bundle-items-section {
@@ -235,6 +216,7 @@ const calculatePriceUSD = (vbucks) => {
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .items-list {
@@ -299,6 +281,7 @@ const calculatePriceUSD = (vbucks) => {
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .pavos-icon {
@@ -309,6 +292,7 @@ const calculatePriceUSD = (vbucks) => {
   color: #ffffff;
   font-weight: 700;
   font-size: 16px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .account-message {
@@ -342,12 +326,11 @@ const calculatePriceUSD = (vbucks) => {
 
 .action-buttons {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .btn {
-  flex: 1;
   padding: 14px 20px;
   border: none;
   border-radius: 8px;
@@ -361,6 +344,7 @@ const calculatePriceUSD = (vbucks) => {
   gap: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .btn-primary {
@@ -386,23 +370,33 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 @media (max-width: 768px) {
-  .modal-body {
-    flex-direction: column;
-    gap: 20px;
+  .modal-content {
     padding: 20px;
+    max-width: 100%;
+    width: 95%;
   }
 
-  .product-image {
-    width: 100%;
-    height: 250px;
+  .modal-body {
+    gap: 16px;
   }
 
   .product-name {
     font-size: 20px;
   }
 
-  .action-buttons {
-    flex-direction: column;
+  .product-image img {
+    max-height: 200px;
+  }
+
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
   }
 }
 </style>
