@@ -1,5 +1,5 @@
 <template>
-  <div class="bundle-card" @click="$emit('select', bundle)">
+  <div class="bundle-card" :class="`rarity-${bundleRarity}`" @click="$emit('select', bundle)">
     <div class="bundle-header">
       <img :src="bundle.imageUrl" :alt="bundle.name" class="bundle-image"/>
       <div class="bundle-badge">PACK</div>
@@ -30,7 +30,9 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   bundle: {
     type: Object,
     required: true
@@ -38,6 +40,27 @@ defineProps({
 });
 
 defineEmits(['select']);
+
+// Calcular rareza del bundle basada en el item más raro
+const rarityOrder = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
+
+const bundleRarity = computed(() => {
+  if (!props.bundle.items || props.bundle.items.length === 0) return 'rare';
+  
+  let highestRarity = 'common';
+  let highestIndex = 0;
+  
+  props.bundle.items.forEach(item => {
+    const rarity = (item.rarity || 'common').toLowerCase();
+    const index = rarityOrder.indexOf(rarity);
+    if (index > highestIndex) {
+      highestIndex = index;
+      highestRarity = rarity;
+    }
+  });
+  
+  return highestRarity;
+});
 
 // Tasas de conversión: 100 vbucks = 7.5 MXN = 0.45 USD
 const convertToMXN = (vbucks) => {
@@ -56,7 +79,6 @@ const formatPrice = (price) => {
 <style scoped>
 .bundle-card {
   position: relative;
-  background: linear-gradient(180deg, #3D1000, #DC2F02 100%);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -65,6 +87,26 @@ const formatPrice = (price) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+/* Rarezas - mismos colores que CosmeticCard */
+.bundle-card.rarity-common {
+  background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
+}
+.bundle-card.rarity-uncommon {
+  background: linear-gradient(180deg, #3D1A00, #8B3A00 100%);
+}
+.bundle-card.rarity-rare {
+  background: linear-gradient(180deg, #3D1000, #DC2F02 100%);
+}
+.bundle-card.rarity-epic {
+  background: linear-gradient(180deg, #FF8C00, #D35400 100%);
+}
+.bundle-card.rarity-legendary {
+  background: linear-gradient(180deg, #7B3F00, #FF6B00 100%);
+}
+.bundle-card.rarity-mythic {
+  background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
 }
 
 .bundle-card:hover {
@@ -77,7 +119,7 @@ const formatPrice = (price) => {
   width: 100%;
   height: 320px;
   overflow: hidden;
-  background: #DC2F02;
+  background: transparent;
 }
 
 .bundle-image {
