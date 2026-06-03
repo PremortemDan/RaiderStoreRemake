@@ -74,7 +74,7 @@ const pases = ref([
 const crew = ref([
   {
     id: 'crew-1',
-    name: '1 Mes',
+    name: '1 Mes de crew',
     label: '1 mes de Crew',
     price: 0,
     mxn: '89.00',
@@ -85,7 +85,7 @@ const crew = ref([
   },
   {
     id: 'crew-3',
-    name: '3 Meses',
+    name: '3 Meses de crew',
     label: '3 meses de Crew',
     price: 0,
     mxn: '199.00',
@@ -96,7 +96,7 @@ const crew = ref([
   },
   {
     id: 'crew-6',
-    name: '6 Meses',
+    name: '6 Meses de crew',
     label: '6 meses de Crew',
     price: 0,
     mxn: '350.00',
