@@ -6,7 +6,6 @@
     
     <div class="crew-content">
       <h3 class="crew-name">{{ crew.name }}</h3>
-      <p class="crew-label">{{ crew.label }}</p>
       
       <div class="crew-price">
         <div class="price-container">
@@ -95,17 +94,11 @@ defineEmits(['select']);
 .crew-name {
   margin: 0 0 6px 0;
   color: #ffffff;
-  font-size: 22px;
+  font-size: 36px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.crew-label {
-  margin: 0 0 15px 0;
-  color: #b0b0b0;
-  font-size: 14px;
 }
 
 .crew-price {
@@ -132,6 +125,7 @@ defineEmits(['select']);
 .converted-price {
   color: #e0e0e0;
   font-weight: 600;
+  font-size: 30px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -166,12 +160,8 @@ defineEmits(['select']);
     font-size: 16px;
   }
 
-  .crew-label {
-    font-size: 12px;
-  }
-
   .converted-price {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 </style>

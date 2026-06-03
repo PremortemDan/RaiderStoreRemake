@@ -307,7 +307,7 @@ const addCrewToCart = (item) => {
     <main v-if="activeTab === 'recargas'" class="main-content">
       <section class="pases-section">
         <h2 class="series-title">Recargas de Pavos</h2>
-        <div class="cosmetics-grid">
+        <div class="cosmetics-grid recargas-grid">
           <PavosCard
             v-for="recarga in recargas"
             :key="recarga.id"
@@ -583,6 +583,10 @@ const addCrewToCart = (item) => {
   row-gap: 160px;
 }
 
+.recargas-grid {
+  row-gap: 40px;
+}
+
 @media (min-width: 1024px) {
   .cosmetics-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -614,6 +618,10 @@ const addCrewToCart = (item) => {
     grid-template-columns: repeat(2, 1fr);
     gap: 6px;
     row-gap: 30px;
+  }
+  .recargas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 20px;
   }
   .series-title {
     font-size: 18px;

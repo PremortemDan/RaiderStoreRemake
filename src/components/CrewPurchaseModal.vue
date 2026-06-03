@@ -32,11 +32,6 @@
             <p class="instructions-step"><strong>Paso 3. Nosotros hacemos la activación y listo.</strong> ¡Los beneficios te servirán para todas las plataformas (PC, PS, Switch o Celular)!</p>
           </div>
 
-          <!-- Mensaje de cuenta -->
-          <div class="account-message">
-            <p>¿Ya agregaste tu cuenta? Si aun no la has agregado <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="account-link">hazlo aquí</a></p>
-          </div>
-
           <!-- Botones de acción -->
           <div class="action-buttons">
             <button class="btn btn-primary" @click="addToCart">
