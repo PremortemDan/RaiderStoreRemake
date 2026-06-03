@@ -620,7 +620,7 @@ const addCrewToCart = (item) => {
     row-gap: 30px;
   }
   .recargas-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     row-gap: 20px;
   }
   .series-title {
