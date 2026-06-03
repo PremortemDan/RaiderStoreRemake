@@ -1,30 +1,27 @@
 <template>
   <div class="pavos-card-wrapper" @click="selectPavos">
     <div class="pavos-card" :class="`rarity-${pavos.rarity}`">
-      <div class="card-inner">
-        <div class="image-container">
-          <img :src="pavos.imageUrl" :alt="pavos.name" class="card-image" />
-        </div>
+      <div class="card-image-container">
+        <img :src="pavos.imageUrl" :alt="pavos.name" class="card-image-small" />
         <h3 class="card-title">{{ pavos.name }}</h3>
-        <div class="prices-container">
-          <div class="vbucks-row">
-            <svg class="pavos-icon" width="20" height="20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="100" cy="100" r="80" fill="white"/>
-              <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/>
-            </svg>
-            <span class="vbucks-value">{{ pavos.price }}</span>
-          </div>
-          <div class="conversion-row">
-            <div class="conversion-item">
-              <span class="currency-label">MXN</span>
-              <span class="currency-value">${{ pavos.mxn }}</span>
-            </div>
-            <div class="conversion-item">
-              <span class="currency-label">USD</span>
-              <span class="currency-value">${{ pavos.usd }}</span>
-            </div>
-          </div>
+        <div class="price-badge">
+          <svg class="pavos-icon" width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" fill="white"/>
+            <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/>
+          </svg>
+          {{ pavos.price }}
         </div>
+        <div class="fade-image" :class="`rarity-${pavos.rarity}`"></div>
+      </div>
+    </div>
+    <div class="price-info">
+      <div class="price-row">
+        <span class="currency-label">MXN:</span>
+        <span class="price-value">${{ pavos.mxn }}</span>
+      </div>
+      <div class="price-row">
+        <span class="currency-label">USD:</span>
+        <span class="price-value">${{ pavos.usd }}</span>
       </div>
     </div>
   </div>
@@ -53,17 +50,17 @@ const selectPavos = () => {
 
 .pavos-card {
   border-radius: 15px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  height: 100%;
   cursor: pointer;
 }
 
 .pavos-card:hover {
   box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
-  transform: translateY(-4px);
 }
 
 /* Rarezas */
@@ -86,151 +83,205 @@ const selectPavos = () => {
   background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
 }
 
-.card-inner {
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-}
-
-.image-container {
+.card-image-container {
+  position: relative;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
+  aspect-ratio: 0.6;
+  overflow: hidden;
+  background: rgba(250, 0, 0, 0);
+  margin-top: -70px;
+  margin-left: 0px;
+  margin-right: -16px;
+  padding-top: -15px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.card-image {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+.card-image-small {
+  width: 140%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.3s ease;
+  margin-left: -23%;
+  transform: scale(0.55);
 }
 
-.pavos-card:hover .card-image {
-  transform: scale(1.1);
+.pavos-card:hover .card-image-small {
+  transform: scale(0.60);
+}
+
+.price-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 0px;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+.pavos-icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.fade-image {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #DC2F02);
+  z-index: 1;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.fade-image.rarity-common {
+  background: linear-gradient(180deg, #2a2a2a00, #4a4a4a 100%);
+}
+.fade-image.rarity-uncommon {
+  background: linear-gradient(180deg, #3D1A0000, #8B3A00 100%);
+}
+.fade-image.rarity-rare {
+  background: linear-gradient(180deg, #3D100000, #DC2F02 100%);
+}
+.fade-image.rarity-epic {
+  background: linear-gradient(180deg, #FF8C0000, #D35400 100%);
+}
+.fade-image.rarity-legendary {
+  background: linear-gradient(180deg, #7B3F0000, #FF6B00 100%);
+}
+.fade-image.rarity-mythic {
+  background: linear-gradient(180deg, #5C2E0000, #CC5500 100%);
 }
 
 .card-title {
   margin: 0;
-  font-size: 24px;
-  font-weight: 900;
-  color: #ffffff;
-  line-height: 1.2;
-  text-align: center;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f3f4f6;
+  line-height: 1.3;
+  
+  position: absolute;
+  bottom: 35px;
+  left: 12px;
+  right: 12px;
+  
+  z-index: 2;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.prices-container {
+/* Estilos para el wrapper y precio */
+.pavos-card-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
+  gap: 4px;
 }
 
-.vbucks-row {
+.price-info {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+  font-size: large;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.price-row {
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 8px;
-}
-
-.pavos-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.vbucks-value {
-  font-size: 26px;
-  font-weight: 900;
+  font-size: 35px;
+  font-weight: 600;
   color: #ffffff;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.conversion-row {
-  display: flex;
-  gap: 12px;
-}
-
-.conversion-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: rgba(0, 0, 0, 0.25);
-  padding: 6px 14px;
-  border-radius: 10px;
-  min-width: 80px;
+  line-height: 1;
 }
 
 .currency-label {
-  font-size: 11px;
   font-weight: 700;
-  color: #FFB347;
-  text-transform: uppercase;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  letter-spacing: 1px;
+  min-width: 40px;
+  color: #f3f4f6;
 }
 
-.currency-value {
-  font-size: 18px;
-  font-weight: 700;
+.price-value {
   color: #ffffff;
+  font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 /* ========== MÓVIL ========== */
 @media (max-width: 767px) {
   .pavos-card {
-    border-radius: 10px;
-  }
-
-  .card-inner {
-    padding: 14px 10px;
-    gap: 10px;
-  }
-
-  .card-image {
-    width: 60px;
-    height: 60px;
-  }
-
-  .card-title {
-    font-size: 16px;
-  }
-
-  .vbucks-value {
-    font-size: 18px;
-  }
-
-  .pavos-icon {
-    width: 14px;
-    height: 14px;
-  }
-
-  .conversion-row {
-    gap: 8px;
-  }
-
-  .conversion-item {
-    padding: 4px 8px;
-    min-width: 60px;
     border-radius: 6px;
   }
 
-  .currency-label {
-    font-size: 8px;
+  .card-image-container {
+    margin-top: -28px;
+    margin-right: -6px;
+    aspect-ratio: 0.6;
   }
 
-  .currency-value {
-    font-size: 13px;
+  .card-image-small {
+    width: 150%;
+    margin-left: -25%;
+    transform: scale(0.7);
+  }
+
+  .pavos-card:hover .card-image-small {
+    transform: scale(0.73);
+  }
+
+  .card-title {
+    font-size: 7px;
+    font-weight: 900;
+    bottom: 18px;
+    left: 4px;
+    right: 4px;
+    -webkit-line-clamp: 2;
+    line-height: 1.2;
+  }
+
+  .price-badge {
+    font-size: 7px;
+    bottom: 0px;
+    left: 0px;
+    padding: 0px 3px;
+    gap: 2px;
+    align-items: left;
+  }
+
+  .pavos-icon {
+    width: 10px;
+    height: 10px;
+    padding: 0px 0px 5px 0px;
+  }
+
+  .fade-image {
+    height: 45%;
+  }
+
+  .price-row {
+    font-size: 12px;
+    line-height: 0.6;
+  }
+
+  .currency-label {
+    min-width: 30px;
   }
 }
 </style>

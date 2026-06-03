@@ -4,6 +4,7 @@ import CosmeticStore from './components/CosmeticStore.vue';
 import PasesCard from './components/PasesCard.vue';
 import PavosCard from './components/PavosCard.vue';
 import CrewCard from './components/CrewCard.vue';
+import CrewPurchaseModal from './components/CrewPurchaseModal.vue';
 import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
@@ -21,7 +22,9 @@ const searchQuery = ref('');
 const currentLanguage = ref('es');
 const activeTab = ref('skins');
 const showPurchaseModal = ref(false);
+const showCrewModal = ref(false);
 const selectedItem = ref(null);
+const selectedCrewItem = ref(null);
 
 // Datos de pases
 const pases = ref([
@@ -199,6 +202,17 @@ const addItemToCart = (item) => {
   window.dispatchEvent(event);
   showPurchaseModal.value = false;
 };
+
+const openCrewModal = (item) => {
+  selectedCrewItem.value = item;
+  showCrewModal.value = true;
+};
+
+const addCrewToCart = (item) => {
+  const event = new CustomEvent('add-to-cart', { detail: item });
+  window.dispatchEvent(event);
+  showCrewModal.value = false;
+};
 </script>
 
 <template>
@@ -313,11 +327,19 @@ const addItemToCart = (item) => {
             v-for="item in crew"
             :key="item.id"
             :crew="item"
-            @select="openPurchaseModal"
+            @select="openCrewModal"
           />
         </div>
       </section>
     </main>
+
+    <!-- Modal de Compra Crew -->
+    <CrewPurchaseModal
+      :isOpen="showCrewModal"
+      :crew="selectedCrewItem"
+      @close="showCrewModal = false"
+      @add-to-cart="addCrewToCart"
+    />
 
     <!-- Modal de Compra (Pases, Recargas y Crew) -->
     <PurchaseModal

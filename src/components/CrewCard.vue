@@ -1,22 +1,18 @@
 <template>
-  <div class="crew-card-wrapper" @click="selectCrew">
-    <div class="crew-card" :class="`rarity-${crew.rarity}`">
-      <div class="card-inner">
-        <div class="image-container">
-          <img :src="crew.imageUrl" :alt="crew.label" class="card-image" />
-        </div>
-        <div class="months-big">{{ crew.name }}</div>
-        <div class="price-tag">
-          <span class="price-label">{{ crew.label }}</span>
-        </div>
-        <div class="conversion-row">
-          <div class="conversion-item">
-            <span class="currency-label">MXN</span>
-            <span class="currency-value">${{ crew.mxn }}</span>
-          </div>
-          <div class="conversion-item">
-            <span class="currency-label">USD</span>
-            <span class="currency-value">${{ crew.usd }}</span>
+  <div class="crew-card" :class="`rarity-${crew.rarity}`" @click="$emit('select', crew)">
+    <div class="crew-header">
+      <img :src="crew.imageUrl" :alt="crew.label" class="crew-image"/>
+    </div>
+    
+    <div class="crew-content">
+      <h3 class="crew-name">{{ crew.name }}</h3>
+      <p class="crew-label">{{ crew.label }}</p>
+      
+      <div class="crew-price">
+        <div class="price-container">
+          <div class="price-converted">
+            <span class="converted-price">${{ crew.mxn }} MXN</span>
+            <span class="converted-price">${{ crew.usd }} USD</span>
           </div>
         </div>
       </div>
@@ -25,39 +21,27 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   crew: {
     type: Object,
     required: true
   }
 });
 
-const emit = defineEmits(['select']);
-
-const selectCrew = () => {
-  emit('select', props.crew);
-};
+defineEmits(['select']);
 </script>
 
 <style scoped>
-.crew-card-wrapper {
-  cursor: pointer;
-  user-select: none;
-}
-
 .crew-card {
-  border-radius: 15px;
+  position: relative;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  grid-column: span 2;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-}
-
-.crew-card:hover {
-  box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
-  transform: translateY(-4px);
+  height: 100%;
 }
 
 /* Rarezas */
@@ -80,130 +64,114 @@ const selectCrew = () => {
   background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
 }
 
-.image-container {
+.crew-card:hover {
+  box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
+  transform: translateY(-8px);
+}
+
+.crew-header {
+  position: relative;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 0;
+  height: 250px;
+  overflow: hidden;
+  background: transparent;
 }
 
-.card-image {
-  width: 90px;
-  height: 90px;
+.crew-image {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-  transition: transform 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.crew-card:hover .card-image {
-  transform: scale(1.1);
-}
-
-.card-inner {
-  padding: 28px 20px;
+.crew-content {
+  padding: 16px 20px 20px 20px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  flex: 1;
-  min-height: 220px;
 }
 
-.months-big {
-  font-size: 100px;
-  font-weight: 900;
+.crew-name {
+  margin: 0 0 6px 0;
   color: #ffffff;
-  line-height: 1;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  letter-spacing: -3px;
-}
-
-.price-tag {
-  display: flex;
-  align-items: center;
-}
-
-.price-label {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
-  color: #FFB347;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
-.conversion-row {
-  display: flex;
-  gap: 14px;
+.crew-label {
+  margin: 0 0 15px 0;
+  color: #b0b0b0;
+  font-size: 14px;
 }
 
-.conversion-item {
+.crew-price {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: rgba(0, 0, 0, 0.25);
-  padding: 6px 16px;
-  border-radius: 10px;
-  min-width: 85px;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 107, 0, 0.3);
+  margin-top: auto;
 }
 
-.currency-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #FFB347;
-  text-transform: uppercase;
+.price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.price-converted {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.converted-price {
+  color: #e0e0e0;
+  font-weight: 600;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  letter-spacing: 1px;
 }
 
-.currency-value {
-  font-size: 19px;
-  font-weight: 700;
-  color: #ffffff;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+@media (max-width: 1023px) {
+  .crew-card {
+    grid-column: span 3;
+  }
+  
+  .crew-header {
+    height: 180px;
+  }
+
+  .crew-name {
+    font-size: 18px;
+  }
 }
 
-/* ========== MÓVIL ========== */
 @media (max-width: 767px) {
   .crew-card {
-    border-radius: 10px;
+    grid-column: span 3;
+  }
+  
+  .crew-header {
+    height: 140px;
   }
 
-  .card-inner {
-    padding: 16px 10px;
-    gap: 10px;
-    min-height: 150px;
+  .crew-content {
+    padding: 12px 15px;
   }
 
-  .months-big {
-    font-size: 50px;
-    letter-spacing: -1px;
+  .crew-name {
+    font-size: 16px;
   }
 
-  .price-label {
+  .crew-label {
     font-size: 12px;
   }
 
-  .conversion-row {
-    gap: 8px;
-  }
-
-  .conversion-item {
-    padding: 4px 10px;
-    min-width: 60px;
-    border-radius: 6px;
-  }
-
-  .currency-label {
-    font-size: 8px;
-  }
-
-  .currency-value {
-    font-size: 14px;
+  .converted-price {
+    font-size: 12px;
   }
 }
 </style>
