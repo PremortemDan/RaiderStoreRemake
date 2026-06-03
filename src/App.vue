@@ -13,6 +13,7 @@ import PaseOG from './assets/PaseOG.png';
 import PaseLego from './assets/PaseLego.png';
 import PaseFestival from './assets/PaseFestival.png';
 import pavosImg from './assets/pavos.png';
+import crewImg from './assets/crew.png';
 
 const cartItems = ref([]);
 const showCart = ref(false);
@@ -73,66 +74,33 @@ const crew = ref([
     name: '1 Mes',
     label: '1 mes de Crew',
     price: 0,
-    mxn: '75.00',
-    usd: '4.34',
+    mxn: '89.00',
+    usd: '5.15',
     rarity: 'rare',
     type: 'default',
-    imageUrl: ''
-  },
-  {
-    id: 'crew-2',
-    name: '2 Meses',
-    label: '2 meses de Crew',
-    price: 0,
-    mxn: '110.00',
-    usd: '6.36',
-    rarity: 'epic',
-    type: 'default',
-    imageUrl: ''
+    imageUrl: crewImg
   },
   {
     id: 'crew-3',
     name: '3 Meses',
     label: '3 meses de Crew',
     price: 0,
-    mxn: '140.00',
-    usd: '8.10',
-    rarity: 'legendary',
+    mxn: '199.00',
+    usd: '11.51',
+    rarity: 'epic',
     type: 'default',
-    imageUrl: ''
-  },
-  {
-    id: 'crew-4',
-    name: '4 Meses',
-    label: '4 meses de Crew',
-    price: 0,
-    mxn: '165.00',
-    usd: '9.55',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: ''
-  },
-  {
-    id: 'crew-5',
-    name: '5 Meses',
-    label: '5 meses de Crew',
-    price: 0,
-    mxn: '195.00',
-    usd: '11.28',
-    rarity: 'mythic',
-    type: 'default',
-    imageUrl: ''
+    imageUrl: crewImg
   },
   {
     id: 'crew-6',
     name: '6 Meses',
     label: '6 meses de Crew',
     price: 0,
-    mxn: '220.00',
-    usd: '12.72',
-    rarity: 'mythic',
+    mxn: '350.00',
+    usd: '20.25',
+    rarity: 'legendary',
     type: 'default',
-    imageUrl: ''
+    imageUrl: crewImg
   }
 ]);
 

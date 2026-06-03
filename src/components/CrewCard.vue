@@ -2,6 +2,9 @@
   <div class="crew-card-wrapper" @click="selectCrew">
     <div class="crew-card" :class="`rarity-${crew.rarity}`">
       <div class="card-inner">
+        <div class="image-container">
+          <img :src="crew.imageUrl" :alt="crew.label" class="card-image" />
+        </div>
         <div class="months-big">{{ crew.name }}</div>
         <div class="price-tag">
           <span class="price-label">{{ crew.label }}</span>
@@ -75,6 +78,26 @@ const selectCrew = () => {
 }
 .crew-card.rarity-mythic {
   background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
+}
+
+.image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.card-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease;
+}
+
+.crew-card:hover .card-image {
+  transform: scale(1.1);
 }
 
 .card-inner {
