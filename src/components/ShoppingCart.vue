@@ -22,13 +22,14 @@
             <div class="item-details">
               <h4 class="item-name">{{ item.name }}</h4>
               <div class="item-prices">
-                <span class="item-price">
+                <span v-if="item.price > 0" class="item-price">
                   <svg class="pavos-icon" width="16" height="16" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="80" fill="white"/>
                     <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
                   {{ item.price }}
                 </span>
-                <span class="item-mxn">${{ calculatePriceMXN(item.price) }} MXN</span>
+                <span class="item-mxn">${{ item.mxn || calculatePriceMXN(item.price) }} MXN</span>
+                <span class="item-usd">${{ item.usd || calculatePriceUSD(item.price) }} USD</span>
               </div>
             </div>
             <button class="remove-btn" @click="removeItem(index)">
@@ -43,17 +44,17 @@
 
       <div v-if="items.length > 0" class="cart-footer">
         <div class="total-section">
-          <div class="total-row">
+          <div v-if="totalVbucks > 0" class="total-row">
             <span>Total V-Bucks:</span>
             <span class="total-vbucks">{{ totalVbucks }}</span>
           </div>
           <div class="total-row">
             <span>Total MXN:</span>
-            <span class="total-mxn">${{ totalMXN }}</span>
+            <span class="total-mxn">${{ totalMXN.toFixed(2) }}</span>
           </div>
           <div class="total-row">
             <span>Total USD:</span>
-            <span class="total-usd">${{ totalUSD }}</span>
+            <span class="total-usd">${{ totalUSD.toFixed(2) }}</span>
           </div>
         </div>
         <button class="checkout-btn" @click="showCheckout = true">Proceder al Pago</button>
@@ -104,15 +105,23 @@ const calculatePriceUSD = (vbucks) => {
 };
 
 const totalVbucks = computed(() => {
-  return props.items.reduce((sum, item) => sum + item.price, 0);
+  return props.items.reduce((sum, item) => sum + (item.price || 0), 0);
 });
 
 const totalMXN = computed(() => {
-  return calculatePriceMXN(totalVbucks.value);
+  return props.items.reduce((sum, item) => {
+    if (item.mxn) return sum + parseFloat(item.mxn);
+    if (item.price > 0) return sum + parseFloat(calculatePriceMXN(item.price));
+    return sum;
+  }, 0);
 });
 
 const totalUSD = computed(() => {
-  return calculatePriceUSD(totalVbucks.value);
+  return props.items.reduce((sum, item) => {
+    if (item.usd) return sum + parseFloat(item.usd);
+    if (item.price > 0) return sum + parseFloat(calculatePriceUSD(item.price));
+    return sum;
+  }, 0);
 });
 </script>
 
@@ -272,6 +281,11 @@ const totalUSD = computed(() => {
 
 .item-mxn {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.item-usd {
+  color: #FFCC80;
+  font-size: 11px;
 }
 
 .remove-btn {

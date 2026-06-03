@@ -13,22 +13,22 @@
             <div v-for="(item, index) in items" :key="index" class="product-summary-item">
               <span class="product-name">{{ item.name }}</span>
               <div class="product-prices">
-                <span class="vbucks-price">
+                <span v-if="item.price > 0" class="vbucks-price">
                   <svg class="pavos-icon" width="14" height="14" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="80" fill="white"/>
                     <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> 
                   </svg>
                   {{ item.price }}
                 </span>
-                <span class="real-price">${{ calculatePriceMXN(item.price) }} MXN</span>
-                <span class="real-price-usd">${{ calculatePriceUSD(item.price) }} USD</span>
+                <span class="real-price">${{ item.mxn || calculatePriceMXN(item.price) }} MXN</span>
+                <span class="real-price-usd">${{ item.usd || calculatePriceUSD(item.price) }} USD</span>
               </div>
             </div>
           </div>
           
           <!-- Total -->
           <div class="total-summary">
-            <div class="total-row">
+            <div v-if="totalVbucks > 0" class="total-row">
               <span>Total V-Bucks:</span>
               <span class="total-vbucks">{{ totalVbucks }}</span>
             </div>
@@ -125,15 +125,23 @@ const calculatePriceUSD = (vbucks) => {
 };
 
 const totalVbucks = computed(() => {
-  return props.items.reduce((sum, item) => sum + item.price, 0);
+  return props.items.reduce((sum, item) => sum + (item.price || 0), 0);
 });
 
 const totalMXN = computed(() => {
-  return calculatePriceMXN(totalVbucks.value);
+  return props.items.reduce((sum, item) => {
+    if (item.mxn) return sum + parseFloat(item.mxn);
+    if (item.price > 0) return sum + parseFloat(calculatePriceMXN(item.price));
+    return sum;
+  }, 0).toFixed(2);
 });
 
 const totalUSD = computed(() => {
-  return calculatePriceUSD(totalVbucks.value);
+  return props.items.reduce((sum, item) => {
+    if (item.usd) return sum + parseFloat(item.usd);
+    if (item.price > 0) return sum + parseFloat(calculatePriceUSD(item.price));
+    return sum;
+  }, 0).toFixed(2);
 });
 
 const proceedToWhatsApp = () => {
@@ -146,14 +154,20 @@ const proceedToWhatsApp = () => {
   message += `*PRODUCTOS:*\n`;
   
   props.items.forEach((item) => {
-    const mxn = calculatePriceMXN(item.price);
-    const usd = calculatePriceUSD(item.price);
+    const mxn = item.mxn || calculatePriceMXN(item.price);
+    const usd = item.usd || calculatePriceUSD(item.price);
     message += `• ${item.name}\n`;
-    message += `  💙 ${item.price} V-Bucks | $${mxn} MXN | $${usd} USD\n\n`;
+    if (item.price > 0) {
+      message += `  💙 ${item.price} V-Bucks | $${mxn} MXN | $${usd} USD\n\n`;
+    } else {
+      message += `  💵 $${mxn} MXN | $${usd} USD\n\n`;
+    }
   });
 
   message += `*TOTALES:*\n`;
-  message += `💙 V-Bucks: ${totalVbucks.value}\n`;
+  if (totalVbucks.value > 0) {
+    message += `💙 V-Bucks: ${totalVbucks.value}\n`;
+  }
   message += `💵 MXN: $${totalMXN.value}\n`;
   message += `💵 USD: $${totalUSD.value}\n\n`;
   message += `*Usuario Epic Games:* ${username.value}\n`;
