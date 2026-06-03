@@ -37,7 +37,6 @@ defineEmits(['select']);
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  grid-column: span 2;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -130,10 +129,6 @@ defineEmits(['select']);
 }
 
 @media (max-width: 1023px) {
-  .pavos-card {
-    grid-column: span 3;
-  }
-  
   .pavos-header {
     height: 180px;
   }
@@ -144,10 +139,6 @@ defineEmits(['select']);
 }
 
 @media (max-width: 767px) {
-  .pavos-card {
-    grid-column: span 3;
-  }
-  
   .pavos-header {
     height: 140px;
   }
