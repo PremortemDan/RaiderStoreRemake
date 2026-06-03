@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import PasesCard from './components/PasesCard.vue';
 import PavosCard from './components/PavosCard.vue';
+import CrewCard from './components/CrewCard.vue';
 import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
@@ -62,6 +63,76 @@ const pases = ref([
     rarity: 'legendary',
     type: 'default',
     imageUrl: PaseFestival
+  }
+]);
+
+// Datos de Crew de Fortnite
+const crew = ref([
+  {
+    id: 'crew-1',
+    name: '1 Mes',
+    label: '1 mes de Crew',
+    price: 0,
+    mxn: '75.00',
+    usd: '4.34',
+    rarity: 'rare',
+    type: 'default',
+    imageUrl: ''
+  },
+  {
+    id: 'crew-2',
+    name: '2 Meses',
+    label: '2 meses de Crew',
+    price: 0,
+    mxn: '110.00',
+    usd: '6.36',
+    rarity: 'epic',
+    type: 'default',
+    imageUrl: ''
+  },
+  {
+    id: 'crew-3',
+    name: '3 Meses',
+    label: '3 meses de Crew',
+    price: 0,
+    mxn: '140.00',
+    usd: '8.10',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: ''
+  },
+  {
+    id: 'crew-4',
+    name: '4 Meses',
+    label: '4 meses de Crew',
+    price: 0,
+    mxn: '165.00',
+    usd: '9.55',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: ''
+  },
+  {
+    id: 'crew-5',
+    name: '5 Meses',
+    label: '5 meses de Crew',
+    price: 0,
+    mxn: '195.00',
+    usd: '11.28',
+    rarity: 'mythic',
+    type: 'default',
+    imageUrl: ''
+  },
+  {
+    id: 'crew-6',
+    name: '6 Meses',
+    label: '6 meses de Crew',
+    price: 0,
+    mxn: '220.00',
+    usd: '12.72',
+    rarity: 'mythic',
+    type: 'default',
+    imageUrl: ''
   }
 ]);
 
@@ -220,6 +291,13 @@ const addItemToCart = (item) => {
         >
           Recargas de pavos
         </button>
+        <button
+          class="service-tab"
+          :class="{ active: activeTab === 'crew' }"
+          @click="activeTab = 'crew'"
+        >
+          Crew de Fortnite
+        </button>
       </div>
     </div>
 
@@ -258,7 +336,22 @@ const addItemToCart = (item) => {
       </section>
     </main>
 
-    <!-- Modal de Compra (Pases y Recargas) -->
+    <!-- Pestaña Crew de Fortnite -->
+    <main v-if="activeTab === 'crew'" class="main-content">
+      <section class="pases-section">
+        <h2 class="series-title">Crew de Fortnite</h2>
+        <div class="cosmetics-grid">
+          <CrewCard
+            v-for="item in crew"
+            :key="item.id"
+            :crew="item"
+            @select="openPurchaseModal"
+          />
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de Compra (Pases, Recargas y Crew) -->
     <PurchaseModal
       :isOpen="showPurchaseModal"
       :cosmetic="selectedItem"
