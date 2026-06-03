@@ -2,15 +2,24 @@
 import { ref, onMounted } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import PasesCard from './components/PasesCard.vue';
+import PavosCard from './components/PavosCard.vue';
+import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
 import ChatBot from './components/ChatBot.vue';
+import paseDeBatalla from './assets/paseDeBatalla.png';
+import PaseOG from './assets/PaseOG.png';
+import PaseLego from './assets/PaseLego.png';
+import PaseFestival from './assets/PaseFestival.png';
+import pavosImg from './assets/pavos.png';
 
 const cartItems = ref([]);
 const showCart = ref(false);
 const searchQuery = ref('');
 const currentLanguage = ref('es');
 const activeTab = ref('skins');
+const showPurchaseModal = ref(false);
+const selectedItem = ref(null);
 
 // Datos de pases
 const pases = ref([
@@ -22,7 +31,7 @@ const pases = ref([
     usd: '6.07',
     rarity: 'rare',
     type: 'default',
-    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/bp_token_icon.png'
+    imageUrl: paseDeBatalla
   },
   {
     id: 'og',
@@ -32,7 +41,7 @@ const pases = ref([
     usd: '6.07',
     rarity: 'legendary',
     type: 'default',
-    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/ogpasslvl1_icon.png'
+    imageUrl: PaseOG
   },
   {
     id: 'lego',
@@ -42,7 +51,7 @@ const pases = ref([
     usd: '8.39',
     rarity: 'epic',
     type: 'default',
-    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/legopass_banner.png'
+    imageUrl: PaseLego
   },
   {
     id: 'festival',
@@ -52,7 +61,71 @@ const pases = ref([
     usd: '8.39',
     rarity: 'legendary',
     type: 'default',
-    imageUrl: 'https://fortnite-api.com/images/cosmetics/br/festival_icon.png'
+    imageUrl: PaseFestival
+  }
+]);
+
+// Datos de recargas de pavos
+const recargas = ref([
+  {
+    id: 'recarga-800',
+    name: '800 V-Bucks',
+    price: 800,
+    mxn: '109.00',
+    usd: '6.31',
+    rarity: 'uncommon',
+    type: 'default',
+    imageUrl: pavosImg
+  },
+  {
+    id: 'recarga-2400',
+    name: '2,400 V-Bucks',
+    price: 2400,
+    mxn: '270.00',
+    usd: '15.62',
+    rarity: 'rare',
+    type: 'default',
+    imageUrl: pavosImg
+  },
+  {
+    id: 'recarga-4500',
+    name: '4,500 V-Bucks',
+    price: 4500,
+    mxn: '409.00',
+    usd: '23.66',
+    rarity: 'epic',
+    type: 'default',
+    imageUrl: pavosImg
+  },
+  {
+    id: 'recarga-12500',
+    name: '12,500 V-Bucks',
+    price: 12500,
+    mxn: '899.00',
+    usd: '52.01',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: pavosImg
+  },
+  {
+    id: 'recarga-17000',
+    name: '17,000 V-Bucks',
+    price: 17000,
+    mxn: '1370.00',
+    usd: '79.25',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: pavosImg
+  },
+  {
+    id: 'recarga-25000',
+    name: '25,000 V-Bucks',
+    price: 25000,
+    mxn: '1920.00',
+    usd: '111.07',
+    rarity: 'mythic',
+    type: 'default',
+    imageUrl: pavosImg
   }
 ]);
 
@@ -77,9 +150,15 @@ const removeFromCart = (index) => {
   cartItems.value.splice(index, 1);
 };
 
-const addPaseToCart = (pase) => {
-  const event = new CustomEvent('add-to-cart', { detail: pase });
+const openPurchaseModal = (item) => {
+  selectedItem.value = item;
+  showPurchaseModal.value = true;
+};
+
+const addItemToCart = (item) => {
+  const event = new CustomEvent('add-to-cart', { detail: item });
   window.dispatchEvent(event);
+  showPurchaseModal.value = false;
 };
 </script>
 
@@ -134,6 +213,13 @@ const addPaseToCart = (pase) => {
         >
           Pases de batalla
         </button>
+        <button
+          class="service-tab"
+          :class="{ active: activeTab === 'recargas' }"
+          @click="activeTab = 'recargas'"
+        >
+          Recargas de pavos
+        </button>
       </div>
     </div>
 
@@ -151,11 +237,34 @@ const addPaseToCart = (pase) => {
             v-for="pase in pases"
             :key="pase.id"
             :pase="pase"
-            @select="addPaseToCart"
+            @select="openPurchaseModal"
           />
         </div>
       </section>
     </main>
+
+    <!-- Pestaña Recargas de Pavos -->
+    <main v-if="activeTab === 'recargas'" class="main-content">
+      <section class="pases-section">
+        <h2 class="series-title">Recargas de Pavos</h2>
+        <div class="cosmetics-grid">
+          <PavosCard
+            v-for="recarga in recargas"
+            :key="recarga.id"
+            :pavos="recarga"
+            @select="openPurchaseModal"
+          />
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de Compra (Pases y Recargas) -->
+    <PurchaseModal
+      :isOpen="showPurchaseModal"
+      :cosmetic="selectedItem"
+      @close="showPurchaseModal = false"
+      @add-to-cart="addItemToCart"
+    />
 
     <!-- Carrito de Compras -->
     <ShoppingCart
