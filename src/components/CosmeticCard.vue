@@ -63,7 +63,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .cosmetic-card {
-  background: linear-gradient(180deg, #001637, #003B8D 100%);
+  background: linear-gradient(180deg, #3D1000, #DC2F02 100%);
   border-radius: 15px;
   overflow: visible;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -121,7 +121,7 @@ const calculatePriceUSD = (vbucks) => {
   position: absolute;
   bottom: 100px;
   left: 10px;
-  background: #F7FF19;
+  background: #FF9F1C;
   color: rgb(0, 0, 0);
   padding: 2px 8px;
   border-radius: 8px;
@@ -162,7 +162,7 @@ const calculatePriceUSD = (vbucks) => {
   left: 0;
   width: 100%;
   height: 50%;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #003B8C);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #DC2F02);
   z-index: 1;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
@@ -211,23 +211,23 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .cosmetic-card.rarity-uncommon {
-  background: linear-gradient(180deg, #143b14, #2d7a2d 100%);
+  background: linear-gradient(180deg, #3D1A00, #8B3A00 100%);
 }
 
 .cosmetic-card.rarity-rare {
-  background: linear-gradient(180deg, #001637, #003B8D 100%);
+  background: linear-gradient(180deg, #3D1000, #DC2F02 100%);
 }
 
 .cosmetic-card.rarity-epic {
-  background: linear-gradient(180deg, #D96CF8, #953CAD 100%);
+  background: linear-gradient(180deg, #FF8C00, #D35400 100%);
 }
 
 .cosmetic-card.rarity-legendary {
-  background: linear-gradient(180deg, #5c3a1a, #c97f1c 100%);
+  background: linear-gradient(180deg, #7B3F00, #FF6B00 100%);
 }
 
 .cosmetic-card.rarity-mythic {
-  background: linear-gradient(180deg, #1a3a5c, #1f7f9f 100%);
+  background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
 }
 
 .fade-image.rarity-common {
@@ -235,23 +235,23 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .fade-image.rarity-uncommon {
-  background: linear-gradient(180deg, #1a4d1a00, #2d7a2d 100%);
+  background: linear-gradient(180deg, #3D1A0000, #8B3A00 100%);
 }
 
 .fade-image.rarity-rare {
-  background: linear-gradient(180deg, #00163700, #003B8D 100%);
+  background: linear-gradient(180deg, #3D100000, #DC2F02 100%);
 }
 
 .fade-image.rarity-epic {
-  background: linear-gradient(180deg, #da6cf800, #953CAD 100%);
+  background: linear-gradient(180deg, #FF8C0000, #D35400 100%);
 }
 
 .fade-image.rarity-legendary {
-  background: linear-gradient(180deg, #5c3a1a00, #c97f1c 100%);
+  background: linear-gradient(180deg, #7B3F0000, #FF6B00 100%);
 }
 
 .fade-image.rarity-mythic {
-  background: linear-gradient(180deg, #1a3a5c00, #1f7f9f 100%);
+  background: linear-gradient(180deg, #5C2E0000, #CC5500 100%);
 }
 
 /* Estilos para el wrapper y precio */

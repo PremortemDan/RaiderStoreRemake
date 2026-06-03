@@ -184,8 +184,8 @@ const sendMessage = async () => {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   border: none;
   cursor: pointer;
   display: flex;
@@ -197,7 +197,7 @@ const sendMessage = async () => {
 
 .chat-toggle-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
 }
 
 .chat-panel {
@@ -206,7 +206,7 @@ const sendMessage = async () => {
   right: 20px;
   width: 380px;
   height: 600px;
-  background: linear-gradient(135deg, #04154D 0%, #0771B8 100%);
+  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
   max-height: 600px;
   border-radius: 20px;
   display: flex;
@@ -254,7 +254,7 @@ const sendMessage = async () => {
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #FFD700;
+  border: 2px solid #FF8C00;
 }
 
 .header-text h3 {
@@ -333,8 +333,8 @@ const sendMessage = async () => {
 }
 
 .message.user .message-content {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -355,7 +355,7 @@ const sendMessage = async () => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #FFD700;
+  background: #FF8C00;
   animation: typing 1.4s infinite;
 }
 
@@ -398,8 +398,8 @@ const sendMessage = async () => {
 }
 
 .chat-input:focus {
-  border-color: #FFD700;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+  border-color: #FF8C00;
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
 }
 
 .chat-input::placeholder {
@@ -416,8 +416,8 @@ const sendMessage = async () => {
   height: 40px;
   padding: 0;
   border: none;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -429,7 +429,7 @@ const sendMessage = async () => {
 
 .send-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
 }
 
 .send-btn:disabled {

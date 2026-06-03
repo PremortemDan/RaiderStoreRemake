@@ -86,7 +86,7 @@ const closeMenu = (e) => {
 }
 
 .world-icon:hover {
-  color: #FFD700;
+  color: #FF8C00;
   transform: scale(1.1);
 }
 
@@ -94,7 +94,7 @@ const closeMenu = (e) => {
   position: absolute;
   top: 50px;
   right: 0;
-  background: linear-gradient(135deg, #04154D 0%, #0771B8 100%);
+  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   min-width: 180px;
@@ -136,15 +136,15 @@ const closeMenu = (e) => {
 }
 
 .language-option:hover {
-  background: rgba(255, 215, 0, 0.1);
-  color: #FFD700;
+  background: rgba(255, 140, 0, 0.1);
+  color: #FF8C00;
   padding-left: 20px;
 }
 
 .language-option.active {
-  background: rgba(255, 215, 0, 0.2);
-  color: #FFD700;
-  border-left: 3px solid #FFD700;
+  background: rgba(255, 140, 0, 0.2);
+  color: #FF8C00;
+  border-left: 3px solid #FF8C00;
   padding-left: 13px;
 }
 

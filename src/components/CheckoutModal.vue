@@ -190,7 +190,7 @@ const proceedToWhatsApp = () => {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #04154D 0%, #0771B8 100%);
+  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
   border-radius: 20px;
   padding: 40px;
   max-width: 600px;
@@ -263,7 +263,7 @@ const proceedToWhatsApp = () => {
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 700;
-  color: #FFD700;
+  color: #FF8C00;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -283,7 +283,7 @@ const proceedToWhatsApp = () => {
   padding: 10px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  border-left: 3px solid #FFD700;
+  border-left: 3px solid #FF8C00;
 }
 
 .product-name {
@@ -300,7 +300,7 @@ const proceedToWhatsApp = () => {
 }
 
 .vbucks-price {
-  color: #FFD700;
+  color: #FF8C00;
   font-size: 13px;
   font-weight: 700;
   display: flex;
@@ -315,13 +315,13 @@ const proceedToWhatsApp = () => {
 }
 
 .real-price {
-  color: #90ee90;
+  color: #FFB347;
   font-size: 13px;
   font-weight: 700;
 }
 
 .real-price-usd {
-  color: #87ceeb;
+  color: #FFCC80;
   font-size: 13px;
   font-weight: 700;
 }
@@ -343,17 +343,17 @@ const proceedToWhatsApp = () => {
 }
 
 .total-vbucks {
-  color: #FFD700;
+  color: #FF8C00;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-mxn {
-  color: #90ee90;
+  color: #FFB347;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-usd {
-  color: #87ceeb;
+  color: #FFCC80;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -385,13 +385,13 @@ const proceedToWhatsApp = () => {
 
 .username-input:focus {
   outline: none;
-  border-color: #FFD700;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  border-color: #FF8C00;
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
 }
 
 .important-message {
-  background: rgba(255, 215, 0, 0.1);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 140, 0, 0.1);
+  border: 1px solid rgba(255, 140, 0, 0.3);
   padding: 12px;
   border-radius: 8px;
   font-size: 13px;
@@ -400,7 +400,7 @@ const proceedToWhatsApp = () => {
 }
 
 .add-friend-link {
-  color: #FFD700;
+  color: #FF8C00;
   text-decoration: none;
   font-weight: 700;
   transition: all 0.3s ease;
@@ -408,7 +408,7 @@ const proceedToWhatsApp = () => {
 
 .add-friend-link:hover {
   text-decoration: underline;
-  color: #ffed4e;
+  color: #FFA500;
 }
 
 .checkbox-section {
@@ -431,7 +431,7 @@ const proceedToWhatsApp = () => {
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #FFD700;
+  accent-color: #FF8C00;
 }
 
 .action-buttons {
@@ -452,13 +452,13 @@ const proceedToWhatsApp = () => {
 }
 
 .btn-confirm {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
 }
 
 .btn-confirm:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
 }
 
 .btn-confirm:disabled {

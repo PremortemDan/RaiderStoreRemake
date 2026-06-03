@@ -135,7 +135,7 @@ const totalUSD = computed(() => {
   bottom: 0;
   width: 100%;
   max-width: 400px;
-  background: linear-gradient(135deg, #04154D 0%, #0771B8 100%);
+  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
   display: flex;
   flex-direction: column;
   animation: slideInRight 0.3s ease-out;
@@ -257,7 +257,7 @@ const totalUSD = computed(() => {
 }
 
 .item-price {
-  color: #FFD700;
+  color: #FF8C00;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -320,22 +320,22 @@ const totalUSD = computed(() => {
 }
 
 .total-vbucks {
-  color: #FFD700;
+  color: #FF8C00;
 }
 
 .total-mxn {
-  color: #90ee90;
+  color: #FFB347;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-usd {
-  color: #87ceeb;
+  color: #FFCC80;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .checkout-btn {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   border: none;
   padding: 14px;
   border-radius: 8px;
@@ -348,7 +348,7 @@ const totalUSD = computed(() => {
 
 .checkout-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
 }
 
 @media (max-width: 768px) {

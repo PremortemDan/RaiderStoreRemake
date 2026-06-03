@@ -56,7 +56,7 @@ const formatPrice = (price) => {
 <style scoped>
 .bundle-card {
   position: relative;
-  background: linear-gradient(180deg, #001637, #003B8D 100%);
+  background: linear-gradient(180deg, #3D1000, #DC2F02 100%);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -77,7 +77,7 @@ const formatPrice = (price) => {
   width: 100%;
   height: 320px;
   overflow: hidden;
-  background: #003B8D;
+  background: #DC2F02;
 }
 
 .bundle-image {
@@ -91,7 +91,7 @@ const formatPrice = (price) => {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #F7FF19;
+  background: #FF9F1C;
   color: rgb(0, 0, 0);
   padding: 6px 12px;
   border-radius: 8px;
@@ -149,7 +149,7 @@ const formatPrice = (price) => {
   content: "→";
   position: absolute;
   left: 0;
-  color: #0095FF;
+  color: #FF6B00;
   font-weight: 700;
 }
 
@@ -158,7 +158,7 @@ const formatPrice = (price) => {
   flex-direction: column;
   gap: 8px;
   padding-top: 15px;
-  border-top: 1px solid rgba(0, 149, 255, 0.3);
+  border-top: 1px solid rgba(255, 107, 0, 0.3);
 }
 
 .price-label {

@@ -141,7 +141,7 @@ title {
 }
 
 .cart-icon:hover {
-  color: #FFD700;
+  color: #FF6B00;
   cursor: pointer;
   transform: scale(1.1);
 }
@@ -151,15 +151,15 @@ title {
 }
 
 .cart-icon.cart-active:hover {
-  color: #FFD700;
+  color: #FF6B00;
 }
 
 .cart-badge {
   position: absolute;
   top: 25px;
   right: -8px;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -169,7 +169,7 @@ title {
   font-size: 12px;
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
   z-index: 10;
 }
 
@@ -286,8 +286,8 @@ title {
   .cart-badge {
   top: 30px;
   right: -4px;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #000000;
+  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
+  color: #ffffff;
   width: 15px;
   height: 15px;
   border-radius: 50%;
