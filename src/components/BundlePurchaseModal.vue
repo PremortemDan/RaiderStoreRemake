@@ -16,13 +16,11 @@
           <!-- Items incluidos -->
           <div class="bundle-items-section">
             <h3 class="items-title">{{ bundle.items.length }} Items Incluidos:</h3>
-            <ul class="items-list">
-              <li v-for="item in bundle.items" :key="item.name" class="item">
-                <span class="item-icon">→</span>
-                <span class="item-name">{{ item.name }}</span>
-                <span class="item-type">({{ item.type }})</span>
-              </li>
-            </ul>
+            <p class="items-line">
+              <span v-for="(item, index) in bundle.items" :key="item.name">
+                {{ item.name }}<span v-if="index < bundle.items.length - 1">, </span>
+              </span>
+            </p>
           </div>
           
           <!-- Precios -->
@@ -219,36 +217,12 @@ const calculatePriceUSD = (vbucks) => {
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
-.items-list {
-  list-style: none;
+.items-line {
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   color: #e0e0e0;
-  font-size: 13px;
-}
-
-.item-icon {
-  color: #FF7B00;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.item-name {
-  font-weight: 600;
-}
-
-.item-type {
-  color: #888;
-  font-size: 11px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .prices-section {

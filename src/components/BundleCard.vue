@@ -9,11 +9,11 @@
       <h3 class="bundle-name">{{ bundle.name }}</h3>
       
       <div class="bundle-items">
-        <ul class="items-list">
-          <li v-for="item in bundle.items" :key="item.name" class="item-name">
-            {{ item.name }}
-          </li>
-        </ul>
+        <p class="items-line">
+          <span v-for="(item, index) in bundle.items" :key="item.name">
+            {{ item.name }}<span v-if="index < bundle.items.length - 1">, </span>
+          </span>
+        </p>
       </div>
       
       <div class="bundle-price">
@@ -169,32 +169,12 @@ const formatPrice = (price) => {
 }
 
 
-.items-list {
-  list-style: none;
+.items-line {
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; /* Permite que se creen las filas necesarias */
-  gap: 6px;
-}
-
-.items-list li {
-  white-space: nowrap; /* Evita que el nombre del item dé un salto de línea interno */
-}
-.item-name {
   color: #e0e0e0;
-  font-size: 12px;
-  padding-left: 15px;
-  position: relative;
-}
-
-.item-name::before {
-  content: "→";
-  position: absolute;
-  left: 0;
-  color: #FF6B00;
-  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .bundle-price {
@@ -252,7 +232,7 @@ const formatPrice = (price) => {
     font-size: 16px;
   }
 
-  .item-name {
+  .items-line {
     font-size: 11px;
   }
 }
@@ -279,7 +259,7 @@ const formatPrice = (price) => {
     font-size: 11px;
   }
 
-  .item-name {
+  .items-line {
     font-size: 10px;
   }
 
