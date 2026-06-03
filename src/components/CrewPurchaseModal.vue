@@ -95,15 +95,14 @@ const addToCart = () => {
 
 .modal-content {
   background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 40px;
   max-width: 550px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease-out;
 }
 
