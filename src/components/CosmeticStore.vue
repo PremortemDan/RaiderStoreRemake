@@ -86,14 +86,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
 import PurchaseModal from './PurchaseModal.vue';
 import BundleCard from './BundleCard.vue';
 import BundlePurchaseModal from './BundlePurchaseModal.vue';
-import { useReactiveLanguage } from '../utils/useLanguage';
+import { useReactiveLanguage, getLanguage } from '../utils/useLanguage';
 
-const { t } = useReactiveLanguage();
+const { t, lang } = useReactiveLanguage();
+
+// Mapeo de nuestro código de idioma al código de la API de Fortnite
+const apiLangMap = {
+  es: 'es',
+  en: 'en',
+  fr: 'fr',
+  pt: 'pt-BR'
+};
+
+const getApiLang = () => apiLangMap[lang.value] || 'es';
 
 const cosmetics = ref([]);
 const bundles = ref([]);
@@ -208,7 +218,8 @@ const fetchCosmetics = async () => {
     loading.value = true;
     error.value = null;
 
-    const response = await fetch('https://fortnite-api.com/v2/shop');
+    const apiLang = getApiLang();
+    const response = await fetch(`https://fortnite-api.com/v2/shop?language=${apiLang}`);
     const data = await response.json();
 
     if (data.status !== 200) {
@@ -361,6 +372,11 @@ const loadFallbackData = () => {
 };
 
 onMounted(() => {
+  fetchCosmetics();
+});
+
+// Re-fetch cuando cambia el idioma
+watch(lang, () => {
   fetchCosmetics();
 });
 </script>
