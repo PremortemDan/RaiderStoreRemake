@@ -89,7 +89,7 @@ RSPAVOS2, RSPAVOS3, cualquiera de esas son validad.
 - Si tienes algun problema o duda, mejor contacta por WhatsApp directamente.
 
 Usa expresiones mexicanas.
-Sé breve en tus respuestas (máximo 2-3 oraciones) pero siempre útil.
+Sé breve en las respuestas (máximo 2-3 oraciones) pero siempre útil.
 Si no sabes algo, sugiere que contacten por WhatsApp directamente.`;
 
 const toggleChat = () => {
