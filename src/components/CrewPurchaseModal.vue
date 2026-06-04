@@ -17,21 +17,21 @@
           <!-- Precios -->
           <div class="prices-section">
             <div class="price-row">
-              <span class="price-label">MXN:</span>
+              <span class="price-label">{{ t('mxn') }}:</span>
               <span class="price-value">${{ crew.mxn }}</span>
             </div>
             <div class="price-row">
-              <span class="price-label">USD:</span>
+              <span class="price-label">{{ t('usd') }}:</span>
               <span class="price-value">${{ crew.usd }}</span>
             </div>
           </div>
 
           <!-- Instrucciones de Xbox -->
           <div class="instructions-section">
-            <h3 class="instructions-title">ACTIVACIÓN DEL CLUB DE FORTNITE 👑</h3>
-            <p class="instructions-step"><strong>Paso 1. El Requisito:</strong> Necesitamos el acceso a tu cuenta de Xbox principal.</p>
-            <p class="instructions-step"><strong>Paso 2. ¿No tienes cuenta de Xbox?</strong> No te preocupes. Solo crea una cuenta de Xbox gratuita y vincúlala a tu cuenta actual de Epic Games.</p>
-            <p class="instructions-step"><strong>Paso 3. Nosotros hacemos la activación y listo.</strong> ¡Los beneficios te servirán para todas las plataformas (PC, PS, Switch o Celular)!</p>
+            <h3 class="instructions-title">{{ t('activacionTitulo') }}</h3>
+            <p class="instructions-step"><strong>{{ t('activacionPaso1') }}</strong> {{ t('activacionPaso1Text') }}</p>
+            <p class="instructions-step"><strong>{{ t('activacionPaso2') }}</strong> {{ t('activacionPaso2Text') }}</p>
+            <p class="instructions-step"><strong>{{ t('activacionPaso3') }}</strong> {{ t('activacionPaso3Text') }}</p>
           </div>
 
           <!-- Botones de acción -->
@@ -42,10 +42,10 @@
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
-              Añadir al carrito
+              {{ t('anadirCarrito') }}
             </button>
             <button class="btn btn-secondary" @click="closeModal">
-              Cancelar
+              {{ t('cancelar') }}
             </button>
           </div>
         </div>
@@ -55,6 +55,10 @@
 </template>
 
 <script setup>
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,

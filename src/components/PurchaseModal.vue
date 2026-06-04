@@ -16,7 +16,7 @@
           <!-- Precios -->
           <div class="prices-section">
             <div class="price-row">
-              <span class="price-label">V-Bucks:</span>
+              <span class="price-label">{{ t('precioVbucks') }}:</span>
               <div class="price-display">
                 <svg class="pavos-icon" width="20" height="20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="100" cy="100" r="80" fill="white"/>
@@ -26,19 +26,19 @@
             </div>
 
             <div class="price-row">
-              <span class="price-label">MXN:</span>
+              <span class="price-label">{{ t('mxn') }}:</span>
               <span class="price-value">${{ calculatePriceMXN(cosmetic.price) }}</span>
             </div>
 
             <div class="price-row">
-              <span class="price-label">USD:</span>
+              <span class="price-label">{{ t('usd') }}:</span>
               <span class="price-value">${{ calculatePriceUSD(cosmetic.price) }}</span>
             </div>
           </div>
 
           <!-- Mensaje de cuenta -->
           <div class="account-message">
-            <p>¿Ya agregaste tu cuenta? Si aun no la has agregado <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="account-link">hazlo aquí</a></p>
+            <p>{{ t('accountMsg') }} <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="account-link">{{ t('hazloAqui') }}</a></p>
           </div>
 
           <!-- Botones de acción -->
@@ -49,10 +49,10 @@
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
               </svg>
-              Añadir al carrito
+              {{ t('anadirCarrito') }}
             </button>
             <button class="btn btn-secondary" @click="closeModal">
-              Cancelar
+              {{ t('cancelar') }}
             </button>
           </div>
         </div>
@@ -62,6 +62,10 @@
 </template>
 
 <script setup>
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
+
 const props = defineProps({
   isOpen: {
     type: Boolean,

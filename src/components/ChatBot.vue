@@ -1,7 +1,7 @@
 <template>
   <div class="chatbot-container">
     <!-- Botón flotante para abrir chat -->
-    <button v-if="!isOpen" class="chat-toggle-btn" @click="toggleChat" title="Abrir chat de ayuda">
+    <button v-if="!isOpen" class="chat-toggle-btn" @click="toggleChat" :title="t('chatAbrir')">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
@@ -13,8 +13,8 @@
         <div class="header-content">
           <img src="../assets/salvador.jpeg" alt="Salvador" class="salvador-avatar-header" />
           <div class="header-text">
-            <h3>Salvador - Asistente RaiderStore</h3>
-            <p class="status">Disponible</p>
+            <h3>{{ t('chatTitulo') }}</h3>
+            <p class="status">{{ t('chatDisponible') }}</p>
           </div>
         </div>
         <button class="close-chat-btn" @click="toggleChat">✕</button>
@@ -36,7 +36,7 @@
           v-model="userInput"
           type="text"
           class="chat-input"
-          placeholder="Escribe tu pregunta..."
+          :placeholder="t('chatPlaceholder')"
           @keyup.enter="sendMessage"
           :disabled="isLoading"
         />
@@ -52,7 +52,10 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, onMounted } from 'vue';
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
 
 const isOpen = ref(false);
 const isLoading = ref(false);
@@ -60,9 +63,14 @@ const userInput = ref('');
 const messages = ref([
   {
     role: 'assistant',
-    content: '¡Ey, ¿qué pex, jefe! Soy Salvador, tu asistente aquí en RaiderStore. ¿Necesitas ayuda con algo? 🎮'
+    content: '' // Se inicializa en onMounted
   }
 ]);
+
+// Inicializar mensaje de bienvenida
+onMounted(() => {
+  messages.value[0].content = t('chatBienvenida');
+});
 
 const systemPrompt = `Eres Salvador, el asistente de ayuda, soló para resolver dudas de RaiderStore, una tienda de cosméticos de Fortnite. 
 Tu personalidad es la de un mexicano joven y amigable que habla con jerga y modismos mexicanos naturalmente.
@@ -116,7 +124,7 @@ const sendMessage = async () => {
     if (!apiKey || apiKey === 'your_deepseek_api_key_here') {
       messages.value.push({
         role: 'assistant',
-        content: '¡Ey, hermano! Parece que el servidor no está configurado todavía. Mejor contacta al admin, ¿qué te parece? 😅'
+        content: t('chatErrorApi')
       });
       isLoading.value = false;
       return;
@@ -157,7 +165,7 @@ const sendMessage = async () => {
     console.error('Error al conectar con la API:', error);
     messages.value.push({
       role: 'assistant',
-      content: 'Nel, hermano, hubo un error con el servidor. ¿Mejor contactas por WhatsApp? 📱'
+      content: t('chatErrorServidor')
     });
   } finally {
     isLoading.value = false;

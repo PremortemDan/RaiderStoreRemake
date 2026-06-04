@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import PasesCard from './components/PasesCard.vue';
 import PavosCard from './components/PavosCard.vue';
@@ -9,6 +9,7 @@ import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
 import ChatBot from './components/ChatBot.vue';
+import { setLanguage, useLanguage } from './utils/useLanguage';
 import paseDeBatalla from './assets/paseDeBatalla.png';
 import PaseOG from './assets/PaseOG.png';
 import PaseLego from './assets/PaseLego.png';
@@ -20,6 +21,12 @@ const cartItems = ref([]);
 const showCart = ref(false);
 const searchQuery = ref('');
 const currentLanguage = ref('es');
+const { t } = useLanguage();
+
+// Sincronizar cambio de idioma con el sistema global
+watch(currentLanguage, (newLang) => {
+  setLanguage(newLang);
+});
 const activeTab = ref('skins');
 const showPurchaseModal = ref(false);
 const showCrewModal = ref(false);
@@ -233,7 +240,7 @@ const addCrewToCart = (item) => {
             v-model="searchQuery"
             type="text"
             class="search-input"
-            placeholder="Buscar por nombre o categoría..."
+            :placeholder="t('buscar')"
           />
         </div>
         <LanguageMenu v-model="currentLanguage" />
@@ -257,28 +264,28 @@ const addCrewToCart = (item) => {
           :class="{ active: activeTab === 'skins' }"
           @click="activeTab = 'skins'"
         >
-          Skins y packs via regalo
+           {{ t('skinsTab') }}
         </button>
         <button
           class="service-tab"
           :class="{ active: activeTab === 'pases' }"
           @click="activeTab = 'pases'"
         >
-          Pases de batalla
+           {{ t('pasesTab') }}
         </button>
         <button
           class="service-tab"
           :class="{ active: activeTab === 'recargas' }"
           @click="activeTab = 'recargas'"
         >
-          Recargas de pavos
+           {{ t('recargasTab') }}
         </button>
         <button
           class="service-tab"
           :class="{ active: activeTab === 'crew' }"
           @click="activeTab = 'crew'"
         >
-          Crew de Fortnite
+           {{ t('crewTab') }}
         </button>
       </div>
     </div>
@@ -291,7 +298,7 @@ const addCrewToCart = (item) => {
     <!-- Pestaña Pases de Batalla -->
     <main v-if="activeTab === 'pases'" class="main-content">
       <section class="pases-section">
-        <h2 class="series-title">Pases de Batalla</h2>
+        <h2 class="series-title">{{ t('pasesBatalla') }}</h2>
         <div class="cosmetics-grid">
           <PasesCard
             v-for="pase in pases"
@@ -306,7 +313,7 @@ const addCrewToCart = (item) => {
     <!-- Pestaña Recargas de Pavos -->
     <main v-if="activeTab === 'recargas'" class="main-content">
       <section class="pases-section">
-        <h2 class="series-title">Recargas de Pavos</h2>
+        <h2 class="series-title">{{ t('recargasPavos') }}</h2>
         <div class="cosmetics-grid recargas-grid">
           <PavosCard
             v-for="recarga in recargas"
@@ -321,7 +328,7 @@ const addCrewToCart = (item) => {
     <!-- Pestaña Crew de Fortnite -->
     <main v-if="activeTab === 'crew'" class="main-content">
       <section class="pases-section">
-        <h2 class="series-title">Crew de Fortnite</h2>
+        <h2 class="series-title">{{ t('crewFortnite') }}</h2>
         <div class="cosmetics-grid">
           <CrewCard
             v-for="item in crew"

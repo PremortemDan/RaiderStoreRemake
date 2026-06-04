@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="cart-overlay" @click="closeCart">
     <div class="cart-panel" @click.stop>
       <div class="cart-header">
-        <h2>Carrito de Compras</h2>
+        <h2>{{ t('carritoCompras') }}</h2>
         <button class="close-btn" @click="closeCart">✕</button>
       </div>
 
@@ -13,7 +13,7 @@
             <circle cx="20" cy="21" r="1"></circle>
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
           </svg>
-          <p>Tu carrito está vacío</p>
+          <p>{{ t('carritoVacio') }}</p>
         </div>
 
         <div v-else class="cart-items">
@@ -28,8 +28,8 @@
                     <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
                   {{ item.price }}
                 </span>
-                <span class="item-mxn">${{ item.mxn || calculatePriceMXN(item.price) }} MXN</span>
-                <span class="item-usd">${{ item.usd || calculatePriceUSD(item.price) }} USD</span>
+                <span class="item-mxn">${{ item.mxn || calculatePriceMXN(item.price) }} {{ t('mxn') }}</span>
+                <span class="item-usd">${{ item.usd || calculatePriceUSD(item.price) }} {{ t('usd') }}</span>
               </div>
             </div>
             <button class="remove-btn" @click="removeItem(index)">
@@ -45,19 +45,19 @@
       <div v-if="items.length > 0" class="cart-footer">
         <div class="total-section">
           <div v-if="totalVbucks > 0" class="total-row">
-            <span>Total V-Bucks:</span>
+            <span>{{ t('totalVbucks') }}</span>
             <span class="total-vbucks">{{ totalVbucks }}</span>
           </div>
           <div class="total-row">
-            <span>Total MXN:</span>
+            <span>{{ t('totalMxn') }}</span>
             <span class="total-mxn">${{ totalMXN.toFixed(2) }}</span>
           </div>
           <div class="total-row">
-            <span>Total USD:</span>
+            <span>{{ t('totalUsd') }}</span>
             <span class="total-usd">${{ totalUSD.toFixed(2) }}</span>
           </div>
         </div>
-        <button class="checkout-btn" @click="showCheckout = true">Proceder al Pago</button>
+        <button class="checkout-btn" @click="showCheckout = true">{{ t('procederPago') }}</button>
       </div>
     </div>
 
@@ -73,6 +73,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import CheckoutModal from './CheckoutModal.vue';
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
 
 const props = defineProps({
   isOpen: {

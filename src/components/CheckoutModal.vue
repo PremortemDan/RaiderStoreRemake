@@ -4,11 +4,11 @@
       <button class="close-btn" @click="closeModal">✕</button>
       
       <div class="modal-body">
-        <h2 class="modal-title">Confirmar Compra</h2>
+        <h2 class="modal-title">{{ t('confirmarCompra') }}</h2>
         
         <!-- Lista de productos -->
         <div class="products-summary">
-          <h3>Resumen de Compra</h3>
+          <h3>{{ t('resumenCompra') }}</h3>
           <div class="products-list">
             <div v-for="(item, index) in items" :key="index" class="product-summary-item">
               <span class="product-name">{{ item.name }}</span>
@@ -20,8 +20,8 @@
                   </svg>
                   {{ item.price }}
                 </span>
-                <span class="real-price">${{ item.mxn || calculatePriceMXN(item.price) }} MXN</span>
-                <span class="real-price-usd">${{ item.usd || calculatePriceUSD(item.price) }} USD</span>
+                <span class="real-price">${{ item.mxn || calculatePriceMXN(item.price) }} {{ t('mxn') }}</span>
+                <span class="real-price-usd">${{ item.usd || calculatePriceUSD(item.price) }} {{ t('usd') }}</span>
               </div>
             </div>
           </div>
@@ -29,15 +29,15 @@
           <!-- Total -->
           <div class="total-summary">
             <div v-if="totalVbucks > 0" class="total-row">
-              <span>Total V-Bucks:</span>
+              <span>{{ t('totalVbucks') }}</span>
               <span class="total-vbucks">{{ totalVbucks }}</span>
             </div>
             <div class="total-row">
-              <span>Total MXN:</span>
+              <span>{{ t('totalMxn') }}</span>
               <span class="total-mxn">${{ totalMXN }}</span>
             </div>
             <div class="total-row">
-              <span>Total USD:</span>
+              <span>{{ t('totalUsd') }}</span>
               <span class="total-usd">${{ totalUSD }}</span>
             </div>
           </div>
@@ -45,22 +45,22 @@
 
         <!-- Campo de usuario -->
         <div class="username-section">
-          <label for="username" class="username-label">Escribe tu usuario:</label>
+          <label for="username" class="username-label">{{ t('escribeUsuario') }}</label>
           <input 
             id="username"
             v-model="username" 
             type="text" 
             class="username-input" 
-            placeholder="Tu nombre de usuario..."
+            :placeholder="t('placeholderUsuario')"
           />
         </div>
 
         <!-- Mensaje importante -->
         <div class="important-message">
           <p>
-            IMPORTANTE debes añadir de amigo las cuentas de RaiderStore a tu usuario. Si aun no lo has hecho,
+            {{ t('importantes') }}
             <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="add-friend-link">
-              hazlo aquí
+              {{ t('hazloAqui') }}
             </a>
           </p>
         </div>
@@ -69,7 +69,7 @@
         <div class="checkbox-section">
           <label class="checkbox-label">
             <input v-model="friendsAdded" type="checkbox" class="checkbox-input" />
-            <span>Sí he añadido de amigo las cuentas de RaiderStore (RSPAVOS)</span>
+            <span>{{ t('siHeAnadido') }}</span>
           </label>
         </div>
 
@@ -80,10 +80,10 @@
             @click="proceedToWhatsApp"
             :disabled="!username.trim() || !friendsAdded"
           >
-            Confirmar Compra
+            {{ t('confirmarBtn') }}
           </button>
           <button class="btn btn-cancel" @click="closeModal">
-            Cancelar
+            {{ t('cancelar') }}
           </button>
         </div>
       </div>
@@ -93,6 +93,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
 
 const props = defineProps({
   isOpen: {
@@ -150,28 +153,28 @@ const proceedToWhatsApp = () => {
   }
 
   // Construir mensaje de WhatsApp
-  let message = `Hola, deseo realizar una compra en RaiderStore:\n\n`;
-  message += `*PRODUCTOS:*\n`;
+  let message = `${t('msjWhatsApp')}\n\n`;
+  message += `*${t('msjProductos')}*\n`;
   
   props.items.forEach((item) => {
     const mxn = item.mxn || calculatePriceMXN(item.price);
     const usd = item.usd || calculatePriceUSD(item.price);
     message += `• ${item.name}\n`;
     if (item.price > 0) {
-      message += `  💙 ${item.price} V-Bucks | $${mxn} MXN | $${usd} USD\n\n`;
+      message += `  💙 ${item.price} ${t('msjVbucks')} | $${mxn} ${t('mxn')} | $${usd} ${t('usd')}\n\n`;
     } else {
-      message += `  💵 $${mxn} MXN | $${usd} USD\n\n`;
+      message += `  💵 $${mxn} ${t('mxn')} | $${usd} ${t('usd')}\n\n`;
     }
   });
 
-  message += `*TOTALES:*\n`;
+  message += `*${t('msjTotales')}*\n`;
   if (totalVbucks.value > 0) {
-    message += `💙 V-Bucks: ${totalVbucks.value}\n`;
+    message += `💙 ${t('msjVbucks')} ${totalVbucks.value}\n`;
   }
-  message += `💵 MXN: $${totalMXN.value}\n`;
-  message += `💵 USD: $${totalUSD.value}\n\n`;
-  message += `*Usuario Epic Games:* ${username.value}\n`;
-  message += `*Cuenta añadida:* Sí ✓`;
+  message += `💵 ${t('mxn')}: $${totalMXN.value}\n`;
+  message += `💵 ${t('usd')}: $${totalUSD.value}\n\n`;
+  message += `*${t('msjUsuarioEpic')}* ${username.value}\n`;
+  message += `*${t('msjCuentaAnadida')}*`;
 
   // Obtener número de teléfono desde .env
   const phoneNumber = import.meta.env.VITE_WHATSAPP_PHONE || '5215512345678';

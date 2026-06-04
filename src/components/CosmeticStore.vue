@@ -10,7 +10,7 @@
     </div>
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
-      <p class="loading-text">Cargando cosméticos...</p>
+      <p class="loading-text">{{ t('cargandoCosmeticos') }}</p>
     </div>
 
     <div v-else-if="error" class="error">
@@ -19,7 +19,7 @@
 
     <div v-else>
       <section v-if="filteredBundles.length > 0" class="series-section">
-        <h2 class="series-title">Packs Destacados</h2>
+        <h2 class="series-title">{{ t('packsDestacados') }}</h2>
         <div class="cosmetics-grid">
           <BundleCard
             v-for="bundle in filteredBundles"
@@ -31,7 +31,7 @@
       </section>
 
       <section v-if="newCosmetics.length > 0" class="series-section">
-        <h2 class="series-title">Lo Más Nuevo</h2>
+        <h2 class="series-title">{{ t('loMasNuevo') }}</h2>
         <div class="cosmetics-grid">
           <CosmeticCard
             v-for="cosmetic in newCosmetics"
@@ -91,6 +91,9 @@ import CosmeticCard from './CosmeticCard.vue';
 import PurchaseModal from './PurchaseModal.vue';
 import BundleCard from './BundleCard.vue';
 import BundlePurchaseModal from './BundlePurchaseModal.vue';
+import { useReactiveLanguage } from '../utils/useLanguage';
+
+const { t } = useReactiveLanguage();
 
 const cosmetics = ref([]);
 const bundles = ref([]);
@@ -209,7 +212,7 @@ const fetchCosmetics = async () => {
     const data = await response.json();
 
     if (data.status !== 200) {
-      throw new Error('Error al obtener datos de la API');
+      throw new Error(t('errorApi'));
     }
 
     const entries = data.data.entries;
@@ -332,7 +335,7 @@ const fetchCosmetics = async () => {
     
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
-    error.value = 'No se pudieron cargar los cosméticos. Por favor, intenta de nuevo.';
+    error.value = t('errorCarga');
     // Cargar datos de respaldo si falla la API
     loadFallbackData();
   } finally {
