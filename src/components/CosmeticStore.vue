@@ -512,9 +512,9 @@ watch(lang, () => {
 
 @media (max-width: 1023px) and (min-width: 768px) {
   .cosmetics-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px 20px;
-    row-gap: 80px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 20px;
+    row-gap: 60px;
   }
    .series-title {
     font-size: 25px;
@@ -525,9 +525,9 @@ watch(lang, () => {
 
 @media (max-width: 767px) {
   .cosmetics-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    row-gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    row-gap: 40px;
   }
    .series-title {
     font-size: 18px;
