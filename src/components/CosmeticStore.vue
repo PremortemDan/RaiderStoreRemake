@@ -229,89 +229,108 @@ const fetchCosmetics = async () => {
     const entries = data.data.entries;
     const mappedCosmetics = [];
     const mappedBundles = [];
+    // Conjunto para rastrear nombres de items que ya pertenecen a bundles
+    const bundleItemNames = new Set();
 
-    // Procesar todos los tipos de cosméticos
+    // Primera pasada: detectar bundles y recolectar nombres de sus items
     entries.slice(0, 500).forEach(entry => {
-      // Detectar si es un bundle (pack)
       if (entry.bundle && entry.brItems && entry.brItems.length > 1) {
         // Es un pack - creamos un objeto bundle
+        const bundleItems = entry.brItems.map(item => ({
+          name: item.name,
+          type: item.type.value,
+          rarity: item.rarity?.displayValue || 'Común'
+        }));
+        
+        // Registrar los nombres de items que pertenecen a este bundle
+        bundleItems.forEach(item => bundleItemNames.add(item.name.toLowerCase()));
+        
         mappedBundles.push({
           offerId: entry.offerId,
           name: entry.bundle.name,
           imageUrl: entry.bundle.image,
           price: entry.finalPrice,
           regularPrice: entry.regularPrice,
-          items: entry.brItems.map(item => ({
-            name: item.name,
-            type: item.type.value,
-            rarity: item.rarity?.displayValue || 'Común'
-          })),
+          items: bundleItems,
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
           outDate: entry.outDate,
         });
-      } else {
-        // No es un bundle, procesar items normalmente
-        
-        // Procesar brItems (outfits, emotes, etc.)
-        if (entry.brItems && entry.brItems.length > 0) {
-          entry.brItems.forEach(item => {
-            mappedCosmetics.push({
-              offerId: entry.offerId,
-              name: item.name,
-              type: item.type.value,
-              series: item.series?.value || '',
-              layout: entry.layout?.name || '',
-              rarity: item.rarity?.displayValue || 'Común',
-              price: entry.finalPrice,
-              imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
-              regularPrice: entry.regularPrice,
-              isNew: entry.banner?.backendValue === 'New',
-              inDate: entry.inDate,
-              outDate: entry.outDate,
-            });
-          });
-        }
+      }
+    });
 
-        // Procesar cars/ruedas (wheels)
-        if (entry.cars && entry.cars.length > 0) {
-          entry.cars.forEach(car => {
-            mappedCosmetics.push({
-              offerId: entry.offerId,
-              name: car.name,
-              type: car.type.value,
-              series: car.series?.value || '',
-              layout: entry.layout?.name || entry.bundle?.name || '',
-              rarity: car.rarity?.displayValue || 'Común',
-              price: entry.finalPrice,
-              imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
-              regularPrice: entry.regularPrice,
-              isNew: entry.banner?.backendValue === 'New',
-              inDate: entry.inDate,
-              outDate: entry.outDate,
-            });
+    // Segunda pasada: procesar cosméticos individuales, omitiendo los que ya están en bundles
+    entries.slice(0, 500).forEach(entry => {
+      // Saltar entries que ya se procesaron como bundles
+      if (entry.bundle && entry.brItems && entry.brItems.length > 1) return;
+      
+      // Procesar brItems (outfits, emotes, etc.)
+      if (entry.brItems && entry.brItems.length > 0) {
+        entry.brItems.forEach(item => {
+          // Omitir si este item ya pertenece a un bundle
+          if (bundleItemNames.has(item.name.toLowerCase())) return;
+          
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: item.name,
+            type: item.type.value,
+            series: item.series?.value || '',
+            layout: entry.layout?.name || '',
+            rarity: item.rarity?.displayValue || 'Común',
+            price: entry.finalPrice,
+            imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
           });
-        }
+        });
+      }
 
-        // Procesar tracks (música)
-        if (entry.tracks && entry.tracks.length > 0) {
-          entry.tracks.forEach(track => {
-            mappedCosmetics.push({
-              offerId: entry.offerId,
-              name: track.title,
-              type: 'Music',
-              series: '',
-              layout: entry.layout?.name || 'Jam Tracks',
-              rarity: 'Uncommon',
-              price: entry.finalPrice,
-              imageUrl: track.albumArt || 'https://via.placeholder.com/200',
-              regularPrice: entry.regularPrice,
-              isNew: entry.banner?.backendValue === 'New',
-              inDate: entry.inDate,
-              outDate: entry.outDate,
-            });
+      // Procesar cars/ruedas (wheels)
+      if (entry.cars && entry.cars.length > 0) {
+        entry.cars.forEach(car => {
+          // Omitir si este car ya pertenece a un bundle
+          if (bundleItemNames.has(car.name.toLowerCase())) return;
+          
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: car.name,
+            type: car.type.value,
+            series: car.series?.value || '',
+            layout: entry.layout?.name || entry.bundle?.name || '',
+            rarity: car.rarity?.displayValue || 'Común',
+            price: entry.finalPrice,
+            imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
           });
-        }
+        });
+      }
+
+      // Procesar tracks (música)
+      if (entry.tracks && entry.tracks.length > 0) {
+        entry.tracks.forEach(track => {
+          // Omitir si este track ya pertenece a un bundle
+          if (bundleItemNames.has(track.title.toLowerCase())) return;
+          
+          mappedCosmetics.push({
+            offerId: entry.offerId,
+            name: track.title,
+            type: 'Music',
+            series: '',
+            layout: entry.layout?.name || 'Jam Tracks',
+            rarity: 'Uncommon',
+            price: entry.finalPrice,
+            imageUrl: track.albumArt || 'https://via.placeholder.com/200',
+            regularPrice: entry.regularPrice,
+            isNew: entry.banner?.backendValue === 'New',
+            inDate: entry.inDate,
+            outDate: entry.outDate,
+          });
+        });
       }
     });
 
