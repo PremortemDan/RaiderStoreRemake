@@ -315,34 +315,21 @@ const fetchCosmetics = async () => {
       }
     });
 
-    cosmetics.value = mappedCosmetics;
+    // Recopilar nombres de todos los ítems que pertenecen a bundles
+    const bundleItemNames = new Set();
+    mappedBundles.forEach(bundle => {
+      bundle.items.forEach(item => {
+        bundleItemNames.add(item.name.toLowerCase());
+      });
+    });
+
+    // Filtrar cosméticos: excluir los que ya están dentro de un bundle
+    const filteredMappedCosmetics = mappedCosmetics.filter(cosmetic => {
+      return !bundleItemNames.has(cosmetic.name.toLowerCase());
+    });
+
+    cosmetics.value = filteredMappedCosmetics;
     bundles.value = mappedBundles;
-    
-    // Detectar cosméticos repetidos y marcar los más caros con " - LOTE"
-    const cosmeticsByName = {};
-    
-    mappedCosmetics.forEach(cosmetic => {
-      if (!cosmeticsByName[cosmetic.name]) {
-        cosmeticsByName[cosmetic.name] = [];
-      }
-      cosmeticsByName[cosmetic.name].push(cosmetic);
-    });
-    
-    // Para cada nombre repetido, marcar los de mayor precio con " - LOTE"
-    Object.keys(cosmeticsByName).forEach(name => {
-      const group = cosmeticsByName[name];
-      if (group.length > 1) {
-        // Encontrar el precio máximo
-        const maxPrice = Math.max(...group.map(c => c.price));
-        
-        // Marcar los que tienen precio máximo y no tienen bundledItems
-        group.forEach(cosmetic => {
-          if (cosmetic.price === maxPrice && !cosmetic.bundledItems) {
-            cosmetic.name = cosmetic.name + ' - LOTE';
-          }
-        });
-      }
-    });
     
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
