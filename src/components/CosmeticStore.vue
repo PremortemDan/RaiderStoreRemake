@@ -239,7 +239,7 @@ const fetchCosmetics = async () => {
         const bundleItems = entry.brItems.map(item => ({
           name: item.name,
           type: item.type.value,
-          rarity: item.rarity?.displayValue || 'Común'
+          rarity: item.rarity?.value || 'common'
         }));
         
         // Registrar los nombres de items que pertenecen a este bundle
@@ -276,7 +276,7 @@ const fetchCosmetics = async () => {
             type: item.type.value,
             series: item.series?.value || '',
             layout: entry.layout?.name || '',
-            rarity: item.rarity?.displayValue || 'Común',
+            rarity: item.rarity?.value || item.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
             imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
             regularPrice: entry.regularPrice,
@@ -299,7 +299,7 @@ const fetchCosmetics = async () => {
             type: car.type.value,
             series: car.series?.value || '',
             layout: entry.layout?.name || entry.bundle?.name || '',
-            rarity: car.rarity?.displayValue || 'Común',
+            rarity: car.rarity?.value || car.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
             imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
             regularPrice: entry.regularPrice,
@@ -322,7 +322,7 @@ const fetchCosmetics = async () => {
             type: 'Music',
             series: '',
             layout: entry.layout?.name || 'Jam Tracks',
-            rarity: 'Uncommon',
+            rarity: 'uncommon',
             price: entry.finalPrice,
             imageUrl: track.albumArt || 'https://via.placeholder.com/200',
             regularPrice: entry.regularPrice,
