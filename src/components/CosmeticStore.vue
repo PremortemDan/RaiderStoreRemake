@@ -323,7 +323,8 @@ const fetchCosmetics = async () => {
     cosmetics.value = mappedCosmetics;
     bundles.value = mappedBundles;
     
-    // Detectar cosméticos repetidos y marcar los más caros con " - LOTE"
+    // Eliminar cosméticos duplicados: si hay varios con el mismo nombre,
+    // nos quedamos solo con el de menor precio (eliminamos los más caros)
     const cosmeticsByName = {};
     
     mappedCosmetics.forEach(cosmetic => {
@@ -333,21 +334,26 @@ const fetchCosmetics = async () => {
       cosmeticsByName[cosmetic.name].push(cosmetic);
     });
     
-    // Para cada nombre repetido, marcar los de mayor precio con " - LOTE"
+    const deduplicatedCosmetics = [];
+    
     Object.keys(cosmeticsByName).forEach(name => {
       const group = cosmeticsByName[name];
       if (group.length > 1) {
-        // Encontrar el precio máximo
-        const maxPrice = Math.max(...group.map(c => c.price));
-        
-        // Marcar los que tienen precio máximo y no tienen bundledItems
-        group.forEach(cosmetic => {
-          if (cosmetic.price === maxPrice && !cosmetic.bundledItems) {
-            cosmetic.name = cosmetic.name + ' - LOTE';
-          }
-        });
+        // Quedarse solo con el de menor precio
+        const minPrice = Math.min(...group.map(c => c.price));
+        const cheapest = group.find(c => c.price === minPrice);
+        if (cheapest) {
+          deduplicatedCosmetics.push(cheapest);
+        }
+      } else {
+        deduplicatedCosmetics.push(group[0]);
       }
     });
+    
+    cosmetics.value = deduplicatedCosmetics;
+    bundles.value = mappedBundles;
+    
+    return; // Salir para no asignar de nuevo al final
     
   } catch (err) {
     console.error('Error fetching cosmetics:', err);
