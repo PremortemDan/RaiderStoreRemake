@@ -229,10 +229,8 @@ const fetchCosmetics = async () => {
     const entries = data.data.entries;
     const mappedCosmetics = [];
     const mappedBundles = [];
-    // Conjunto para rastrear nombres de items que ya pertenecen a bundles
-    const bundleItemNames = new Set();
 
-    // Primera pasada: detectar bundles y recolectar nombres de sus items
+    // Primera pasada: detectar bundles
     entries.slice(0, 500).forEach(entry => {
       if (entry.bundle && entry.brItems && entry.brItems.length > 1) {
         // Es un pack - creamos un objeto bundle
@@ -241,9 +239,6 @@ const fetchCosmetics = async () => {
           type: item.type.value,
           rarity: item.rarity?.value || 'common'
         }));
-        
-        // Registrar los nombres de items que pertenecen a este bundle
-        bundleItems.forEach(item => bundleItemNames.add(item.name.toLowerCase()));
         
         mappedBundles.push({
           offerId: entry.offerId,
@@ -259,16 +254,11 @@ const fetchCosmetics = async () => {
       }
     });
 
-    // Segunda pasada: procesar cosméticos individuales, omitiendo los que ya están en bundles
+    // Segunda pasada: procesar cosméticos individuales
     entries.slice(0, 500).forEach(entry => {
-      // Saltar entries que ya se procesaron como bundles
-      if (entry.bundle && entry.brItems && entry.brItems.length > 1) return;
-      
       // Procesar brItems (outfits, emotes, etc.)
       if (entry.brItems && entry.brItems.length > 0) {
         entry.brItems.forEach(item => {
-          // Omitir si este item ya pertenece a un bundle
-          if (bundleItemNames.has(item.name.toLowerCase())) return;
           
           mappedCosmetics.push({
             offerId: entry.offerId,
@@ -290,8 +280,6 @@ const fetchCosmetics = async () => {
       // Procesar cars/ruedas (wheels)
       if (entry.cars && entry.cars.length > 0) {
         entry.cars.forEach(car => {
-          // Omitir si este car ya pertenece a un bundle
-          if (bundleItemNames.has(car.name.toLowerCase())) return;
           
           mappedCosmetics.push({
             offerId: entry.offerId,
@@ -313,8 +301,6 @@ const fetchCosmetics = async () => {
       // Procesar tracks (música)
       if (entry.tracks && entry.tracks.length > 0) {
         entry.tracks.forEach(track => {
-          // Omitir si este track ya pertenece a un bundle
-          if (bundleItemNames.has(track.title.toLowerCase())) return;
           
           mappedCosmetics.push({
             offerId: entry.offerId,
