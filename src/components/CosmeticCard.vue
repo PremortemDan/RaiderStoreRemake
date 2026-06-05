@@ -58,9 +58,11 @@ const calculatePriceUSD = (vbucks) => {
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* Fondo por defecto para rarezas no contempladas */
+  background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
 }
 
-/* Rarezas */
+/* Rarezas base */
 .cosmetic-card.rarity-common {
   background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
 }
@@ -80,12 +82,39 @@ const calculatePriceUSD = (vbucks) => {
   background: linear-gradient(180deg, #5C2E00, #CC5500 100%);
 }
 
+/* Series/Facciones especiales de Fortnite */
+.cosmetic-card.rarity-dark,
+.cosmetic-card.rarity-darkv2 {
+  background: linear-gradient(180deg, #1a0a2e, #3d1a6e 100%);
+}
+.cosmetic-card.rarity-frozen,
+.cosmetic-card.rarity-lava {
+  background: linear-gradient(180deg, #1a3a5c, #2196F3 100%);
+}
+.cosmetic-card.rarity-shadow {
+  background: linear-gradient(180deg, #1a1a1a, #2d2d2d 100%);
+}
+.cosmetic-card.rarity-slurp {
+  background: linear-gradient(180deg, #003d33, #00bfa5 100%);
+}
+.cosmetic-card.rarity-marvel,
+.cosmetic-card.rarity-dc {
+  background: linear-gradient(180deg, #4a0000, #b71c1c 100%);
+}
+.cosmetic-card.rarity-icon,
+.cosmetic-card.rarity-gaminglegends {
+  background: linear-gradient(180deg, #1b0a3d, #6a1b9a 100%);
+}
+.cosmetic-card.rarity-starwars {
+  background: linear-gradient(180deg, #0d1b2a, #1b3a5c 100%);
+}
+
 .cosmetic-card:hover {
   box-shadow: 0px 0px 0px 3px rgb(255, 255, 255);
   transform: translateY(-8px);
 }
 
-.cosmetic-header {
+  .cosmetic-header {
   position: relative;
   width: 100%;
   height: 250px;
@@ -96,15 +125,16 @@ const calculatePriceUSD = (vbucks) => {
 .cosmetic-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  padding: 20px;
-  box-sizing: border-box;
+  object-fit: cover;
+  object-position: top;
+  display: block;
 }
 
 .badge-new {
   position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 2;
   background: #FF9F1C;
   color: rgb(0, 0, 0);
   padding: 6px 12px;
@@ -183,7 +213,7 @@ const calculatePriceUSD = (vbucks) => {
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
-@media (max-width: 1023px) {
+  @media (max-width: 1023px) {
   .cosmetic-header {
     height: 180px;
   }
@@ -201,7 +231,7 @@ const calculatePriceUSD = (vbucks) => {
   }
 }
 
-@media (max-width: 767px) {
+  @media (max-width: 767px) {
   .cosmetic-header {
     height: 140px;
   }
