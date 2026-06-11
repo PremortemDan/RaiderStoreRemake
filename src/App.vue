@@ -39,8 +39,8 @@ const pases = ref([
     id: 'bp',
     name: 'Pase de Batalla',
     price: 800,
-    mxn: '105.00',
-    usd: '6.07',
+    mxn: '115.00',
+    usd: '6.61',
     rarity: 'rare',
     type: 'default',
     imageUrl: paseDeBatalla
@@ -49,8 +49,8 @@ const pases = ref([
     id: 'og',
     name: 'Pase OG',
     price: 800,
-    mxn: '105.00',
-    usd: '6.07',
+    mxn: '115.00',
+    usd: '6.61',
     rarity: 'legendary',
     type: 'default',
     imageUrl: PaseOG
