@@ -17,7 +17,9 @@ import PaseFestival from './assets/PaseFestival.png';
 import pavosImg from './assets/pavos.png';
 import crewImg from './assets/crew.png';
 
-const cartItems = ref([]);
+const CART_STORAGE_KEY = 'raiderstore_cart';
+
+const cartItems = ref(JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]'));
 const showCart = ref(false);
 const searchQuery = ref('');
 const currentLanguage = ref('es');
@@ -177,6 +179,11 @@ const recargas = ref([
     imageUrl: pavosImg
   }
 ]);
+
+// Persistir carrito en localStorage cada vez que cambie
+watch(cartItems, (newItems) => {
+  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newItems));
+}, { deep: true });
 
 // Escuchar evento de agregar al carrito
 onMounted(() => {

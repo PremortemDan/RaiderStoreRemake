@@ -41,7 +41,7 @@ export const translations = {
     usuario: 'Usuario Epic Games:',
     placeholderUsuario: 'Tu nombre de usuario...',
     cuentaAnadida: 'Cuenta añadida:',
-    importantes: 'IMPORTANTE debes añadir de amigo las cuentas de RaiderStore a tu usuario. Si aun no lo has hecho,',
+    importantes: 'IMPORTANTE debes añadir de amigo a algunas las cuentas de RaiderStore a tu usuario ( RSPAVOS, RSPAVOS2, RSPAVOS3, RSPAVOS4, RSPAVOS5, RSPAVOS6, RSPAVOS7, RSPAVOS8, RSPAVOS9, RSPAVOS10, RSPAVOS11, RSPAVOS12). Si aun no lo has hecho,',
     hazloAqui: 'hazlo aquí',
     siHeAnadido: 'Sí he añadido de amigo las cuentas de RaiderStore (RSPAVOS)',
     confirmarBtn: 'Confirmar Compra',
