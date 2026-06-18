@@ -37,7 +37,10 @@
           </div>
 
           <!-- Mensaje de cuenta -->
-          <div class="account-message">
+          <div v-if="customAccountMessage" class="account-message">
+            <p>{{ customAccountMessage }}</p>
+          </div>
+          <div v-else class="account-message">
             <p>{{ t('accountMsg') }} <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="account-link">{{ t('hazloAqui') }}</a></p>
           </div>
 
@@ -74,6 +77,10 @@ const props = defineProps({
   cosmetic: {
     type: Object,
     required: true
+  },
+  customAccountMessage: {
+    type: String,
+    default: ''
   }
 });
 

@@ -9,7 +9,7 @@ import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import LanguageMenu from './components/LanguageMenu.vue';
 import ChatBot from './components/ChatBot.vue';
-import { setLanguage, useLanguage } from './utils/useLanguage';
+import { setLanguage, useLanguage, useReactiveLanguage } from './utils/useLanguage';
 import paseDeBatalla from './assets/paseDeBatalla.png';
 import PaseOG from './assets/PaseOG.png';
 import PaseLego from './assets/PaseLego.png';
@@ -24,6 +24,7 @@ const showCart = ref(false);
 const searchQuery = ref('');
 const currentLanguage = ref('es');
 const { t } = useLanguage();
+const { t: rt } = useReactiveLanguage();
 
 // Sincronizar cambio de idioma con el sistema global
 watch(currentLanguage, (newLang) => {
@@ -359,6 +360,7 @@ const addCrewToCart = (item) => {
     <PurchaseModal
       :isOpen="showPurchaseModal"
       :cosmetic="selectedItem"
+      :customAccountMessage="activeTab === 'recargas' ? rt('accountMsgPavos') : ''"
       @close="showPurchaseModal = false"
       @add-to-cart="addItemToCart"
     />
