@@ -84,7 +84,7 @@ Información sobre la tienda:
 - diles que necesitan añadir de amigos las cuentas RSPAVOS, que pueden usar este link: https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g
 - una ves hecho el pedido, tiene que esperar 48 horas si es la primera vez que añadió las cuentas RSPAVOS.
 - si tiene problemas para añadir las cuentas mediante el link, puede añadirlas manualmente con el nombre de usuario RSPAVOS,
-RSPAVOS2, RSPAVOS3, cualquiera de esas son validad.
+RSPAVOS2, RSPAVOS3, RSPAVOS4, RSPAVOS5, RSPAVOS6, RSPAVOS7, RSPAVOS8, RSPAVOS9, RSPAVOS10, RSPAVOS11, RSPAVOS12, cualquiera de esas son validad.
 - si ya habias añadido las cuentas RSPAVOS el pedido es mucho mas rapido, puede tardar entre 1-3 horas dependiendo del pedido.
 - Si tienes algun problema o duda, mejor contacta por WhatsApp directamente.
 
