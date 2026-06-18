@@ -55,8 +55,8 @@
           />
         </div>
 
-        <!-- Mensaje importante -->
-        <div class="important-message">
+        <!-- Mensaje importante - Bundles, Cosméticos, Pases -->
+        <div v-if="hasBundleOrCosmeticOrPases" class="important-message">
           <p>
             {{ t('importantes') }}
             <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="add-friend-link">
@@ -65,8 +65,18 @@
           </p>
         </div>
 
-        <!-- Checkbox de confirmación -->
-        <div class="checkbox-section">
+        <!-- Mensaje para Pavos -->
+        <div v-if="hasPavos" class="important-message">
+          <p>{{ t('checkoutMsgPavos') }}</p>
+        </div>
+
+        <!-- Mensaje para Crew -->
+        <div v-if="hasCrew" class="important-message">
+          <p>{{ t('checkoutMsgCrew') }}</p>
+        </div>
+
+        <!-- Checkbox de confirmación (solo si hay bundles, cosméticos o pases) -->
+        <div v-if="hasBundleOrCosmeticOrPases" class="checkbox-section">
           <label class="checkbox-label">
             <input v-model="friendsAdded" type="checkbox" class="checkbox-input" />
             <span>{{ t('siHeAnadido') }}</span>
@@ -78,7 +88,7 @@
           <button 
             class="btn btn-confirm" 
             @click="proceedToWhatsApp"
-            :disabled="!username.trim() || !friendsAdded"
+            :disabled="!username.trim() || (hasBundleOrCosmeticOrPases && !friendsAdded)"
           >
             {{ t('confirmarBtn') }}
           </button>
@@ -147,8 +157,35 @@ const totalUSD = computed(() => {
   }, 0).toFixed(2);
 });
 
+// Detectar tipos de items en el carrito
+const hasBundleOrCosmeticOrPases = computed(() => {
+  return props.items.some(item => {
+    // Bundle: tiene array 'items'
+    if (item.items && Array.isArray(item.items)) return true;
+    // Excluir recargas y crew por su id
+    const id = item.id || '';
+    if (id.startsWith('recarga-')) return false;
+    if (id.startsWith('crew-')) return false;
+    // El resto: PasesCard (type: 'default' + id no recarga/crew) o CosmeticCard (type: 'Outfit', 'Emote', etc.)
+    return true;
+  });
+});
+
+const hasPavos = computed(() => {
+  return props.items.some(item => (item.id || '').startsWith('recarga-'));
+});
+
+const hasCrew = computed(() => {
+  return props.items.some(item => (item.id || '').startsWith('crew-'));
+});
+
 const proceedToWhatsApp = () => {
-  if (!username.value.trim() || !friendsAdded.value) {
+  // Si hay bundles/cosméticos/pases, requiere username y checkbox
+  if (hasBundleOrCosmeticOrPases.value && (!username.value.trim() || !friendsAdded.value)) {
+    return;
+  }
+  // Si solo hay pavos o crew, solo requiere username
+  if (!username.value.trim()) {
     return;
   }
 

@@ -50,6 +50,10 @@ export const translations = {
     accountMsg: '¿Ya agregaste tu cuenta? Si aun no la has agregado',
     accountMsgPavos: 'Para el proceso se requiere acceso a la cuenta de epic games o xbox, no tiene ningun tipo de riesgo se puede en principales, secundarias y nuevas',
     
+    // Checkout condicional
+    checkoutMsgPavos: 'PAVOS: Para el proceso se requiere acceso a la cuenta de epic games o xbox, no tiene ningun tipo de riesgo se puede en principales, secundarias y nuevas',
+    checkoutMsgCrew: 'CLUB: Para el proceso se requiere acceso a la cuenta de xbox vinculada, no tiene ningun tipo de riesgo se puede en principales, secundarias y nuevas',
+    
     // Modal Crew
     activacionTitulo: 'ACTIVACIÓN DEL CLUB DE FORTNITE 👑',
     activacionPaso1: 'Paso 1. El Requisito:',
@@ -125,6 +129,8 @@ export const translations = {
     confirmarBtn: 'Confirm Purchase',
     accountMsg: 'Have you added your account? If you haven\'t added it yet',
     accountMsgPavos: 'The process requires access to your Epic Games or Xbox account, there is no risk and it can be done on primary, secondary or new accounts',
+    checkoutMsgPavos: 'The process requires access to your Epic Games or Xbox account, there is no risk and it can be done on primary, secondary or new accounts',
+    checkoutMsgCrew: 'The process requires access to your linked Xbox account, there is no risk and it can be done on primary, secondary or new accounts',
     activacionTitulo: 'FORTNITE CREW ACTIVATION 👑',
     activacionPaso1: 'Step 1. The Requirement:',
     activacionPaso1Text: 'We need access to your main Xbox account.',
@@ -189,6 +195,8 @@ export const translations = {
     confirmarBtn: 'Confirmer l\'Achat',
     accountMsg: 'Avez-vous ajouté votre compte? Si vous ne l\'avez pas encore ajouté',
     accountMsgPavos: 'Le processus nécessite l\'accès à votre compte Epic Games ou Xbox, il n\'y a aucun risque et cela peut être fait sur des comptes principaux, secondaires ou nouveaux',
+    checkoutMsgPavos: 'Le processus nécessite l\'accès à votre compte Epic Games ou Xbox, il n\'y a aucun risque et cela peut être fait sur des comptes principaux, secondaires ou nouveaux',
+    checkoutMsgCrew: 'Le processus nécessite l\'accès à votre compte Xbox lié, il n\'y a aucun risque et cela peut être fait sur des comptes principaux, secondaires ou nouveaux',
     activacionTitulo: 'ACTIVATION FORTNITE CREW 👑',
     activacionPaso1: 'Étape 1. Le Prérequis:',
     activacionPaso1Text: 'Nous avons besoin de l\'accès à votre compte Xbox principal.',
@@ -253,6 +261,8 @@ export const translations = {
     confirmarBtn: 'Confirmar Compra',
     accountMsg: 'Já adicionou sua conta? Se ainda não adicionou',
     accountMsgPavos: 'O processo requer acesso à sua conta Epic Games ou Xbox, não há risco e pode ser feito em contas principais, secundárias ou novas',
+    checkoutMsgPavos: 'O processo requer acesso à sua conta Epic Games ou Xbox, não há risco e pode ser feito em contas principais, secundárias ou novas',
+    checkoutMsgCrew: 'O processo requer acesso à sua conta Xbox vinculada, não há risco e pode ser feito em contas principais, secundárias ou novas',
     activacionTitulo: 'ATIVAÇÃO DO FORTNITE CREW 👑',
     activacionPaso1: 'Passo 1. O Requisito:',
     activacionPaso1Text: 'Precisamos de acesso à sua conta Xbox principal.',
