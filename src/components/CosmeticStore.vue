@@ -170,6 +170,9 @@ const groupedBySeriesCosmetics = computed(() => {
     grouped[seriesName].push(cosmetic);
   });
   
+  // Eliminar secciones sin nombre
+  delete grouped[''];
+  
   return grouped;
 });
 
@@ -186,6 +189,9 @@ const musicCosmetics = computed(() => {
     }
     grouped[seriesName].push(cosmetic);
   });
+  
+  // Eliminar secciones sin nombre
+  delete grouped[''];
   
   return grouped;
 });
