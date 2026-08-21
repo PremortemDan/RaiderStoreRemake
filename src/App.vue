@@ -144,8 +144,8 @@ const recargas = ref([
     id: 'recarga-800',
     name: '800 V-Bucks',
     price: 800,
-    mxn: '109.00',
-    usd: '6.31',
+    mxn: '115.00',
+    usd: '6.79',
     rarity: 'uncommon',
     type: 'default',
     imageUrl: pavosImg
@@ -154,8 +154,8 @@ const recargas = ref([
     id: 'recarga-2400',
     name: '2,400 V-Bucks',
     price: 2400,
-    mxn: '270.00',
-    usd: '15.62',
+    mxn: '249.00',
+    usd: '14.71',
     rarity: 'rare',
     type: 'default',
     imageUrl: pavosImg
@@ -164,8 +164,8 @@ const recargas = ref([
     id: 'recarga-4500',
     name: '4,500 V-Bucks',
     price: 4500,
-    mxn: '409.00',
-    usd: '23.66',
+    mxn: '399.00',
+    usd: '23.56',
     rarity: 'epic',
     type: 'default',
     imageUrl: pavosImg
@@ -174,18 +174,18 @@ const recargas = ref([
     id: 'recarga-12500',
     name: '12,500 V-Bucks',
     price: 12500,
-    mxn: '899.00',
-    usd: '52.01',
+    mxn: '849.00',
+    usd: '50.14',
     rarity: 'legendary',
     type: 'default',
     imageUrl: pavosImg
   },
   {
-    id: 'recarga-17000',
-    name: '17,000 V-Bucks',
-    price: 17000,
-    mxn: '1370.00',
-    usd: '79.25',
+    id: 'recarga-14900',
+    name: '14,900 V-Bucks',
+    price: 14900,
+    mxn: '1040.00',
+    usd: '61.42',
     rarity: 'legendary',
     type: 'default',
     imageUrl: pavosImg
@@ -194,8 +194,8 @@ const recargas = ref([
     id: 'recarga-25000',
     name: '25,000 V-Bucks',
     price: 25000,
-    mxn: '1920.00',
-    usd: '111.07',
+    mxn: '1640.00',
+    usd: '96.85',
     rarity: 'mythic',
     type: 'default',
     imageUrl: pavosImg
@@ -862,13 +862,13 @@ const onChatToggle = (isOpen) => {
   }
 
   .social-float-btn {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
   }
 
   .social-float-btn img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
   }
 }
 </style>
