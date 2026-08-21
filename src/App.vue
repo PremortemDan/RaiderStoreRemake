@@ -16,6 +16,11 @@ import PaseLego from './assets/PaseLego.png';
 import PaseFestival from './assets/PaseFestival.png';
 import pavosImg from './assets/pavos.png';
 import crewImg from './assets/crew.png';
+import whatsapplogo from './assets/whatsapplogo.png';
+import facebooklogo from './assets/facebooklogo.png';
+
+const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL || '';
+const facebookUrl = import.meta.env.VITE_FACEBOOK_URL || '';
 
 const CART_STORAGE_KEY = 'raiderstore_cart';
 
@@ -35,6 +40,7 @@ const showPurchaseModal = ref(false);
 const showCrewModal = ref(false);
 const selectedItem = ref(null);
 const selectedCrewItem = ref(null);
+const chatOpen = ref(false);
 
 // Datos de pases
 const pases = ref([
@@ -228,6 +234,10 @@ const addCrewToCart = (item) => {
   window.dispatchEvent(event);
   showCrewModal.value = false;
 };
+
+const onChatToggle = (isOpen) => {
+  chatOpen.value = isOpen;
+};
 </script>
 
 <template>
@@ -373,8 +383,30 @@ const addCrewToCart = (item) => {
       @remove-item="removeFromCart"
     />
 
+    <!-- Botones flotantes de redes sociales -->
+    <div v-if="!showCart && !showPurchaseModal && !showCrewModal && !chatOpen" class="social-floating">
+      <a
+        :href="whatsappUrl || '#'"
+        target="_blank"
+        rel="noopener"
+        class="social-float-btn whatsapp"
+        title="WhatsApp"
+      >
+        <img :src="whatsapplogo" alt="WhatsApp" />
+      </a>
+      <a
+        :href="facebookUrl || '#'"
+        target="_blank"
+        rel="noopener"
+        class="social-float-btn facebook"
+        title="Facebook"
+      >
+        <img :src="facebooklogo" alt="Facebook" />
+      </a>
+    </div>
+
     <!-- ChatBot de Ayuda -->
-    <ChatBot />
+    <ChatBot @toggle="onChatToggle" />
   </div>
 </template>
 
@@ -710,6 +742,66 @@ const addCrewToCart = (item) => {
     width: 15px;
     height: 15px;
     border-radius: 50%;
+  }
+}
+
+/* ========== Botones flotantes de redes sociales ========== */
+.social-floating {
+  position: fixed;
+  right: 20px;
+  bottom: 96px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-float-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.social-float-btn.whatsapp {
+  background-color: #25D366;
+}
+
+.social-float-btn.facebook {
+  background-color: #1877F2;
+}
+
+.social-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.social-float-btn img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+}
+
+@media (max-width: 480px) {
+  .social-floating {
+    right: 10px;
+    bottom: 78px;
+    gap: 8px;
+  }
+
+  .social-float-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-float-btn img {
+    width: 40px;
+    height: 40px;
   }
 }
 </style>

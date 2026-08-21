@@ -57,6 +57,8 @@ import { useReactiveLanguage } from '../utils/useLanguage';
 
 const { t } = useReactiveLanguage();
 
+const emit = defineEmits(['toggle']);
+
 const isOpen = ref(false);
 const isLoading = ref(false);
 const userInput = ref('');
@@ -94,6 +96,7 @@ Si no sabes algo, sugiere que contacten por WhatsApp directamente.`;
 
 const toggleChat = () => {
   isOpen.value = !isOpen.value;
+  emit('toggle', isOpen.value);
   if (isOpen.value) {
     nextTick(() => {
       const messagesDiv = document.querySelector('.chat-messages');
