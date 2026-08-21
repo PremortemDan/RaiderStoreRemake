@@ -18,9 +18,24 @@ import pavosImg from './assets/pavos.png';
 import crewImg from './assets/crew.png';
 import whatsapplogo from './assets/whatsapplogo.png';
 import facebooklogo from './assets/facebooklogo.png';
+import fortnitewallpaper1 from './assets/fortnitewallpaper1.jpg';
+import fortnitewallpaper2 from './assets/fortnitewallpaper2.jpg';
+import fortnitewallpaper3 from './assets/fortnitewallpaper3.jpg';
 
 const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL || '';
 const facebookUrl = import.meta.env.VITE_FACEBOOK_URL || '';
+
+// Fondos de pantalla rotativos
+const wallpapers = [fortnitewallpaper1, fortnitewallpaper2, fortnitewallpaper3];
+const currentWallpaper = ref(0);
+
+let wallpaperInterval = null;
+
+onMounted(() => {
+  wallpaperInterval = setInterval(() => {
+    currentWallpaper.value = (currentWallpaper.value + 1) % wallpapers.length;
+  }, 8000);
+});
 
 const CART_STORAGE_KEY = 'raiderstore_cart';
 
@@ -242,6 +257,18 @@ const onChatToggle = (isOpen) => {
 
 <template>
   <div id="app">
+    <!-- Fondo de pantalla rotativo -->
+    <div class="wallpaper-background">
+      <div
+        v-for="(wallpaper, index) in wallpapers"
+        :key="index"
+        class="wallpaper-layer"
+        :class="{ active: index === currentWallpaper }"
+        :style="{ backgroundImage: `url(${wallpaper})` }"
+      ></div>
+      <div class="wallpaper-overlay"></div>
+    </div>
+
     <nav class="navbar">
       <div class="navbar-container-right">
         <div class="logo">
@@ -743,6 +770,36 @@ const onChatToggle = (isOpen) => {
     height: 15px;
     border-radius: 50%;
   }
+}
+
+/* ========== Fondo de pantalla rotativo ========== */
+.wallpaper-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  filter: blur(8px);
+  transform: scale(1.1);
+}
+
+.wallpaper-layer.active {
+  opacity: 1;
+}
+
+.wallpaper-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 /* ========== Botones flotantes de redes sociales ========== */
