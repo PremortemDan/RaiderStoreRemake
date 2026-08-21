@@ -789,11 +789,21 @@ const onChatToggle = (isOpen) => {
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
   filter: blur(8px);
-  transform: scale(1.1);
+  transform: scale(1.1) translateX(-3%);
 }
 
 .wallpaper-layer.active {
   opacity: 1;
+  animation: pan-left 8s ease-in-out forwards;
+}
+
+@keyframes pan-left {
+  from {
+    transform: scale(1.1) translateX(0);
+  }
+  to {
+    transform: scale(1.1) translateX(-3%);
+  }
 }
 
 .wallpaper-overlay {
