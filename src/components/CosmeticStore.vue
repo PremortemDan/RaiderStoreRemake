@@ -138,22 +138,25 @@ const filteredCosmetics = computed(() => {
   });
 });
 
-// Filtrar bundles por búsqueda
+// Filtrar bundles por búsqueda y ordenar de mayor a menor precio
 const filteredBundles = computed(() => {
-  if (!props.searchQuery.trim()) {
-    return bundles.value;
+  const query = props.searchQuery.trim().toLowerCase();
+
+  let result = bundles.value;
+
+  if (query) {
+    result = bundles.value.filter(bundle => {
+      const nameMatch = bundle.name.toLowerCase().includes(query);
+      const itemsMatch = bundle.items.some(item => 
+        item.name.toLowerCase().includes(query)
+      );
+      
+      return nameMatch || itemsMatch;
+    });
   }
 
-  const query = props.searchQuery.toLowerCase();
-  
-  return bundles.value.filter(bundle => {
-    const nameMatch = bundle.name.toLowerCase().includes(query);
-    const itemsMatch = bundle.items.some(item => 
-      item.name.toLowerCase().includes(query)
-    );
-    
-    return nameMatch || itemsMatch;
-  });
+  // Ordenar de mayor a menor precio
+  return [...result].sort((a, b) => b.price - a.price);
 });
 
 const groupedBySeriesCosmetics = computed(() => {
