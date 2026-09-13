@@ -171,8 +171,8 @@ const formatPrice = (price) => {
 
 .items-line {
   margin: 0;
-  color: #e0e0e0;
-  font-size: 13px;
+  color: #ffffff;
+  font-size: 18px;
   line-height: 1.5;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
@@ -186,7 +186,7 @@ const formatPrice = (price) => {
 }
 
 .price-label {
-  color: #b0b0b0;
+  color: #ffffff;
   font-size: 12px;
   font-weight: 600;
 }
@@ -210,11 +210,11 @@ const formatPrice = (price) => {
 .price-converted {
   display: flex;
   gap: 12px;
-  font-size: 13px;
+  font-size: 18px;
 }
 
 .converted-price {
-  color: #e0e0e0;
+  color: #ffffff;
   font-weight: 600;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
@@ -233,7 +233,7 @@ const formatPrice = (price) => {
   }
 
   .items-line {
-    font-size: 11px;
+    font-size: 13px;
   }
 }
 
@@ -260,7 +260,7 @@ const formatPrice = (price) => {
   }
 
   .items-line {
-    font-size: 10px;
+    font-size: 15px;
   }
 
   .price-value {
