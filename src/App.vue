@@ -816,7 +816,7 @@ const onChatToggle = (isOpen) => {
 .social-floating {
   position: fixed;
   right: 20px;
-  bottom: 96px;
+  bottom: 86px;
   z-index: 999;
   display: flex;
   flex-direction: column;
@@ -857,7 +857,7 @@ const onChatToggle = (isOpen) => {
 @media (max-width: 480px) {
   .social-floating {
     right: 10px;
-    bottom: 78px;
+    bottom: 68px;
     gap: 8px;
   }
 
