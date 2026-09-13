@@ -215,7 +215,7 @@ const calculatePriceUSD = (vbucks) => {
 .items-title {
   margin: 0 0 12px 0;
   color: #FF7B00;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -224,7 +224,7 @@ const calculatePriceUSD = (vbucks) => {
 .items-line {
   margin: 0;
   color: #e0e0e0;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.6;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
@@ -249,14 +249,16 @@ const calculatePriceUSD = (vbucks) => {
 
 .price-label {
   font-weight: 600;
-  color: #b0b0b0;
+  color: #ffffff;
+  font-size: 30px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .price-display {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 18px;
+  font-size: 30px;
   font-weight: 700;
   color: #ffffff;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -269,7 +271,7 @@ const calculatePriceUSD = (vbucks) => {
 .price-value {
   color: #ffffff;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 30px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -278,20 +280,22 @@ const calculatePriceUSD = (vbucks) => {
   border: 1px solid rgba(255, 140, 0, 0.3);
   padding: 12px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 20px;
   color: #e0e0e0;
   line-height: 1.5;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .account-message p {
   margin: 0;
-  color: #d0d0d0;
-  font-size: 12px;
+  color: #ffffff;
+  font-size: 20px;
   line-height: 1.5;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .account-link {
-  color: #FF8C00;
+  color: #ffb55b;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
@@ -312,7 +316,7 @@ const calculatePriceUSD = (vbucks) => {
   padding: 14px 20px;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -362,13 +366,31 @@ const calculatePriceUSD = (vbucks) => {
     font-size: 20px;
   }
 
-  .product-image img {
-    max-height: 200px;
+  .price-display {
+  font-size: 20px;
+
+ }
+
+  .price-row {
+    font-size: 20px;
+  }
+
+  .price-label {
+    font-size: 20px;
+  }
+
+  .price-value {
+    font-size: 20px;
+  }
+
+  .account-message {
+    font-size: 18px;
+    padding: 10px;
   }
 
   .btn {
     padding: 12px 16px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .close-btn {
@@ -376,5 +398,10 @@ const calculatePriceUSD = (vbucks) => {
     height: 36px;
     font-size: 20px;
   }
+
+  .product-image img {
+    max-height: 200px;
+  }
+
 }
 </style>

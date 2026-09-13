@@ -220,6 +220,7 @@ const addToCart = () => {
   border: 1px solid rgba(255, 140, 0, 0.3);
   padding: 16px;
   border-radius: 10px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .instructions-title {

@@ -95,6 +95,7 @@ defineEmits(['select']);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .pases-name {
@@ -115,6 +116,7 @@ defineEmits(['select']);
   padding-top: 12px;
   border-top: 1px solid rgba(255, 107, 0, 0.3);
   margin-top: auto;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .price-container {
@@ -146,6 +148,7 @@ defineEmits(['select']);
   display: flex;
   gap: 12px;
   font-size: 14px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .converted-price {

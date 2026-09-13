@@ -7,9 +7,8 @@ import CrewCard from './components/CrewCard.vue';
 import CrewPurchaseModal from './components/CrewPurchaseModal.vue';
 import PurchaseModal from './components/PurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
-import LanguageMenu from './components/LanguageMenu.vue';
 import ChatBot from './components/ChatBot.vue';
-import { setLanguage, useLanguage, useReactiveLanguage } from './utils/useLanguage';
+import { useLanguage, useReactiveLanguage } from './utils/useLanguage';
 import paseDeBatalla from './assets/paseDeBatalla.png';
 import PaseOG from './assets/PaseOG.png';
 import PaseLego from './assets/PaseLego.png';
@@ -42,14 +41,9 @@ const CART_STORAGE_KEY = 'raiderstore_cart';
 const cartItems = ref(JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]'));
 const showCart = ref(false);
 const searchQuery = ref('');
-const currentLanguage = ref('es');
 const { t } = useLanguage();
 const { t: rt } = useReactiveLanguage();
 
-// Sincronizar cambio de idioma con el sistema global
-watch(currentLanguage, (newLang) => {
-  setLanguage(newLang);
-});
 const activeTab = ref('skins');
 const showPurchaseModal = ref(false);
 const showCrewModal = ref(false);
@@ -288,7 +282,6 @@ const onChatToggle = (isOpen) => {
             :placeholder="t('buscar')"
           />
         </div>
-        <LanguageMenu v-model="currentLanguage" />
         <div class="cart-button-wrapper">
           <svg class="cart-icon" :class="{ 'cart-active': cartItems.length > 0 }" @click="toggleCart" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"></circle>
