@@ -72,7 +72,7 @@ const convertToUSD = (vbucks) => {
 };
 
 const formatPrice = (price) => {
-  return Math.round(price);
+  return Math.floor(price);
 };
 </script>
 

@@ -247,6 +247,10 @@ const addCrewToCart = (item) => {
 const onChatToggle = (isOpen) => {
   chatOpen.value = isOpen;
 };
+
+const reloadPage = () => {
+  window.location.reload();
+};
 </script>
 
 <template>
@@ -266,7 +270,7 @@ const onChatToggle = (isOpen) => {
     <nav class="navbar">
       <div class="navbar-container-right">
         <div class="logo">
-          <img src="./assets/RaiderStore.png" alt="RaiderStore Logo" width="300" height="50">
+          <img src="./assets/RaiderStore.png" alt="RaiderStore Logo" width="300" height="50" @click="reloadPage">
         </div>
       </div>
       <div class="navbar-container">
@@ -295,7 +299,7 @@ const onChatToggle = (isOpen) => {
 
     <!-- Banner con logo y tabs de servicios -->
     <div class="services-banner">
-      <img src="./assets/RaiderLogo.png" alt="Raider Logo" class="raider-logo" />
+      <img src="./assets/RaiderLogo.png" alt="Raider Logo" class="raider-logo" @click="reloadPage" />
       <div class="services-tabs">
         <button
           class="service-tab"
@@ -466,6 +470,10 @@ const onChatToggle = (isOpen) => {
   letter-spacing: -0.5px;
 }
 
+.logo img {
+  cursor: pointer;
+}
+
 .cart-button-wrapper {
   position: relative;
   display: flex;
@@ -575,6 +583,7 @@ const onChatToggle = (isOpen) => {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  cursor: pointer;
 }
 
 .services-tabs {

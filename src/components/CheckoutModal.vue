@@ -130,11 +130,11 @@ const closeModal = () => {
 };
 
 const calculatePriceMXN = (vbucks) => {
-  return Math.round((vbucks / 100) * 7.5);
+  return Math.floor((vbucks / 100) * 7.5);
 };
 
 const calculatePriceUSD = (vbucks) => {
-  return Math.round((vbucks / 100) * 0.45);
+  return Math.floor((vbucks / 100) * 0.45);
 };
 
 const totalVbucks = computed(() => {
