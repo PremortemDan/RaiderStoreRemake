@@ -101,11 +101,11 @@ const addToCart = () => {
 };
 
 const calculatePriceMXN = (vbucks) => {
-  return (vbucks * (7.5 / 100)).toFixed(2);
+  return Math.round(vbucks * (7.5 / 100));
 };
 
 const calculatePriceUSD = (vbucks) => {
-  return (vbucks * (0.45 / 100)).toFixed(2);
+  return Math.round(vbucks * (0.45 / 100));
 };
 </script>
 

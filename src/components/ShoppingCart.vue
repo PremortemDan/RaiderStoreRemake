@@ -100,11 +100,11 @@ const removeItem = (index) => {
 };
 
 const calculatePriceMXN = (vbucks) => {
-  return ((vbucks / 100) * 7.5).toFixed(2);
+  return Math.round((vbucks / 100) * 7.5);
 };
 
 const calculatePriceUSD = (vbucks) => {
-  return ((vbucks / 100) * 0.45).toFixed(2);
+  return Math.round((vbucks / 100) * 0.45);
 };
 
 const totalVbucks = computed(() => {
