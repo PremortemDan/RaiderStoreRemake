@@ -43,8 +43,8 @@
           </div>
         </div>
 
-        <!-- Campo de usuario -->
-        <div class="username-section">
+        <!-- Campo de usuario (no se muestra si el carrito solo tiene artículos de "otros") -->
+        <div v-if="!onlyOtros" class="username-section">
           <label for="username" class="username-label">{{ t('escribeUsuario') }}</label>
           <input 
             id="username"
@@ -88,7 +88,7 @@
           <button 
             class="btn btn-confirm" 
             @click="proceedToWhatsApp"
-            :disabled="!username.trim() || (hasBundleOrCosmeticOrPases && !friendsAdded)"
+            :disabled="(!onlyOtros && !username.trim()) || (hasBundleOrCosmeticOrPases && !friendsAdded)"
           >
             {{ t('confirmarBtn') }}
           </button>
@@ -166,6 +166,7 @@ const hasBundleOrCosmeticOrPases = computed(() => {
     const id = item.id || '';
     if (id.startsWith('recarga-')) return false;
     if (id.startsWith('crew-')) return false;
+    if (id.startsWith('otros-')) return false;
     // El resto: PasesCard (type: 'default' + id no recarga/crew) o CosmeticCard (type: 'Outfit', 'Emote', etc.)
     return true;
   });
@@ -179,13 +180,18 @@ const hasCrew = computed(() => {
   return props.items.some(item => (item.id || '').startsWith('crew-'));
 });
 
+// Indica si el carrito contiene EXCLUSIVAMENTE artículos de "otros"
+const onlyOtros = computed(() => {
+  return props.items.length > 0 && props.items.every(item => (item.id || '').startsWith('otros-'));
+});
+
 const proceedToWhatsApp = () => {
   // Si hay bundles/cosméticos/pases, requiere username y checkbox
   if (hasBundleOrCosmeticOrPases.value && (!username.value.trim() || !friendsAdded.value)) {
     return;
   }
-  // Si solo hay pavos o crew, solo requiere username
-  if (!username.value.trim()) {
+  // Si hay pavos, crew u otros tipos (no exclusivamente "otros"), requiere username
+  if (!onlyOtros.value && !username.value.trim()) {
     return;
   }
 
@@ -210,8 +216,11 @@ const proceedToWhatsApp = () => {
   }
   message += `💵 ${t('mxn')}: $${totalMXN.value}\n`;
   message += `💵 ${t('usd')}: $${totalUSD.value}\n\n`;
-  message += `*${t('msjUsuarioEpic')}* ${username.value}\n`;
-  message += `*${t('msjCuentaAnadida')}*`;
+  // El usuario Epic solo aplica si el carrito no es exclusivamente de "otros"
+  if (!onlyOtros.value) {
+    message += `*${t('msjUsuarioEpic')}* ${username.value}\n`;
+    message += `*${t('msjCuentaAnadida')}*`;
+  }
 
   // Obtener número de teléfono desde .env
   const phoneNumber = import.meta.env.VITE_WHATSAPP_PHONE || '5215512345678';

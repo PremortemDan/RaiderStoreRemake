@@ -6,6 +6,8 @@ import PavosCard from './components/PavosCard.vue';
 import CrewCard from './components/CrewCard.vue';
 import CrewPurchaseModal from './components/CrewPurchaseModal.vue';
 import PurchaseModal from './components/PurchaseModal.vue';
+import OthersCard from './components/OthersCard.vue';
+import OthersPurchaseModal from './components/OthersPurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import ChatBot from './components/ChatBot.vue';
 import { useLanguage, useReactiveLanguage } from './utils/useLanguage';
@@ -15,8 +17,10 @@ import PaseLego from './assets/PaseLego.png';
 import PaseFestival from './assets/PaseFestival.png';
 import pavosImg from './assets/pavos.png';
 import crewImg from './assets/crew.png';
+import otrosImg from './assets/otros.svg';
 import whatsapplogo from './assets/whatsapplogo.png';
 import facebooklogo from './assets/facebooklogo.png';
+import Geminilogo from './assets/Gemini.png';
 import fortnitewallpaper1 from './assets/fortnitewallpaper1.jpg';
 import fortnitewallpaper2 from './assets/fortnitewallpaper2.jpg';
 import fortnitewallpaper3 from './assets/fortnitewallpaper3.jpg';
@@ -49,6 +53,8 @@ const showPurchaseModal = ref(false);
 const showCrewModal = ref(false);
 const selectedItem = ref(null);
 const selectedCrewItem = ref(null);
+const showOthersModal = ref(false);
+const selectedOtherItem = ref(null);
 const chatOpen = ref(false);
 
 // Datos de pases
@@ -196,6 +202,53 @@ const recargas = ref([
   }
 ]);
 
+// Datos de la sección "Otros" (servicios de streaming, cuentas, etc.)
+// EJEMPLO: ajusta los valores, precios e instrucciones según tus productos.
+const otros = ref([
+  {
+    id: 'otros-disney-30-dias',
+    name: 'Disney+ 30 Dias',
+    label: 'Disney+ 30 Dias',
+    price: 0,
+    mxn: '65.00',
+    usd: '3.70',
+    rarity: 'epic',
+    type: 'default',
+    imageUrl: 'https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/C67C35CF0EB8C168A861956E743C6CCD26BFB17B93227234F3CD1A81BB728F35/compose?format=webp&width=640',
+    dispositivos: 1,
+    dias: 30,
+    instrucciones: 'Perfil para un dispositivo por 30 días'
+  },
+  {
+    id: 'otros-Gemini-pro-18-meses',
+    name: 'Gemini Pro 18 meses',
+    label: 'Gemini Pro 18 meses',
+    price: 0,
+    mxn: '100.00',
+    usd: '5.83',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: Geminilogo,
+    dispositivos: 1,
+    dias: 540,
+    instrucciones: 'Código de activación para correo principal o secundario, garantía 5 meses.'
+  },
+  {
+    id: 'otros-hbo-30-dias',
+    name: 'HBO Max 30 Dias',
+    label: 'HBO Max 30 Dias',
+    price: 0,
+    mxn: '65.00',
+    usd: '3.79',
+    rarity: 'rare',
+    type: 'default',
+    imageUrl: 'https://beam-images.warnermediacdn.com/2025-07/mob.png?host=wbd-dotcom-drupal-prd-us-east-1.s3.amazonaws.com',
+    dispositivos: 1,
+    dias: 90,
+    instrucciones: 'Un perfil por 30 Días, 1 dispositivo, 4k ultra HD, Audio Dolby atmos.'
+  }
+]);
+
 // Persistir carrito en localStorage cada vez que cambie
 watch(cartItems, (newItems) => {
   localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newItems));
@@ -242,6 +295,17 @@ const addCrewToCart = (item) => {
   const event = new CustomEvent('add-to-cart', { detail: item });
   window.dispatchEvent(event);
   showCrewModal.value = false;
+};
+
+const openOthersModal = (item) => {
+  selectedOtherItem.value = item;
+  showOthersModal.value = true;
+};
+
+const addOtherToCart = (item) => {
+  const event = new CustomEvent('add-to-cart', { detail: item });
+  window.dispatchEvent(event);
+  showOthersModal.value = false;
 };
 
 const onChatToggle = (isOpen) => {
@@ -329,6 +393,13 @@ const reloadPage = () => {
         >
            {{ t('crewTab') }}
         </button>
+        <button
+          class="service-tab"
+          :class="{ active: activeTab === 'otros' }"
+          @click="activeTab = 'otros'"
+        >
+           {{ t('otrosTab') }}
+        </button>
       </div>
     </div>
 
@@ -382,12 +453,35 @@ const reloadPage = () => {
       </section>
     </main>
 
+    <!-- Pestaña Otros -->
+    <main v-if="activeTab === 'otros'" class="main-content">
+      <section class="pases-section">
+        <h2 class="series-title">{{ t('otrosTitulo') }}</h2>
+        <div class="cosmetics-grid">
+          <OthersCard
+            v-for="item in otros"
+            :key="item.id"
+            :other="item"
+            @select="openOthersModal"
+          />
+        </div>
+      </section>
+    </main>
+
     <!-- Modal de Compra Crew -->
     <CrewPurchaseModal
       :isOpen="showCrewModal"
       :crew="selectedCrewItem"
       @close="showCrewModal = false"
       @add-to-cart="addCrewToCart"
+    />
+
+    <!-- Modal de Compra Otros -->
+    <OthersPurchaseModal
+      :isOpen="showOthersModal"
+      :other="selectedOtherItem"
+      @close="showOthersModal = false"
+      @add-to-cart="addOtherToCart"
     />
 
     <!-- Modal de Compra (Pases, Recargas y Crew) -->
@@ -408,7 +502,7 @@ const reloadPage = () => {
     />
 
     <!-- Botones flotantes de redes sociales -->
-    <div v-if="!showCart && !showPurchaseModal && !showCrewModal && !chatOpen" class="social-floating">
+    <div v-if="!showCart && !showPurchaseModal && !showCrewModal && !showOthersModal && !chatOpen" class="social-floating">
       <a
         :href="whatsappUrl || '#'"
         target="_blank"

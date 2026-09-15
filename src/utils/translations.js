@@ -10,6 +10,7 @@ export const translations = {
     pasesTab: 'Pases de batalla',
     recargasTab: 'Recargas de pavos',
     crewTab: 'Crew de Fortnite',
+    otrosTab: 'Otros',
     
     // Títulos de sección
     packsDestacados: 'Packs Destacados',
@@ -17,6 +18,7 @@ export const translations = {
     pasesBatalla: 'Pases de Batalla',
     recargasPavos: 'Recargas de Pavos',
     crewFortnite: 'Crew de Fortnite',
+    otrosTitulo: 'Otros Servicios',
     
     // Carrito / Precios
     precioVbucks: 'V-Bucks',
@@ -63,6 +65,12 @@ export const translations = {
     activacionPaso3: 'Paso 3. Nosotros hacemos la activación y listo.',
     activacionPaso3Text: '¡Los beneficios te servirán para todas las plataformas (PC, PS, Switch o Celular)!',
     
+    // Sección Otros
+    dispositivo: 'dispositivo',
+    dispositivos: 'dispositivos',
+    dias: 'días',
+    meses: 'meses',
+    
     // Bundle modal
     itemsIncluidos: 'Items Incluidos:',
     
@@ -100,11 +108,13 @@ export const translations = {
     pasesTab: 'Battle Passes',
     recargasTab: 'V-Bucks Top Up',
     crewTab: 'Fortnite Crew',
+    otrosTab: 'Others',
     packsDestacados: 'Featured Packs',
     loMasNuevo: 'Latest',
     pasesBatalla: 'Battle Passes',
     recargasPavos: 'V-Bucks Top Up',
     crewFortnite: 'Fortnite Crew',
+    otrosTitulo: 'Other Services',
     precioVbucks: 'V-Bucks',
     precioDinero: 'Real Price',
     total: 'Total',
@@ -138,6 +148,12 @@ export const translations = {
     activacionPaso2Text: 'Don\'t worry. Just create a free Xbox account and link it to your current Epic Games account.',
     activacionPaso3: 'Step 3. We do the activation and that\'s it.',
     activacionPaso3Text: 'The benefits will work on all platforms (PC, PS, Switch or Mobile)!',
+    
+    // Others section
+    dispositivo: 'device',
+    dispositivos: 'devices',
+    dias: 'days',
+    meses: 'months',
     itemsIncluidos: 'Items Included:',
     cargandoCosmeticos: 'Loading cosmetics...',
     errorCarga: 'Could not load cosmetics. Please try again.',
@@ -166,11 +182,13 @@ export const translations = {
     pasesTab: 'Passes de combat',
     recargasTab: 'Recharge V-Bucks',
     crewTab: 'Fortnite Crew',
+    otrosTab: 'Autres',
     packsDestacados: 'Packs en vedette',
     loMasNuevo: 'Le Plus Récent',
     pasesBatalla: 'Passes de Combat',
     recargasPavos: 'Recharge V-Bucks',
     crewFortnite: 'Fortnite Crew',
+    otrosTitulo: 'Autres Services',
     precioVbucks: 'V-Bucks',
     precioDinero: 'Prix Réel',
     total: 'Total',
@@ -204,6 +222,12 @@ export const translations = {
     activacionPaso2Text: 'Ne vous inquiétez pas. Créez simplement un compte Xbox gratuit et liez-le à votre compte Epic Games actuel.',
     activacionPaso3: 'Étape 3. Nous faisons l\'activation et c\'est tout.',
     activacionPaso3Text: 'Les avantages fonctionneront sur toutes les plateformes (PC, PS, Switch ou Mobile)!',
+    
+    // Section Autres
+    dispositivo: 'appareil',
+    dispositivos: 'appareils',
+    dias: 'jours',
+    meses: 'mois',
     itemsIncluidos: 'Articles Inclus:',
     cargandoCosmeticos: 'Chargement des cosmétiques...',
     errorCarga: 'Impossible de charger les cosmétiques. Veuillez réessayer.',
@@ -232,11 +256,13 @@ export const translations = {
     pasesTab: 'Passes de Batalha',
     recargasTab: 'Recarga de V-Bucks',
     crewTab: 'Fortnite Crew',
+    otrosTab: 'Outros',
     packsDestacados: 'Packs em Destaque',
     loMasNuevo: 'Mais Recente',
     pasesBatalla: 'Passes de Batalha',
     recargasPavos: 'Recarga de V-Bucks',
     crewFortnite: 'Fortnite Crew',
+    otrosTitulo: 'Outros Serviços',
     precioVbucks: 'V-Bucks',
     precioDinero: 'Preço Real',
     total: 'Total',
@@ -270,6 +296,12 @@ export const translations = {
     activacionPaso2Text: 'Não se preocupe. Basta criar uma conta Xbox gratuita e vinculá-la à sua conta atual da Epic Games.',
     activacionPaso3: 'Passo 3. Nós fazemos a ativação e pronto.',
     activacionPaso3Text: 'Os benefícios funcionarão em todas as plataformas (PC, PS, Switch ou Celular)!',
+    
+    // Seção Outros
+    dispositivo: 'dispositivo',
+    dispositivos: 'dispositivos',
+    dias: 'dias',
+    meses: 'meses',
     itemsIncluidos: 'Itens Incluídos:',
     cargandoCosmeticos: 'Carregando cosméticos...',
     errorCarga: 'Não foi possível carregar os cosméticos. Por favor, tente novamente.',
