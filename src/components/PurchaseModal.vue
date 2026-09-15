@@ -27,12 +27,12 @@
 
             <div class="price-row">
               <span class="price-label">{{ t('mxn') }}:</span>
-              <span class="price-value">${{ calculatePriceMXN(cosmetic.price) }}</span>
+              <span class="price-value">${{ cosmetic.mxn || calculatePriceMXN(cosmetic.price) }}</span>
             </div>
 
             <div class="price-row">
               <span class="price-label">{{ t('usd') }}:</span>
-              <span class="price-value">${{ calculatePriceUSD(cosmetic.price) }}</span>
+              <span class="price-value">${{ cosmetic.usd || calculatePriceUSD(cosmetic.price) }}</span>
             </div>
           </div>
 
