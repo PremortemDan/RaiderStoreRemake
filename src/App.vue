@@ -21,6 +21,7 @@ import otrosImg from './assets/otros.svg';
 import whatsapplogo from './assets/whatsapplogo.png';
 import facebooklogo from './assets/facebooklogo.png';
 import Geminilogo from './assets/Gemini.png';
+import AmazonPrimelogo from './assets/AmazonPrime.png';
 import fortnitewallpaper1 from './assets/fortnitewallpaper1.jpg';
 import fortnitewallpaper2 from './assets/fortnitewallpaper2.jpg';
 import fortnitewallpaper3 from './assets/fortnitewallpaper3.jpg';
@@ -246,6 +247,20 @@ const otros = ref([
     dispositivos: 1,
     dias: 90,
     instrucciones: 'Un perfil por 30 Días, 1 dispositivo, 4k ultra HD, Audio Dolby atmos.'
+  },
+  {
+    id: 'otros-amazon-prime-30-dias',
+    name: 'Amazon Prime 30 Dias',
+    label: 'Amazon Prime 3o  Dias',
+    price: 0,
+    mxn: '65.00',
+    usd: '3.79',
+    rarity: 'legendary',
+    type: 'default',
+    imageUrl: AmazonPrimelogo,
+    dispositivos: 1,
+    dias: 90,
+    instrucciones: 'Resolución 4k, 30 días'
   }
 ]);
 
