@@ -261,6 +261,7 @@ const proceedToWhatsApp = () => {
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease-out;
 }
@@ -283,11 +284,12 @@ const proceedToWhatsApp = () => {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 28px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -307,7 +309,7 @@ const proceedToWhatsApp = () => {
 
 .modal-title {
   margin: 0;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   color: #ffffff;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -323,7 +325,7 @@ const proceedToWhatsApp = () => {
 
 .products-summary h3 {
   margin: 0 0 16px 0;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   color: #FF8C00;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -350,7 +352,7 @@ const proceedToWhatsApp = () => {
 
 .product-name {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   flex: 1;
 }
@@ -363,7 +365,7 @@ const proceedToWhatsApp = () => {
 
 .vbucks-price {
   color: #FF8C00;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -378,13 +380,13 @@ const proceedToWhatsApp = () => {
 
 .real-price {
   color: #FFB347;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
 }
 
 .real-price-usd {
   color: #FFCC80;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
 }
 
@@ -399,7 +401,7 @@ const proceedToWhatsApp = () => {
 .total-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   color: #ffffff;
 }
@@ -427,7 +429,7 @@ const proceedToWhatsApp = () => {
 
 .username-label {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -437,7 +439,7 @@ const proceedToWhatsApp = () => {
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.2);
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -456,7 +458,7 @@ const proceedToWhatsApp = () => {
   border: 1px solid rgba(255, 140, 0, 0.3);
   padding: 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 17px;
   color: #e0e0e0;
   line-height: 1.6;
 }
@@ -483,7 +485,7 @@ const proceedToWhatsApp = () => {
   align-items: center;
   gap: 10px;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
@@ -504,7 +506,7 @@ const proceedToWhatsApp = () => {
 
 .btn {
   padding: 14px 24px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   border: none;
   border-radius: 8px;
@@ -552,11 +554,11 @@ const proceedToWhatsApp = () => {
   }
 
   .modal-title {
-    font-size: 22px;
+    font-size: 26px;
   }
 
   .products-summary h3 {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .products-list {
@@ -578,23 +580,23 @@ const proceedToWhatsApp = () => {
   }
 
   .username-input {
-    font-size: 13px;
+    font-size: 17px;
     padding: 10px;
   }
 
   .btn {
     padding: 12px 16px;
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .close-btn {
     width: 36px;
     height: 36px;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .checkbox-label {
-    font-size: 12px;
+    font-size: 16px;
   }
 }
 
@@ -606,11 +608,11 @@ const proceedToWhatsApp = () => {
   }
 
   .modal-title {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .products-summary h3 {
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .products-list {
@@ -618,29 +620,29 @@ const proceedToWhatsApp = () => {
   }
 
   .product-name {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .product-prices {
-    font-size: 11px;
+    font-size: 15px;
   }
 
   .username-label {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .username-input {
-    font-size: 12px;
+    font-size: 16px;
     padding: 8px;
   }
 
   .important-message {
-    font-size: 11px;
+    font-size: 15px;
     padding: 8px;
   }
 
   .checkbox-label {
-    font-size: 11px;
+    font-size: 15px;
     gap: 8px;
   }
 
@@ -651,11 +653,11 @@ const proceedToWhatsApp = () => {
 
   .btn {
     padding: 10px 12px;
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .total-row {
-    font-size: 12px;
+    font-size: 16px;
   }
 }
 </style>

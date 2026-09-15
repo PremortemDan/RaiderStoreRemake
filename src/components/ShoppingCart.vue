@@ -150,6 +150,7 @@ const totalUSD = computed(() => {
   background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
   display: flex;
   flex-direction: column;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   animation: slideInRight 0.3s ease-out;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
 }
@@ -174,7 +175,7 @@ const totalUSD = computed(() => {
 .cart-header h2 {
   margin: 0;
   color: #ffffff;
-  font-size: 24px;
+  font-size: 28px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -182,11 +183,12 @@ const totalUSD = computed(() => {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 28px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -220,7 +222,7 @@ const totalUSD = computed(() => {
 
 .empty-cart p {
   margin: 0;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .cart-items {
@@ -256,7 +258,7 @@ const totalUSD = computed(() => {
 .item-name {
   margin: 0;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -265,7 +267,7 @@ const totalUSD = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .item-price {
@@ -288,7 +290,7 @@ const totalUSD = computed(() => {
 
 .item-usd {
   color: #FFCC80;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .remove-btn {
@@ -299,6 +301,7 @@ const totalUSD = computed(() => {
   height: 32px;
   border-radius: 6px;
   cursor: pointer;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,7 +335,7 @@ const totalUSD = computed(() => {
   display: flex;
   justify-content: space-between;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -356,7 +359,7 @@ const totalUSD = computed(() => {
   border: none;
   padding: 14px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -374,7 +377,7 @@ const totalUSD = computed(() => {
   }
 
   .cart-header h2 {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .cart-content {
@@ -391,20 +394,20 @@ const totalUSD = computed(() => {
   }
 
   .item-name {
-    font-size: 13px;
+    font-size: 17px;
   }
 
   .item-prices {
-    font-size: 11px;
+    font-size: 15px;
   }
 
   .total-row {
-    font-size: 13px;
+    font-size: 17px;
   }
 
   .checkout-btn {
     padding: 12px;
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .close-btn {
@@ -419,7 +422,7 @@ const totalUSD = computed(() => {
   }
 
   .cart-header h2 {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .cart-content {
@@ -441,11 +444,11 @@ const totalUSD = computed(() => {
   }
 
   .item-name {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .item-prices {
-    font-size: 10px;
+    font-size: 14px;
   }
 
   .total-section {
@@ -453,12 +456,12 @@ const totalUSD = computed(() => {
   }
 
   .total-row {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .checkout-btn {
     padding: 10px;
-    font-size: 13px;
+    font-size: 17px;
   }
 
   .remove-btn {
@@ -467,7 +470,7 @@ const totalUSD = computed(() => {
   }
 
   .empty-cart p {
-    font-size: 14px;
+    font-size: 18px;
   }
 }
 </style>
