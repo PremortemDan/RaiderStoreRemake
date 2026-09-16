@@ -245,13 +245,13 @@ const otros = ref([
     type: 'default',
     imageUrl: 'https://beam-images.warnermediacdn.com/2025-07/mob.png?host=wbd-dotcom-drupal-prd-us-east-1.s3.amazonaws.com',
     dispositivos: 1,
-    dias: 90,
+    dias: 30,
     instrucciones: 'Un perfil por 30 Días, 1 dispositivo, 4k ultra HD, Audio Dolby atmos.'
   },
   {
     id: 'otros-amazon-prime-30-dias',
     name: 'Amazon Prime 30 Dias',
-    label: 'Amazon Prime 3o  Dias',
+    label: 'Amazon Prime 30  Dias',
     price: 0,
     mxn: '65.00',
     usd: '3.79',
@@ -259,7 +259,7 @@ const otros = ref([
     type: 'default',
     imageUrl: AmazonPrimelogo,
     dispositivos: 1,
-    dias: 90,
+    dias: 30,
     instrucciones: 'Resolución 4k, 30 días'
   }
 ]);
