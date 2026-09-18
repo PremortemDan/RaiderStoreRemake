@@ -1,13 +1,5 @@
 <template>
   <section class="store-section">
-    <div class="store-header">
-      <!--
-      <div class="Sponsor">
-        <img src="../assets/epiclogo.png" alt="Epic API Logo" width="30" height="30"/>
-      <p class="Store-sponsor">Powered by Epic api</p>
-      </div>
-    -->
-    </div>
     <div v-if="loading" class="loading">
       <div class="spinner"></div>
       <p class="loading-text">{{ t('cargandoCosmeticos') }}</p>
@@ -18,6 +10,14 @@
     </div>
 
     <div v-else>
+      <div class="filter-bar">
+        <select v-model="selectedCategory" class="category-filter">
+          <option v-for="cat in availableCategories" :key="cat.value" :value="cat.value">
+            {{ cat.label }}
+          </option>
+        </select>
+      </div>
+
       <section v-if="filteredBundles.length > 0" class="series-section">
         <h2 class="series-title">{{ t('packsDestacados') }}</h2>
         <div class="cosmetics-grid">
@@ -113,6 +113,7 @@ const showPurchaseModal = ref(false);
 const showBundlePurchaseModal = ref(false);
 const selectedCosmetic = ref(null);
 const selectedBundle = ref(null);
+const selectedCategory = ref('all');
 
 const props = defineProps({
   searchQuery: {
@@ -121,39 +122,104 @@ const props = defineProps({
   }
 });
 
-// Filtrar cosméticos por búsqueda
-const filteredCosmetics = computed(() => {
-  if (!props.searchQuery.trim()) {
-    return cosmetics.value;
-  }
+// ===== Filtro por categorías =====
 
-  const query = props.searchQuery.toLowerCase();
-  
+// Normaliza el tipo a minúsculas para comparar categorías
+const normalizeType = (type) => (type || '').toLowerCase();
+
+// Etiquetas legibles para cada categoría (clave en minúsculas)
+const CATEGORY_LABELS = {
+  outfit: 'Skins',
+  backpack: 'Mochilas',
+  backbling: 'Mochilas',
+  pickaxe: 'Picos',
+  emote: 'Emotes',
+  glider: 'Alas Delta',
+  wrap: 'Envoltorios',
+  music: 'Música',
+  contrail: 'Estelas',
+  loadingscreen: 'Pantallas de Carga',
+  loading_screen: 'Pantallas de Carga',
+  spray: 'Aerosoles',
+  toy: 'Juguetes',
+  pet: 'Mascotas',
+  banner: 'Banners',
+};
+
+const getCategoryLabel = (type) => {
+  const key = normalizeType(type);
+  return CATEGORY_LABELS[key] || type;
+};
+
+// Orden preferido de las categorías
+const CATEGORY_ORDER = [
+  'outfit', 'backpack', 'backbling', 'pickaxe', 'emote', 'glider', 'wrap',
+  'music', 'contrail', 'loadingscreen', 'loading_screen', 'spray', 'toy', 'pet', 'banner'
+];
+
+const availableCategories = computed(() => {
+  const types = new Set();
+  cosmetics.value.forEach(c => { if (c.type) types.add(normalizeType(c.type)); });
+  bundles.value.forEach(b => (b.items || []).forEach(i => { if (i.type) types.add(normalizeType(i.type)); }));
+
+  const ordered = CATEGORY_ORDER.filter(t => types.has(t));
+  types.forEach(t => { if (!ordered.includes(t)) ordered.push(t); });
+
+  const list = [{ value: 'all', label: t('todasLasCategorias') }];
+  ordered.forEach(t => {
+    list.push({ value: t, label: getCategoryLabel(t) });
+  });
+  return list;
+});
+
+// Filtrar cosméticos por búsqueda y categoría
+const filteredCosmetics = computed(() => {
+  const query = props.searchQuery.trim().toLowerCase();
+
   return cosmetics.value.filter(cosmetic => {
-    const nameMatch = cosmetic.name.toLowerCase().includes(query);
-    const seriesMatch = (cosmetic.series || '').toLowerCase().includes(query);
-    const layoutMatch = (cosmetic.layout || '').toLowerCase().includes(query);
-    
-    return nameMatch || seriesMatch || layoutMatch;
+    // Filtro por categoría
+    if (selectedCategory.value !== 'all' && normalizeType(cosmetic.type) !== selectedCategory.value) {
+      return false;
+    }
+
+    // Filtro por búsqueda
+    if (query) {
+      const nameMatch = cosmetic.name.toLowerCase().includes(query);
+      const seriesMatch = (cosmetic.series || '').toLowerCase().includes(query);
+      const layoutMatch = (cosmetic.layout || '').toLowerCase().includes(query);
+      
+      return nameMatch || seriesMatch || layoutMatch;
+    }
+
+    return true;
   });
 });
 
-// Filtrar bundles por búsqueda y ordenar de mayor a menor precio
+// Filtrar bundles por búsqueda y categoría, y ordenar de mayor a menor precio
 const filteredBundles = computed(() => {
   const query = props.searchQuery.trim().toLowerCase();
 
-  let result = bundles.value;
+  const result = bundles.value.filter(bundle => {
+    // Filtro por categoría: el pack pertenece a la categoría si contiene algún item de ese tipo
+    if (selectedCategory.value !== 'all') {
+      const hasCategory = (bundle.items || []).some(item =>
+        normalizeType(item.type) === selectedCategory.value
+      );
+      if (!hasCategory) return false;
+    }
 
-  if (query) {
-    result = bundles.value.filter(bundle => {
+    // Filtro por búsqueda
+    if (query) {
       const nameMatch = bundle.name.toLowerCase().includes(query);
-      const itemsMatch = bundle.items.some(item => 
+      const itemsMatch = (bundle.items || []).some(item =>
         item.name.toLowerCase().includes(query)
       );
       
       return nameMatch || itemsMatch;
-    });
-  }
+    }
+
+    return true;
+  });
 
   // Ordenar de mayor a menor precio
   return [...result].sort((a, b) => b.price - a.price);
@@ -403,6 +469,7 @@ watch(lang, () => {
 
 <style scoped>
 .store-section {
+  position: relative;
   padding: 40px 20px;
   max-width: 1400px;
   margin: 0 auto;
@@ -506,7 +573,7 @@ watch(lang, () => {
   }
   .series-title {
     font-size: 40px;
-    padding: 50px 0 70px 0;
+    padding: 0 0 70px 0;
     letter-spacing: -1px;
   }
 }
@@ -596,6 +663,59 @@ watch(lang, () => {
 
 .error p {
   margin: 0;
+}
+
+/* Filtro por categorías */
+.filter-bar {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+
+.category-filter {
+  padding: 10px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #b0b0b0;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  outline: none;
+}
+
+.category-filter:hover {
+  border-color: rgba(255, 140, 0, 0.5);
+  color: #FF8C00;
+  background: rgba(255, 140, 0, 0.1);
+}
+
+.category-filter option {
+  background: #2a1a0a;
+  color: #ffffff;
+  text-transform: none;
+}
+
+@media (max-width: 767px) {
+  .filter-bar {
+    position: static;
+    justify-content: stretch;
+    margin-bottom: 20px;
+  }
+
+  .category-filter {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
 }
 
 /* Estilos para secciones de series */

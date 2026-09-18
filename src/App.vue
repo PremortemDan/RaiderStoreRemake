@@ -760,6 +760,7 @@ const reloadPage = () => {
   text-transform: uppercase;
   text-align: left;
   width: 100%;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .cosmetics-grid {
