@@ -128,7 +128,7 @@ const addToCart = () => {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 28px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -168,7 +168,7 @@ const addToCart = () => {
 }
 
 .months-display {
-  font-size: 80px;
+  font-size: 84px;
   font-weight: 900;
   color: #ffffff;
   line-height: 1;
@@ -180,7 +180,7 @@ const addToCart = () => {
 
 .product-name {
   margin: 0;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   color: #FFB347;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -201,7 +201,8 @@ const addToCart = () => {
   justify-content: space-between;
   align-items: center;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 20px;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .price-label {
@@ -225,7 +226,7 @@ const addToCart = () => {
 
 .instructions-title {
   margin: 0 0 12px 0;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   color: #FFB347;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -234,7 +235,7 @@ const addToCart = () => {
 .instructions-step {
   margin: 0;
   color: #e0e0e0;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.6;
 }
 
@@ -243,7 +244,7 @@ const addToCart = () => {
   border: 1px solid rgba(255, 140, 0, 0.3);
   padding: 12px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 18px;
   color: #e0e0e0;
   line-height: 1.5;
 }
@@ -268,7 +269,7 @@ const addToCart = () => {
 
 .btn {
   padding: 14px 24px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   border: none;
   border-radius: 8px;
@@ -314,7 +315,7 @@ const addToCart = () => {
   }
 
   .product-name {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .product-image img {
@@ -323,18 +324,18 @@ const addToCart = () => {
   }
 
   .instructions-list li {
-    font-size: 12px;
+    font-size: 16px;
   }
 
   .btn {
     padding: 12px 16px;
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .close-btn {
     width: 36px;
     height: 36px;
-    font-size: 20px;
+    font-size: 24px;
   }
 }
 </style>
