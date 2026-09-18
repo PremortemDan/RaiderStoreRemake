@@ -198,10 +198,7 @@ const formatPrice = (price) => {
 }
 
 .price-value {
-  background: linear-gradient(180deg, #ffffff, #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
   font-size: 24px;
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
