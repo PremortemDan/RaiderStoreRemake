@@ -11,11 +11,60 @@
 
     <div v-else>
       <div class="filter-bar">
-        <select v-model="selectedCategory" class="category-filter">
-          <option v-for="cat in availableCategories" :key="cat.value" :value="cat.value">
-            {{ cat.label }}
-          </option>
-        </select>
+        <div class="category-dropdown" ref="categoryDropdown">
+          <button
+            type="button"
+            class="category-dropdown__trigger"
+            :class="{ open: isCategoryOpen }"
+            @click="toggleCategoryDropdown"
+          >
+            <span class="category-dropdown__label">{{ selectedCategoryLabel }}</span>
+            <svg
+              class="category-dropdown__icon"
+              :class="{ open: isCategoryOpen }"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <transition name="dropdown">
+            <ul v-if="isCategoryOpen" class="category-dropdown__panel">
+              <li
+                v-for="cat in availableCategories"
+                :key="cat.value"
+                class="category-dropdown__option"
+                :class="{ selected: selectedCategory === cat.value }"
+                @click="selectCategory(cat.value)"
+              >
+                <span>{{ cat.label }}</span>
+                <svg
+                  v-if="selectedCategory === cat.value"
+                  class="category-dropdown__check"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </li>
+            </ul>
+          </transition>
+        </div>
       </div>
 
       <section v-if="selectedCategory === 'all' && filteredBundles.length > 0" class="series-section">
@@ -171,6 +220,30 @@ const availableCategories = computed(() => {
   });
   return list;
 });
+
+// Etiqueta de la categoría seleccionada para el botón del desplegable
+const selectedCategoryLabel = computed(() => {
+  if (selectedCategory.value === 'all') return t('todasLasCategorias');
+  return getCategoryLabel(selectedCategory.value);
+});
+
+const isCategoryOpen = ref(false);
+const categoryDropdown = ref(null);
+
+const toggleCategoryDropdown = () => {
+  isCategoryOpen.value = !isCategoryOpen.value;
+};
+
+const selectCategory = (value) => {
+  selectedCategory.value = value;
+  isCategoryOpen.value = false;
+};
+
+const handleClickOutside = (event) => {
+  if (categoryDropdown.value && !categoryDropdown.value.contains(event.target)) {
+    isCategoryOpen.value = false;
+  }
+};
 
 // Filtrar cosméticos por búsqueda y categoría
 const filteredCosmetics = computed(() => {
@@ -459,6 +532,11 @@ const loadFallbackData = () => {
 
 onMounted(() => {
   fetchCosmetics();
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
 });
 
 // Re-fetch cuando cambia el idioma
@@ -676,8 +754,18 @@ watch(lang, () => {
   margin-bottom: 0;
 }
 
-.category-filter {
-  padding: 10px 24px;
+.category-dropdown {
+  position: relative;
+  min-width: 220px;
+}
+
+.category-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 18px;
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
@@ -690,18 +778,106 @@ watch(lang, () => {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   outline: none;
+  box-sizing: border-box;
 }
 
-.category-filter:hover {
+.category-dropdown__trigger:hover {
   border-color: rgba(255, 140, 0, 0.5);
   color: #FF8C00;
   background: rgba(255, 140, 0, 0.1);
 }
 
-.category-filter option {
+.category-dropdown__trigger.open {
+  border-color: #FF8C00;
+  color: #FF8C00;
   background: #2a1a0a;
-  color: #ffffff;
-  text-transform: none;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 6px 18px rgba(255, 140, 0, 0.25);
+}
+
+.category-dropdown__icon {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.category-dropdown__icon.open {
+  transform: rotate(180deg);
+}
+
+.category-dropdown__panel {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: #2a1a0a;
+  border: 2px solid #FF8C00;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+  z-index: 20;
+  max-height: 340px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.category-dropdown__panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.category-dropdown__panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.4);
+  border-radius: 999px;
+}
+
+.category-dropdown__panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.category-dropdown__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #d3d3d3;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.category-dropdown__option:hover {
+  background: rgba(255, 140, 0, 0.16);
+  color: #FF8C00;
+}
+
+.category-dropdown__option.selected {
+  color: #FF8C00;
+}
+
+.category-dropdown__check {
+  flex-shrink: 0;
+  color: #FF8C00;
+}
+
+/* Transición del panel desplegable */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  transform-origin: top;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
 }
 
 @media (max-width: 767px) {
@@ -711,8 +887,12 @@ watch(lang, () => {
     margin-bottom: 20px;
   }
 
-  .category-filter {
+  .category-dropdown {
     width: 100%;
+    min-width: 0;
+  }
+
+  .category-dropdown__trigger {
     padding: 8px 16px;
     font-size: 13px;
   }
