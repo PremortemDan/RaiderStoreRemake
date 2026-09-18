@@ -193,6 +193,10 @@ const CATEGORY_LABELS = {
   toy: 'Juguetes',
   pet: 'Mascotas',
   banner: 'Banners',
+  wheel: 'Ruedas',
+  sidekick: 'Compañeros',
+  shoe: 'Calzado',
+  skin: 'Envoltorio',
 };
 
 const getCategoryLabel = (type) => {
