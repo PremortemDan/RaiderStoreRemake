@@ -18,7 +18,7 @@
         </select>
       </div>
 
-      <section v-if="filteredBundles.length > 0" class="series-section">
+      <section v-if="selectedCategory === 'all' && filteredBundles.length > 0" class="series-section">
         <h2 class="series-title">{{ t('packsDestacados') }}</h2>
         <div class="cosmetics-grid">
           <BundleCard
