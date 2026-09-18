@@ -737,6 +737,7 @@ watch(lang, () => {
 .error {
   color: #f87171;
   font-size: 18px;
+  ont-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .error p {
@@ -774,7 +775,6 @@ watch(lang, () => {
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
   cursor: pointer;
-  transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   outline: none;
@@ -797,7 +797,7 @@ watch(lang, () => {
 
 .category-dropdown__icon {
   flex-shrink: 0;
-  transition: transform 0.3s ease;
+  transition: transform 0.22s ease;
 }
 
 .category-dropdown__icon.open {
