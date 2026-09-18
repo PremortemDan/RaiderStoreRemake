@@ -135,6 +135,7 @@ const formatPrice = (price) => {
   right: 10px;
   background: #FF9F1C;
   color: rgb(0, 0, 0);
+  text-shadow: none;
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 12px;
