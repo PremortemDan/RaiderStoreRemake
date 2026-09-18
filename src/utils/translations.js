@@ -49,7 +49,7 @@ export const translations = {
     confirmarBtn: 'Confirmar Compra',
     
     // Modal purchase
-    accountMsg: '¿Ya agregaste tu cuenta? Si aun no la has agregado',
+    accountMsg: 'Tu pedido se envía como regalo. Para recibirlo, agrega a nuestras cuentas RSPAVOS (del 1 al 12). Si todavía no las has agregado',
     accountMsgPavos: 'Para el proceso se requiere acceso a la cuenta de epic games o xbox, no tiene ningun tipo de riesgo se puede en principales, secundarias y nuevas',
     
     // Checkout condicional
