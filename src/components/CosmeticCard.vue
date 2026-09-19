@@ -147,6 +147,8 @@ const calculatePriceUSD = (vbucks) => {
   text-transform: uppercase;
   transform: skewX(-10deg) rotate(0deg);
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .cosmetic-content {
@@ -263,6 +265,7 @@ const calculatePriceUSD = (vbucks) => {
     padding: 3px 8px;
     top: 6px;
     right: 6px;
+    transform: none;
   }
 }
 </style>
