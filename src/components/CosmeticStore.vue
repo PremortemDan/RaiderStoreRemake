@@ -302,6 +302,16 @@ const filteredBundles = computed(() => {
   return [...result].sort((a, b) => b.price - a.price);
 });
 
+// Ordena los cosméticos de una sección: primero las skins (outfit) y luego de mayor a menor precio
+const sortCosmetics = (list) => {
+  return [...list].sort((a, b) => {
+    const aIsSkin = normalizeType(a.type) === 'outfit' ? 0 : 1;
+    const bIsSkin = normalizeType(b.type) === 'outfit' ? 0 : 1;
+    if (aIsSkin !== bIsSkin) return aIsSkin - bIsSkin;
+    return b.price - a.price;
+  });
+};
+
 const groupedBySeriesCosmetics = computed(() => {
   const grouped = {};
   
@@ -318,6 +328,11 @@ const groupedBySeriesCosmetics = computed(() => {
   
   // Eliminar secciones sin nombre
   delete grouped[''];
+  
+  // En cada sección: skins primero y luego de mayor a menor precio
+  Object.keys(grouped).forEach(key => {
+    grouped[key] = sortCosmetics(grouped[key]);
+  });
   
   return grouped;
 });
@@ -339,11 +354,18 @@ const musicCosmetics = computed(() => {
   // Eliminar secciones sin nombre
   delete grouped[''];
   
+  // En cada sección: ordenar de mayor a menor precio
+  Object.keys(grouped).forEach(key => {
+    grouped[key] = sortCosmetics(grouped[key]);
+  });
+  
   return grouped;
 });
 
 const newCosmetics = computed(() => {
-  return filteredCosmetics.value.filter(cosmetic => cosmetic.isNew === true);
+  const result = filteredCosmetics.value.filter(cosmetic => cosmetic.isNew === true);
+  // Skins primero y luego de mayor a menor precio
+  return sortCosmetics(result);
 });
 
 const openPurchaseModal = (item) => {
