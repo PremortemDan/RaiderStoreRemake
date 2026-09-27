@@ -193,10 +193,15 @@ const CATEGORY_LABELS = {
   toy: 'Juguetes',
   pet: 'Mascotas',
   banner: 'Banners',
+  // Cosmeticos de autos (tienda / catalogo)
+  body: 'Carrocerías',
+  skin: 'Pieles',
+  decal: 'Calcomanías',
+  boost: 'Turbos',
   wheel: 'Ruedas',
+  wheels: 'Ruedas',
   sidekick: 'Compañeros',
   shoe: 'Calzado',
-  skin: 'Envoltorio',
 };
 
 const getCategoryLabel = (type) => {
@@ -207,7 +212,8 @@ const getCategoryLabel = (type) => {
 // Orden preferido de las categorías
 const CATEGORY_ORDER = [
   'outfit', 'backpack', 'backbling', 'pickaxe', 'emote', 'glider', 'wrap',
-  'music', 'contrail', 'loadingscreen', 'loading_screen', 'spray', 'toy', 'pet', 'banner'
+  'music', 'contrail', 'loadingscreen', 'loading_screen', 'spray', 'toy', 'pet', 'banner',
+  'body', 'skin', 'decal', 'boost', 'wheel', 'wheels'
 ];
 
 const availableCategories = computed(() => {
@@ -425,6 +431,28 @@ const fetchCosmetics = async () => {
           inDate: entry.inDate,
           outDate: entry.outDate,
         });
+      } else if (entry.cars && entry.cars.length > 1) {
+        // Es un bundle de autos (carrocería + calcas/pieles + ruedas)
+        const bundleItems = entry.cars.map(car => ({
+          name: car.name,
+          type: car.type.value,
+          rarity: car.rarity?.value || 'common'
+        }));
+        
+        mappedBundles.push({
+          offerId: entry.offerId,
+          name: entry.bundle?.name || entry.cars[0]?.name,
+          imageUrl: entry.bundle?.image || entry.cars[0]?.images?.large || entry.cars[0]?.images?.small || 'https://via.placeholder.com/200',
+          price: entry.finalPrice,
+          regularPrice: entry.regularPrice,
+          items: bundleItems,
+          isNew: entry.banner?.backendValue === 'New',
+          inDate: entry.inDate,
+          outDate: entry.outDate,
+        });
+        
+        // Marcar la entrada para no procesar sus autos como ítems individuales
+        entry._processedAsCarBundle = true;
       }
     });
 
@@ -451,8 +479,8 @@ const fetchCosmetics = async () => {
         });
       }
 
-      // Procesar cars/ruedas (wheels)
-      if (entry.cars && entry.cars.length > 0) {
+      // Procesar autos individuales (cuerpos, pieles, ruedas, etc.)
+      if (entry.cars && entry.cars.length > 0 && !entry._processedAsCarBundle) {
         entry.cars.forEach(car => {
           
           mappedCosmetics.push({
@@ -460,10 +488,10 @@ const fetchCosmetics = async () => {
             name: car.name,
             type: car.type.value,
             series: car.series?.value || '',
-            layout: entry.layout?.name || entry.bundle?.name || '',
+            layout: entry.layout?.name || entry.bundle?.name || getCategoryLabel(car.type.value) || '',
             rarity: car.rarity?.value || car.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
-            imageUrl: car.images?.large || entry.bundle?.image || 'https://via.placeholder.com/200',
+            imageUrl: car.images?.large || car.images?.small || entry.bundle?.image || 'https://via.placeholder.com/200',
             regularPrice: entry.regularPrice,
             isNew: entry.banner?.backendValue === 'New',
             inDate: entry.inDate,
