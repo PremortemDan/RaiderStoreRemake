@@ -91,13 +91,19 @@
         </div>
       </section>
 
-      <section v-for="(series, seriesName) in groupedBySeriesCosmetics" :key="seriesName" class="series-section">
+      <section v-for="(section, seriesName) in groupedBySeriesCosmetics" :key="seriesName" class="series-section">
         <h2 class="series-title">{{ seriesName }}</h2>
         <div class="cosmetics-grid">
           <CosmeticCard
-            v-for="cosmetic in series"
+            v-for="cosmetic in section.cosmetics"
             :key="cosmetic.offerId"
             :cosmetic="cosmetic"
+            @select="openPurchaseModal"
+          />
+          <BundleCard
+            v-for="bundle in section.bundles"
+            :key="'bundle-' + bundle.offerId"
+            :bundle="bundle"
             @select="openPurchaseModal"
           />
         </div>
@@ -319,28 +325,40 @@ const sortCosmetics = (list) => {
 };
 
 const groupedBySeriesCosmetics = computed(() => {
-  const grouped = {};
+  const sections = {};
   
+  // Cosméticos individuales (excluyendo música)
   filteredCosmetics.value.forEach(cosmetic => {
-    // Excluir música de las secciones normales
     if (cosmetic.type === 'Music') return;
     
     const seriesName = cosmetic.series || cosmetic.layout || '';
-    if (!grouped[seriesName]) {
-      grouped[seriesName] = [];
+    if (!sections[seriesName]) {
+      sections[seriesName] = { cosmetics: [], bundles: [] };
     }
-    grouped[seriesName].push(cosmetic);
+    sections[seriesName].cosmetics.push(cosmetic);
+  });
+  
+  // Bundles relacionados: se agrupan por series/layout igual que los cosméticos
+  filteredBundles.value.forEach(bundle => {
+    const seriesName = bundle.series || bundle.layout || bundle.name || '';
+    if (!sections[seriesName]) {
+      sections[seriesName] = { cosmetics: [], bundles: [] };
+    }
+    sections[seriesName].bundles.push(bundle);
   });
   
   // Eliminar secciones sin nombre
-  delete grouped[''];
+  delete sections[''];
   
-  // En cada sección: skins primero y luego de mayor a menor precio
-  Object.keys(grouped).forEach(key => {
-    grouped[key] = sortCosmetics(grouped[key]);
+  // Ordenar el contenido de cada sección:
+  // cosméticos: skins primero y luego de mayor a menor precio
+  // bundles: de mayor a menor precio
+  Object.keys(sections).forEach(key => {
+    sections[key].cosmetics = sortCosmetics(sections[key].cosmetics);
+    sections[key].bundles = [...sections[key].bundles].sort((a, b) => b.price - a.price);
   });
   
-  return grouped;
+  return sections;
 });
 
 const musicCosmetics = computed(() => {
@@ -427,6 +445,8 @@ const fetchCosmetics = async () => {
           price: entry.finalPrice,
           regularPrice: entry.regularPrice,
           items: bundleItems,
+          series: entry.brItems.map(i => i.series?.value).find(s => s) || '',
+          layout: entry.layout?.name || entry.bundle?.name || '',
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
           outDate: entry.outDate,
@@ -446,6 +466,8 @@ const fetchCosmetics = async () => {
           price: entry.finalPrice,
           regularPrice: entry.regularPrice,
           items: bundleItems,
+          series: entry.cars.map(c => c.series?.value).find(s => s) || '',
+          layout: entry.layout?.name || entry.bundle?.name || '',
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
           outDate: entry.outDate,
