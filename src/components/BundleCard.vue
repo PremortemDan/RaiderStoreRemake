@@ -221,7 +221,7 @@ const formatPrice = (price) => {
 
 @media (max-width: 1023px) {
   .bundle-card {
-    grid-column: span 3;
+    grid-column: span 2;
   }
   
   .bundle-header {
@@ -239,7 +239,7 @@ const formatPrice = (price) => {
 
 @media (max-width: 767px) {
   .bundle-card {
-    grid-column: span 3;
+    grid-column: span 2;
   }
   
   .bundle-header {
