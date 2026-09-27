@@ -62,6 +62,15 @@ const calculatePriceUSD = (vbucks) => {
   background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
 }
 
+/* Escritorio (grilla de 4 columnas): evitar que la tarjeta se estire
+   verticalmente cuando comparte fila con un BundleCard más alto */
+@media (min-width: 1024px) {
+  .cosmetic-card {
+    height: auto;
+    align-self: start;
+  }
+}
+
 /* Rarezas base */
 .cosmetic-card.rarity-common {
   background: linear-gradient(180deg, #2a2a2a, #4a4a4a 100%);
