@@ -129,18 +129,6 @@
           </div>
         </div>
       </section>
-
-      <section v-for="(series, seriesName) in musicCosmetics" :key="'music-' + seriesName" :id="sectionId('music-' + seriesName)" class="series-section">
-        <h2 class="series-title">{{ seriesName }}</h2>
-        <div class="cosmetics-grid">
-          <CosmeticCard
-            v-for="cosmetic in series"
-            :key="cosmetic.offerId"
-            :cosmetic="cosmetic"
-            @select="openPurchaseModal"
-          />
-        </div>
-      </section>
     </div>
 
     <!-- Modal de Compra de Cosméticos -->
@@ -258,9 +246,6 @@ const sectionsList = computed(() => {
   groupedBySeriesCosmetics.value.forEach(section => {
     list.push({ id: sectionId(section.name), label: section.name });
   });
-  Object.keys(musicCosmetics.value).forEach(name => {
-    list.push({ id: sectionId(`music-${name}`), label: name });
-  });
 
   return list;
 });
@@ -376,10 +361,8 @@ const resolveSeries = (item) => {
 const groupedBySeriesCosmetics = computed(() => {
   const sections = {};
   
-  // Cosméticos individuales (excluyendo música)
+  // Cosméticos individuales
   filteredCosmetics.value.forEach(cosmetic => {
-    if (cosmetic.type === 'Music') return;
-    
     const seriesName = resolveSeries(cosmetic) || cosmetic.layout || '';
     if (!seriesName) return;
     
@@ -446,31 +429,6 @@ const groupedBySeriesCosmetics = computed(() => {
   return result;
 });
 
-const musicCosmetics = computed(() => {
-  const grouped = {};
-  
-  filteredCosmetics.value.forEach(cosmetic => {
-    // Solo agrupar música
-    if (cosmetic.type !== 'Music') return;
-    
-    const seriesName = cosmetic.layout || 'Jam Tracks';
-    if (!grouped[seriesName]) {
-      grouped[seriesName] = [];
-    }
-    grouped[seriesName].push(cosmetic);
-  });
-  
-  // Eliminar secciones sin nombre
-  delete grouped[''];
-  
-  // En cada sección: ordenar de mayor a menor precio
-  Object.keys(grouped).forEach(key => {
-    grouped[key] = sortCosmetics(grouped[key]);
-  });
-  
-  return grouped;
-});
-
 const newCosmetics = computed(() => {
   const result = filteredCosmetics.value.filter(cosmetic => cosmetic.isNew === true);
   // Skins primero y luego de mayor a menor precio
@@ -513,6 +471,23 @@ const fetchCosmetics = async () => {
     const mappedCosmetics = [];
     const mappedBundles = [];
 
+    // Recopilar todos los conjuntos (sets) disponibles para poder asociar las canciones
+    const knownSets = new Set();
+    entries.forEach(entry => {
+      (entry.brItems || []).forEach(item => {
+        if (item.set?.value) knownSets.add(item.set.value);
+      });
+      (entry.cars || []).forEach(car => {
+        if (car.set?.value) knownSets.add(car.set.value);
+      });
+    });
+
+    // Dado el nombre de un layout, devuelve el conjunto (set) si coincide con uno conocido
+    const layoutToSet = (layoutName) => {
+      const trimmed = (layoutName || '').trim();
+      return knownSets.has(trimmed) ? trimmed : '';
+    };
+
     // Primera pasada: detectar bundles
     entries.slice(0, 500).forEach(entry => {
       if (entry.bundle && entry.brItems && entry.brItems.length > 1) {
@@ -553,7 +528,7 @@ const fetchCosmetics = async () => {
           regularPrice: entry.regularPrice,
           items: bundleItems,
           series: entry.cars.map(c => c.series?.value).find(s => s) || '',
-          set: entry.cars.map(c => c.set?.value).find(s => s) || '',
+          set: entry.cars.map(c => c.set?.value).find(s => s) || layoutToSet(entry.layout?.name),
           layout: entry.layout?.name || entry.bundle?.name || '',
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
@@ -598,7 +573,7 @@ const fetchCosmetics = async () => {
             name: car.name,
             type: car.type.value,
             series: car.series?.value || '',
-            set: car.set?.value || '',
+            set: car.set?.value || layoutToSet(entry.layout?.name),
             layout: entry.layout?.name || entry.bundle?.name || getCategoryLabel(car.type.value) || '',
             rarity: car.rarity?.value || car.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
@@ -613,6 +588,10 @@ const fetchCosmetics = async () => {
 
       // Procesar tracks (música)
       if (entry.tracks && entry.tracks.length > 0) {
+        const trackLayout = (entry.layout?.name || '').trim();
+        // Si el layout coincide con un conjunto conocido, la canción pertenece a ese set
+        const trackSet = knownSets.has(trackLayout) ? trackLayout : '';
+
         entry.tracks.forEach(track => {
           
           mappedCosmetics.push({
@@ -620,7 +599,7 @@ const fetchCosmetics = async () => {
             name: track.title,
             type: 'Music',
             series: '',
-            set: '',
+            set: trackSet,
             layout: entry.layout?.name || 'Jam Tracks',
             rarity: 'uncommon',
             price: entry.finalPrice,
