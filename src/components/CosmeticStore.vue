@@ -358,6 +358,15 @@ const resolveSeries = (item) => {
   return (set && setToSeries.value[set]) || '';
 };
 
+// Determina si una sección contiene únicamente música
+const isMusicOnlySection = (section) => {
+  if (section.bundles.length > 0) return false;
+  if (section.cosmetics.some(c => c.type !== 'Music')) return false;
+  return section.subsections.every(sub =>
+    sub.bundles.length === 0 && sub.cosmetics.every(c => c.type === 'Music')
+  );
+};
+
 const groupedBySeriesCosmetics = computed(() => {
   const sections = {};
   
@@ -424,6 +433,15 @@ const groupedBySeriesCosmetics = computed(() => {
       bundles: section.bundles,
       subsections
     };
+  });
+  
+  // Mover las secciones que contienen solo música al final de la página
+  result.sort((a, b) => {
+    const aMusicOnly = isMusicOnlySection(a);
+    const bMusicOnly = isMusicOnlySection(b);
+    if (aMusicOnly && !bMusicOnly) return 1;
+    if (!aMusicOnly && bMusicOnly) return -1;
+    return 0;
   });
   
   return result;
