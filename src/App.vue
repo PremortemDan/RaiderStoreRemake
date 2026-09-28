@@ -890,6 +890,7 @@ const reloadPage = () => {
   inset: 0;
   z-index: -1;
   overflow: hidden;
+  background-color: #0d0d12;
 }
 
 .wallpaper-layer {

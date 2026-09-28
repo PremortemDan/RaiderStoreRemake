@@ -10,7 +10,7 @@
 :root {
   --text: #6b6375;
   --text-h: #08060d;
-  --bg: linear-gradient(90deg, #4A1800, #E85D04);
+  --bg: #0d0d12;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #FF6B00;
@@ -44,7 +44,7 @@
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
-    --bg: linear-gradient(90deg, #4A1800, #E85D04);
+    --bg: #0d0d12;
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #FF8C42;
