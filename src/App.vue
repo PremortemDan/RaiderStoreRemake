@@ -704,10 +704,10 @@ const reloadPage = () => {
 
 .service-tab {
   padding: 10px 24px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #b0b0b0;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;

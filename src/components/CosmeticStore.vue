@@ -929,10 +929,10 @@ watch(lang, () => {
   gap: 12px;
   width: 100%;
   padding: 10px 18px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #b0b0b0;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -946,7 +946,7 @@ watch(lang, () => {
 .category-dropdown__trigger:hover {
   border-color: rgba(255, 140, 0, 0.5);
   color: #FF8C00;
-  background: rgba(255, 140, 0, 0.1);
+  background: rgba(255, 140, 0, 0.5);
 }
 
 .category-dropdown__trigger.open {
