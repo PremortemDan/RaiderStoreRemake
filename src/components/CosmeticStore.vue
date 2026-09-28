@@ -741,8 +741,9 @@ watch(lang, () => {
 }
 
 .series-title {
-  margin: 0; 
-  padding-bottom: 70px;
+  margin: 0 0 55px 0; 
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
   
   /* 2. Forzamos a que el texto NO rompa línea */
   white-space: nowrap; 
@@ -789,7 +790,6 @@ watch(lang, () => {
   }
   .series-title {
     font-size: 40px;
-    padding: 0 0 70px 0;
     letter-spacing: -1px;
   }
 }
@@ -802,7 +802,7 @@ watch(lang, () => {
   }
    .series-title {
     font-size: 25px;
-    padding-bottom: 40px;
+    margin-bottom: 25px;
     letter-spacing: -1px;
   }
 }
@@ -815,7 +815,7 @@ watch(lang, () => {
   }
    .series-title {
     font-size: 18px;
-    padding-bottom: 40px;
+    margin-bottom: 25px;
     letter-spacing: -1px;
   }
 
@@ -1071,7 +1071,7 @@ watch(lang, () => {
 @media (max-width: 767px) {
   .series-title {
     font-size: 18px;
-    padding-bottom: 40px;
+    margin-bottom: 25px;
     letter-spacing: -1px;
     white-space: normal;
   }
