@@ -345,6 +345,31 @@ const sortCosmetics = (list) => {
   });
 };
 
+// Mapa conjunto (set) -> serie, para agrupar artículos cuyo set pertenece a una serie
+// aunque el artículo en sí no traiga el campo series (inconsistencias de la API).
+const setToSeries = computed(() => {
+  const map = {};
+  cosmetics.value.forEach(c => {
+    if (c.series && c.set && !map[c.set]) {
+      map[c.set] = c.series;
+    }
+  });
+  bundles.value.forEach(b => {
+    if (b.series && b.set && !map[b.set]) {
+      map[b.set] = b.series;
+    }
+  });
+  return map;
+});
+
+// Resuelve la serie de un artículo: usa su series o, si no tiene, el mapa set->serie.
+const resolveSeries = (item) => {
+  const series = item.series || '';
+  if (series) return series;
+  const set = item.set || '';
+  return (set && setToSeries.value[set]) || '';
+};
+
 const groupedBySeriesCosmetics = computed(() => {
   const sections = {};
   
@@ -352,7 +377,7 @@ const groupedBySeriesCosmetics = computed(() => {
   filteredCosmetics.value.forEach(cosmetic => {
     if (cosmetic.type === 'Music') return;
     
-    const seriesName = cosmetic.series || cosmetic.layout || '';
+    const seriesName = resolveSeries(cosmetic) || cosmetic.layout || '';
     if (!seriesName) return;
     
     if (!sections[seriesName]) {
@@ -373,7 +398,7 @@ const groupedBySeriesCosmetics = computed(() => {
   
   // Bundles relacionados: se agrupan por series/layout igual que los cosméticos
   filteredBundles.value.forEach(bundle => {
-    const seriesName = bundle.series || bundle.layout || bundle.name || '';
+    const seriesName = resolveSeries(bundle) || bundle.layout || bundle.name || '';
     if (!seriesName) return;
     
     if (!sections[seriesName]) {
