@@ -91,21 +91,42 @@
         </div>
       </section>
 
-      <section v-for="(section, seriesName) in groupedBySeriesCosmetics" :key="seriesName" class="series-section">
-        <h2 class="series-title">{{ seriesName }}</h2>
-        <div class="cosmetics-grid">
-          <CosmeticCard
-            v-for="cosmetic in section.cosmetics"
-            :key="cosmetic.offerId"
-            :cosmetic="cosmetic"
-            @select="openPurchaseModal"
-          />
+      <section v-for="section in groupedBySeriesCosmetics" :key="section.name" class="series-section">
+        <h2 class="series-title">{{ section.name }}</h2>
+
+        <!-- Cosméticos sin conjunto (set) dentro de la sección -->
+        <div v-if="section.cosmetics.length || section.bundles.length" class="cosmetics-grid">
           <BundleCard
             v-for="bundle in section.bundles"
             :key="'bundle-' + bundle.offerId"
             :bundle="bundle"
             @select="openPurchaseModal"
           />
+          <CosmeticCard
+            v-for="cosmetic in section.cosmetics"
+            :key="cosmetic.offerId"
+            :cosmetic="cosmetic"
+            @select="openPurchaseModal"
+          />
+        </div>
+
+        <!-- Subsecciones (conjuntos) dentro de la sección -->
+        <div v-for="sub in section.subsections" :key="sub.name" class="series-subsection">
+          <h3 class="subsection-title">{{ sub.name }}</h3>
+          <div class="cosmetics-grid">
+            <BundleCard
+              v-for="bundle in sub.bundles"
+              :key="'bundle-' + bundle.offerId"
+              :bundle="bundle"
+              @select="openPurchaseModal"
+            />
+            <CosmeticCard
+              v-for="cosmetic in sub.cosmetics"
+              :key="cosmetic.offerId"
+              :cosmetic="cosmetic"
+              @select="openPurchaseModal"
+            />
+          </div>
         </div>
       </section>
 
@@ -332,33 +353,69 @@ const groupedBySeriesCosmetics = computed(() => {
     if (cosmetic.type === 'Music') return;
     
     const seriesName = cosmetic.series || cosmetic.layout || '';
+    if (!seriesName) return;
+    
     if (!sections[seriesName]) {
-      sections[seriesName] = { cosmetics: [], bundles: [] };
+      sections[seriesName] = { name: seriesName, cosmetics: [], bundles: [], subsections: {} };
     }
-    sections[seriesName].cosmetics.push(cosmetic);
+    
+    // Si el cosmético pertenece a un conjunto (set), se agrupa en una subsección
+    const subName = cosmetic.set || '';
+    if (subName) {
+      if (!sections[seriesName].subsections[subName]) {
+        sections[seriesName].subsections[subName] = { name: subName, cosmetics: [], bundles: [] };
+      }
+      sections[seriesName].subsections[subName].cosmetics.push(cosmetic);
+    } else {
+      sections[seriesName].cosmetics.push(cosmetic);
+    }
   });
   
   // Bundles relacionados: se agrupan por series/layout igual que los cosméticos
   filteredBundles.value.forEach(bundle => {
     const seriesName = bundle.series || bundle.layout || bundle.name || '';
+    if (!seriesName) return;
+    
     if (!sections[seriesName]) {
-      sections[seriesName] = { cosmetics: [], bundles: [] };
+      sections[seriesName] = { name: seriesName, cosmetics: [], bundles: [], subsections: {} };
     }
-    sections[seriesName].bundles.push(bundle);
+    
+    const subName = bundle.set || '';
+    if (subName) {
+      if (!sections[seriesName].subsections[subName]) {
+        sections[seriesName].subsections[subName] = { name: subName, cosmetics: [], bundles: [] };
+      }
+      sections[seriesName].subsections[subName].bundles.push(bundle);
+    } else {
+      sections[seriesName].bundles.push(bundle);
+    }
   });
-  
-  // Eliminar secciones sin nombre
-  delete sections[''];
   
   // Ordenar el contenido de cada sección:
   // cosméticos: skins primero y luego de mayor a menor precio
   // bundles: de mayor a menor precio
-  Object.keys(sections).forEach(key => {
-    sections[key].cosmetics = sortCosmetics(sections[key].cosmetics);
-    sections[key].bundles = [...sections[key].bundles].sort((a, b) => b.price - a.price);
+  const result = Object.keys(sections).map(key => {
+    const section = sections[key];
+    
+    section.cosmetics = sortCosmetics(section.cosmetics);
+    section.bundles = [...section.bundles].sort((a, b) => b.price - a.price);
+    
+    const subsections = Object.keys(section.subsections).map(subKey => {
+      const sub = section.subsections[subKey];
+      sub.cosmetics = sortCosmetics(sub.cosmetics);
+      sub.bundles = [...sub.bundles].sort((a, b) => b.price - a.price);
+      return sub;
+    });
+    
+    return {
+      name: section.name,
+      cosmetics: section.cosmetics,
+      bundles: section.bundles,
+      subsections
+    };
   });
   
-  return sections;
+  return result;
 });
 
 const musicCosmetics = computed(() => {
@@ -446,6 +503,7 @@ const fetchCosmetics = async () => {
           regularPrice: entry.regularPrice,
           items: bundleItems,
           series: entry.brItems.map(i => i.series?.value).find(s => s) || '',
+          set: entry.brItems.map(i => i.set?.value).find(s => s) || '',
           layout: entry.layout?.name || entry.bundle?.name || '',
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
@@ -467,6 +525,7 @@ const fetchCosmetics = async () => {
           regularPrice: entry.regularPrice,
           items: bundleItems,
           series: entry.cars.map(c => c.series?.value).find(s => s) || '',
+          set: entry.cars.map(c => c.set?.value).find(s => s) || '',
           layout: entry.layout?.name || entry.bundle?.name || '',
           isNew: entry.banner?.backendValue === 'New',
           inDate: entry.inDate,
@@ -489,6 +548,7 @@ const fetchCosmetics = async () => {
             name: item.name,
             type: item.type.value,
             series: item.series?.value || '',
+            set: item.set?.value || '',
             layout: entry.layout?.name || '',
             rarity: item.rarity?.value || item.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
@@ -510,6 +570,7 @@ const fetchCosmetics = async () => {
             name: car.name,
             type: car.type.value,
             series: car.series?.value || '',
+            set: car.set?.value || '',
             layout: entry.layout?.name || entry.bundle?.name || getCategoryLabel(car.type.value) || '',
             rarity: car.rarity?.value || car.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
@@ -531,6 +592,7 @@ const fetchCosmetics = async () => {
             name: track.title,
             type: 'Music',
             series: '',
+            set: '',
             layout: entry.layout?.name || 'Jam Tracks',
             rarity: 'uncommon',
             price: entry.finalPrice,
@@ -979,6 +1041,31 @@ watch(lang, () => {
   margin-bottom: 80px;
 }
 
+.series-subsection {
+  margin-bottom: 50px;
+}
+
+.subsection-title {
+  margin: 0;
+  padding-bottom: 30px;
+  white-space: normal;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  font-style: oblique;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .subsection-title {
+    font-size: 22px;
+  }
+}
+
 
 
 @media (max-width: 767px) {
@@ -991,6 +1078,15 @@ watch(lang, () => {
   
   .series-section {
     margin-bottom: 30px;
+  }
+
+  .series-subsection {
+    margin-bottom: 25px;
+  }
+
+  .subsection-title {
+    font-size: 18px;
+    padding-bottom: 20px;
   }
 }
 </style>
