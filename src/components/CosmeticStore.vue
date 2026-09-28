@@ -11,17 +11,17 @@
 
     <div v-else>
       <div class="filter-bar">
-        <div class="category-dropdown" ref="categoryDropdown">
+        <div class="category-dropdown" ref="filterDropdown">
           <button
             type="button"
             class="category-dropdown__trigger"
-            :class="{ open: isCategoryOpen }"
-            @click="toggleCategoryDropdown"
+            :class="{ open: isFilterOpen }"
+            @click="toggleFilterDropdown"
           >
-            <span class="category-dropdown__label">{{ selectedCategoryLabel }}</span>
+            <span class="category-dropdown__label">{{ filterLabel }}</span>
             <svg
               class="category-dropdown__icon"
-              :class="{ open: isCategoryOpen }"
+              :class="{ open: isFilterOpen }"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -37,17 +37,17 @@
           </button>
 
           <transition name="dropdown">
-            <ul v-if="isCategoryOpen" class="category-dropdown__panel">
+            <ul v-if="isFilterOpen" class="category-dropdown__panel">
               <li
-                v-for="cat in availableCategories"
-                :key="cat.value"
+                v-for="section in sectionsList"
+                :key="section.id"
                 class="category-dropdown__option"
-                :class="{ selected: selectedCategory === cat.value }"
-                @click="selectCategory(cat.value)"
+                :class="{ selected: selectedSection === section.id }"
+                @click="selectSection(section.id)"
               >
-                <span>{{ cat.label }}</span>
+                <span>{{ section.label }}</span>
                 <svg
-                  v-if="selectedCategory === cat.value"
+                  v-if="selectedSection === section.id"
                   class="category-dropdown__check"
                   xmlns="http://www.w3.org/2000/svg"
                   width="14"
@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <section v-if="selectedCategory === 'all' && filteredBundles.length > 0" class="series-section">
+      <section v-if="filteredBundles.length > 0" id="section-featured" class="series-section">
         <h2 class="series-title">{{ t('packsDestacados') }}</h2>
         <div class="cosmetics-grid">
           <BundleCard
@@ -79,7 +79,7 @@
         </div>
       </section>
 
-      <section v-if="newCosmetics.length > 0" class="series-section">
+      <section v-if="newCosmetics.length > 0" id="section-new" class="series-section">
         <h2 class="series-title">{{ t('loMasNuevo') }}</h2>
         <div class="cosmetics-grid">
           <CosmeticCard
@@ -91,7 +91,7 @@
         </div>
       </section>
 
-      <section v-for="section in groupedBySeriesCosmetics" :key="section.name" class="series-section">
+      <section v-for="section in groupedBySeriesCosmetics" :key="section.name" :id="sectionId(section.name)" class="series-section">
         <h2 class="series-title">{{ section.name }}</h2>
 
         <!-- Cosméticos sin conjunto (set) dentro de la sección -->
@@ -130,7 +130,7 @@
         </div>
       </section>
 
-      <section v-for="(series, seriesName) in musicCosmetics" :key="'music-' + seriesName" class="series-section">
+      <section v-for="(series, seriesName) in musicCosmetics" :key="'music-' + seriesName" :id="sectionId('music-' + seriesName)" class="series-section">
         <h2 class="series-title">{{ seriesName }}</h2>
         <div class="cosmetics-grid">
           <CosmeticCard
@@ -189,8 +189,6 @@ const showPurchaseModal = ref(false);
 const showBundlePurchaseModal = ref(false);
 const selectedCosmetic = ref(null);
 const selectedBundle = ref(null);
-const selectedCategory = ref('all');
-
 const props = defineProps({
   searchQuery: {
     type: String,
@@ -198,7 +196,7 @@ const props = defineProps({
   }
 });
 
-// ===== Filtro por categorías =====
+// ===== Filtro por secciones =====
 
 // Normaliza el tipo a minúsculas para comparar categorías
 const normalizeType = (type) => (type || '').toLowerCase();
@@ -236,62 +234,75 @@ const getCategoryLabel = (type) => {
   return CATEGORY_LABELS[key] || type;
 };
 
-// Orden preferido de las categorías
-const CATEGORY_ORDER = [
-  'outfit', 'backpack', 'backbling', 'pickaxe', 'emote', 'glider', 'wrap',
-  'music', 'contrail', 'loadingscreen', 'loading_screen', 'spray', 'toy', 'pet', 'banner',
-  'body', 'skin', 'decal', 'boost', 'wheel', 'wheels'
-];
+// Genera un id estable para una sección a partir de su nombre
+const sectionId = (name) => {
+  const slug = String(name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `section-${slug}`;
+};
 
-const availableCategories = computed(() => {
-  const types = new Set();
-  cosmetics.value.forEach(c => { if (c.type) types.add(normalizeType(c.type)); });
-  bundles.value.forEach(b => (b.items || []).forEach(i => { if (i.type) types.add(normalizeType(i.type)); }));
+// Lista de todas las secciones renderizadas, en el mismo orden en que aparecen en pantalla
+const sectionsList = computed(() => {
+  const list = [];
 
-  const ordered = CATEGORY_ORDER.filter(t => types.has(t));
-  types.forEach(t => { if (!ordered.includes(t)) ordered.push(t); });
-
-  const list = [{ value: 'all', label: t('todasLasCategorias') }];
-  ordered.forEach(t => {
-    list.push({ value: t, label: getCategoryLabel(t) });
+  if (filteredBundles.value.length > 0) {
+    list.push({ id: 'section-featured', label: t('packsDestacados') });
+  }
+  if (newCosmetics.value.length > 0) {
+    list.push({ id: 'section-new', label: t('loMasNuevo') });
+  }
+  groupedBySeriesCosmetics.value.forEach(section => {
+    list.push({ id: sectionId(section.name), label: section.name });
   });
+  Object.keys(musicCosmetics.value).forEach(name => {
+    list.push({ id: sectionId(`music-${name}`), label: name });
+  });
+
   return list;
 });
 
-// Etiqueta de la categoría seleccionada para el botón del desplegable
-const selectedCategoryLabel = computed(() => {
-  if (selectedCategory.value === 'all') return t('todasLasCategorias');
-  return getCategoryLabel(selectedCategory.value);
+const selectedSection = ref(null);
+const isFilterOpen = ref(false);
+const filterDropdown = ref(null);
+
+// Etiqueta del botón: la sección seleccionada o "Filtros" por defecto
+const filterLabel = computed(() => {
+  const current = sectionsList.value.find(s => s.id === selectedSection.value);
+  return current ? current.label : t('filtros');
 });
 
-const isCategoryOpen = ref(false);
-const categoryDropdown = ref(null);
-
-const toggleCategoryDropdown = () => {
-  isCategoryOpen.value = !isCategoryOpen.value;
+const toggleFilterDropdown = () => {
+  isFilterOpen.value = !isFilterOpen.value;
 };
 
-const selectCategory = (value) => {
-  selectedCategory.value = value;
-  isCategoryOpen.value = false;
-};
-
-const handleClickOutside = (event) => {
-  if (categoryDropdown.value && !categoryDropdown.value.contains(event.target)) {
-    isCategoryOpen.value = false;
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
 
-// Filtrar cosméticos por búsqueda y categoría
+const selectSection = (id) => {
+  selectedSection.value = id;
+  isFilterOpen.value = false;
+  scrollToSection(id);
+};
+
+const handleClickOutside = (event) => {
+  if (filterDropdown.value && !filterDropdown.value.contains(event.target)) {
+    isFilterOpen.value = false;
+  }
+};
+
+// Filtrar cosméticos por búsqueda
 const filteredCosmetics = computed(() => {
   const query = props.searchQuery.trim().toLowerCase();
 
   return cosmetics.value.filter(cosmetic => {
-    // Filtro por categoría
-    if (selectedCategory.value !== 'all' && normalizeType(cosmetic.type) !== selectedCategory.value) {
-      return false;
-    }
-
     // Filtro por búsqueda
     if (query) {
       const nameMatch = cosmetic.name.toLowerCase().includes(query);
@@ -305,19 +316,11 @@ const filteredCosmetics = computed(() => {
   });
 });
 
-// Filtrar bundles por búsqueda y categoría, y ordenar de mayor a menor precio
+// Filtrar bundles por búsqueda y ordenar de mayor a menor precio
 const filteredBundles = computed(() => {
   const query = props.searchQuery.trim().toLowerCase();
 
   const result = bundles.value.filter(bundle => {
-    // Filtro por categoría: el pack pertenece a la categoría si contiene algún item de ese tipo
-    if (selectedCategory.value !== 'all') {
-      const hasCategory = (bundle.items || []).some(item =>
-        normalizeType(item.type) === selectedCategory.value
-      );
-      if (!hasCategory) return false;
-    }
-
     // Filtro por búsqueda
     if (query) {
       const nameMatch = bundle.name.toLowerCase().includes(query);
@@ -907,15 +910,14 @@ watch(lang, () => {
   margin: 0;
 }
 
-/* Filtro por categorías */
+/* Filtro por secciones */
 .filter-bar {
-  position: absolute;
-  top: 40px;
-  right: 20px;
-  z-index: 5;
+  position: sticky;
+  top: 68px;
+  z-index: 50;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 0;
+  margin-bottom: 20px;
 }
 
 .category-dropdown {
@@ -1045,7 +1047,8 @@ watch(lang, () => {
 
 @media (max-width: 767px) {
   .filter-bar {
-    position: static;
+    position: sticky;
+    top: 52px;
     justify-content: stretch;
     margin-bottom: 20px;
   }
@@ -1064,6 +1067,7 @@ watch(lang, () => {
 /* Estilos para secciones de series */
 .series-section {
   margin-bottom: 80px;
+  scroll-margin-top: 120px;
 }
 
 .series-subsection {
