@@ -204,8 +204,7 @@ onBeforeUnmount(() => {
         <div class="banner-copy">
           <p class="banner-title">Elige, agrega al carrito y confirma por WhatsApp</p>
           <p class="banner-sub">
-            Primer pedido: hasta 48 h mientras se activa la amistad con nuestras cuentas.
-            Si ya las agregaste, llega entre 1 y 3 horas.
+            Debes tener al menos 48 horas de amistad para poder recibir regalos en tu cuenta.
           </p>
         </div>
       </div>
