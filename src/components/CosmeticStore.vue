@@ -472,19 +472,14 @@ const handleAddToCart = (cosmetic) => {
   addToCart(cosmetic);
 };
 
-// Extrae las imágenes de las variantes "Parts" (stages) de un cosmético.
-// Cada option tiene tag/name/image; nos interesan solo las URLs de imagen.
-const getVariantImages = (item) => {
-  const variants = item?.variants;
-  if (!Array.isArray(variants) || variants.length === 0) return [];
+// Extrae las imágenes de render (entry.newDisplayAsset.renderImages) para el carrusel.
+// Cada entrada tiene productTag/fileName/image; solo nos interesan las URLs.
+const getRenderImages = (entry) => {
+  const renderImages = entry?.newDisplayAsset?.renderImages;
+  if (!Array.isArray(renderImages) || renderImages.length === 0) return [];
 
-  const parts = variants.find(
-    (variant) => String(variant?.channel || '').toLowerCase() === 'parts'
-  );
-  if (!parts || !Array.isArray(parts.options)) return [];
-
-  return parts.options
-    .map((option) => option?.image)
+  return renderImages
+    .map((render) => render?.image)
     .filter((image) => typeof image === 'string' && image);
 };
 
@@ -536,6 +531,7 @@ const fetchCosmetics = async () => {
           offerId: entry.offerId,
           name: entry.bundle.name,
           imageUrl: entry.bundle.image,
+          renderImages: getRenderImages(entry),
           price: entry.finalPrice,
           regularPrice: entry.regularPrice,
           items: bundleItems,
@@ -558,6 +554,7 @@ const fetchCosmetics = async () => {
           offerId: entry.offerId,
           name: entry.bundle?.name || entry.cars[0]?.name,
           imageUrl: entry.bundle?.image || entry.cars[0]?.images?.large || entry.cars[0]?.images?.small || 'https://via.placeholder.com/200',
+          renderImages: getRenderImages(entry),
           price: entry.finalPrice,
           regularPrice: entry.regularPrice,
           items: bundleItems,
@@ -590,7 +587,9 @@ const fetchCosmetics = async () => {
             rarity: item.rarity?.value || item.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
             imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
-            variantImages: getVariantImages(item),
+            // Los renderImages viven a nivel de entrada (entry.newDisplayAsset),
+            // solo se aplican a cosméticos individuales, no a los ítems de un bundle.
+            renderImages: (entry.bundle && entry.brItems.length > 1) ? [] : getRenderImages(entry),
             regularPrice: entry.regularPrice,
             isNew: entry.banner?.backendValue === 'New',
             inDate: entry.inDate,

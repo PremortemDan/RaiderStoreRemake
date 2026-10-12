@@ -40,6 +40,7 @@ const itemsLine = computed(() => (props.bundle.items || []).map((item) => item.n
   <ShopCard
     :name="bundle.name"
     :image="bundle.imageUrl"
+    :images="bundle.renderImages"
     :rarity="bundleRarity"
     :vbucks="bundle.price"
     :mxn="calculatePriceMXN(bundle.price)"

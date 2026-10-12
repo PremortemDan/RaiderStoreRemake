@@ -16,7 +16,7 @@ defineEmits(['select']);
   <ShopCard
     :name="cosmetic.name"
     :image="cosmetic.imageUrl"
-    :images="cosmetic.variantImages"
+    :images="cosmetic.renderImages"
     :rarity="cosmetic.rarity"
     :vbucks="cosmetic.price"
     :mxn="calculatePriceMXN(cosmetic.price)"

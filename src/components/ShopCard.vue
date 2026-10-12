@@ -6,7 +6,7 @@ import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 const props = defineProps({
   name: { type: String, required: true },
   image: { type: String, default: '' },
-  // Varias imágenes (variantes "Parts"): se muestran en un carrusel con fundido
+  // Varias imágenes de render (renderImages): se muestran en un carrusel con fundido
   images: { type: Array, default: () => [] },
   alt: { type: String, default: '' },
   rarity: { type: String, default: 'common' },
@@ -47,7 +47,7 @@ const mxnText = computed(() => formatMoney(props.mxn));
 const usdText = computed(() => formatMoney(props.usd));
 const vbucksText = computed(() => props.vbucks.toLocaleString('es-MX'));
 
-// ===== Carrusel de variantes (channel "Parts") =====
+// ===== Carrusel de imágenes de render (renderImages) =====
 const activeIndex = ref(0);
 let slideshowTimer = null;
 
@@ -218,7 +218,7 @@ onBeforeUnmount(stopSlideshow);
   box-sizing: border-box;
 }
 
-/* Carrusel de variantes: imágenes apiladas con fundido */
+/* Carrusel de imágenes de render: apiladas con fundido */
 .shop-card__slide {
   position: absolute;
   inset: 0;
