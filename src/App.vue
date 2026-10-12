@@ -696,6 +696,11 @@ onBeforeUnmount(() => {
     padding: 9px 18px 7px;
     font-size: 17px;
   }
+  .services-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+  }
   .services-banner {
     padding: 12px 14px 4px;
   }
