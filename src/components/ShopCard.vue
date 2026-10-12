@@ -1,11 +1,13 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
 
 // Tarjeta única para todos los productos (skins, packs, pases, V-Bucks, Crew y streaming).
 // Cada componente *Card.vue solo traduce sus datos a estas propiedades.
 const props = defineProps({
   name: { type: String, required: true },
   image: { type: String, default: '' },
+  // Varias imágenes (variantes "Parts"): se muestran en un carrusel con fundido
+  images: { type: Array, default: () => [] },
   alt: { type: String, default: '' },
   rarity: { type: String, default: 'common' },
   vbucks: { type: Number, default: 0 },
@@ -44,6 +46,38 @@ const formatMoney = (value) => {
 const mxnText = computed(() => formatMoney(props.mxn));
 const usdText = computed(() => formatMoney(props.usd));
 const vbucksText = computed(() => props.vbucks.toLocaleString('es-MX'));
+
+// ===== Carrusel de variantes (channel "Parts") =====
+const activeIndex = ref(0);
+let slideshowTimer = null;
+
+const slides = computed(() => {
+  if (!Array.isArray(props.images)) return [];
+  return props.images.filter((src) => typeof src === 'string' && src);
+});
+
+const stopSlideshow = () => {
+  if (slideshowTimer) {
+    clearInterval(slideshowTimer);
+    slideshowTimer = null;
+  }
+};
+
+const startSlideshow = () => {
+  stopSlideshow();
+  if (slides.value.length <= 1) return;
+  slideshowTimer = setInterval(() => {
+    activeIndex.value = (activeIndex.value + 1) % slides.value.length;
+  }, 2500);
+};
+
+watch(slides, () => {
+  activeIndex.value = 0;
+  startSlideshow();
+});
+
+onMounted(startSlideshow);
+onBeforeUnmount(stopSlideshow);
 </script>
 
 <template>
@@ -58,7 +92,20 @@ const vbucksText = computed(() => props.vbucks.toLocaleString('es-MX'));
     @keydown.space.self.prevent="$emit('select')"
   >
     <div class="shop-card__art">
+      <template v-if="slides.length > 1">
+        <img
+          v-for="(slide, index) in slides"
+          :key="`${slide}-${index}`"
+          :src="slide"
+          :alt="`${alt || name} ${index + 1}`"
+          class="shop-card__img shop-card__slide"
+          :class="[`is-${fit}`, { 'is-active': index === activeIndex }]"
+          loading="eager"
+          decoding="async"
+        />
+      </template>
       <img
+        v-else
         :src="image"
         :alt="alt || name"
         class="shop-card__img"
@@ -169,6 +216,18 @@ const vbucksText = computed(() => props.vbucks.toLocaleString('es-MX'));
   object-fit: contain;
   padding: 22px;
   box-sizing: border-box;
+}
+
+/* Carrusel de variantes: imágenes apiladas con fundido */
+.shop-card__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.shop-card__slide.is-active {
+  opacity: 1;
 }
 
 /* Etiqueta inclinada, igual que las de la tienda del juego */

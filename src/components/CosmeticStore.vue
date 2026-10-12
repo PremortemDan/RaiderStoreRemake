@@ -472,6 +472,22 @@ const handleAddToCart = (cosmetic) => {
   addToCart(cosmetic);
 };
 
+// Extrae las imágenes de las variantes "Parts" (stages) de un cosmético.
+// Cada option tiene tag/name/image; nos interesan solo las URLs de imagen.
+const getVariantImages = (item) => {
+  const variants = item?.variants;
+  if (!Array.isArray(variants) || variants.length === 0) return [];
+
+  const parts = variants.find(
+    (variant) => String(variant?.channel || '').toLowerCase() === 'parts'
+  );
+  if (!parts || !Array.isArray(parts.options)) return [];
+
+  return parts.options
+    .map((option) => option?.image)
+    .filter((image) => typeof image === 'string' && image);
+};
+
 const fetchCosmetics = async () => {
   try {
     loading.value = true;
@@ -574,6 +590,7 @@ const fetchCosmetics = async () => {
             rarity: item.rarity?.value || item.rarity?.displayValue?.toLowerCase() || 'common',
             price: entry.finalPrice,
             imageUrl: item.images?.featured || item.images?.icon || 'https://via.placeholder.com/200',
+            variantImages: getVariantImages(item),
             regularPrice: entry.regularPrice,
             isNew: entry.banner?.backendValue === 'New',
             inDate: entry.inDate,
