@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Righteous:wght@400;700&display=swap');
-
 @font-face {
   font-family: 'Burbank Big Condensed';
   src: url('./assets/burbankbigcondensed_bold.otf') format('opentype');
@@ -7,77 +5,82 @@
   font-display: swap;
 }
 
+/* ==========================================================================
+   Sistema de diseño "Atardecer Raider"
+   Los colores salen del logo: cielo violeta pizarra, naranja Raider, aro cromado
+   y el azul-plata de los V-Bucks. Cambia un valor aquí y se actualiza todo el sitio.
+   ========================================================================== */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #0d0d12;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #FF6B00;
-  --accent-bg: rgba(255, 107, 0, 0.1);
-  --accent-border: rgba(255, 107, 0, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Fondos (de más oscuro a más claro) */
+  --dusk-900: #100d20;
+  --dusk-800: #17132b;
+  --dusk-700: #211b3d;
+  --dusk-600: #2b2354;
 
+  /* Texto */
+  --chrome-100: #f1f3f8;
+  --chrome-300: #c9cfdd;
+  --chrome-500: #9aa1b5;
+
+  /* Marca: solo para acciones y para lo legendario */
+  --raider: #ff7a1a;
+  --raider-hi: #ff8c1a;
+  --raider-lo: #d9540a;
+  --ink-on-brand: #1a1020;
+  --grad-brand: linear-gradient(135deg, #ff8c1a 0%, #d9540a 100%);
+
+  /* V-Bucks */
+  --coin: #8ed0f0;
+
+  /* Superficies de modales, carrito y chat */
+  --modal-bg: linear-gradient(160deg, #2b2354 0%, #17132b 75%);
+
+  /* Rarezas: el color real del juego, con el naranja de marca en "legendario" */
+  --rar-common: #8b93a7;
+  --rar-uncommon: #5dbb3f;
+  --rar-rare: #3fa9f5;
+  --rar-epic: #b45ce6;
+  --rar-legendary: #ff7a1a;
+  --rar-mythic: #ffd23f;
+  /* Series y colaboraciones */
+  --rar-dark: #8a4fd6;
+  --rar-frozen: #4fb6f0;
+  --rar-lava: #f2542d;
+  --rar-shadow: #7a7f96;
+  --rar-slurp: #19d3b0;
+  --rar-marvel: #e0343b;
+  --rar-dc: #3b82f6;
+  --rar-icon: #36cfc9;
+  --rar-gaminglegends: #7c5cff;
+  --rar-starwars: #6fa8dc;
+
+  /* Tipografía */
+  --display: 'Burbank Big Condensed', 'Arial Narrow', 'Arial Black', sans-serif;
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-  --display: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  /* Compatibilidad con variables anteriores */
+  --accent: var(--raider);
+  --bg: var(--dusk-900);
+
+  font: 16px/1.5 var(--sans);
+  color-scheme: dark;
+  color: var(--chrome-300);
+  background: var(--dusk-900);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #0d0d12;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #FF8C42;
-    --accent-bg: rgba(255, 140, 66, 0.15);
-    --accent-border: rgba(255, 140, 66, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
 }
 
 body {
   margin: 0;
 }
 
-/* Contorno negro ligero en todos los textos para mejorar el contraste */
-* {
-  text-shadow:
-    -1px -1px 0 #000,
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000;
-}
-
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family: var(--sans);
   font-weight: 500;
-  color: var(--text-h);
+  color: var(--chrome-100);
 }
 
 h1 {
@@ -89,6 +92,7 @@ h1 {
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
@@ -98,81 +102,9 @@ h2 {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
-
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
 }
 
 #app {
@@ -183,129 +115,16 @@ code {
   box-sizing: border-box;
 }
 
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+:focus-visible {
+  outline: 2px solid var(--raider);
+  outline-offset: 2px;
 }
 
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

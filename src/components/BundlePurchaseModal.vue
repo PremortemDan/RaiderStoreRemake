@@ -130,7 +130,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .modal-content {
-  background: linear-gradient(180deg, #4A1800, #E85D04 100%);
+  background: var(--modal-bg);
   border-radius: 12px;
   width: 90%;
   max-width: 600px;
@@ -209,12 +209,12 @@ const calculatePriceUSD = (vbucks) => {
   background: rgba(0, 0, 0, 0.3);
   padding: 15px;
   border-radius: 8px;
-  border-left: 3px solid #FF7B00;
+  border-left: 3px solid var(--raider);
 }
 
 .items-title {
   margin: 0 0 12px 0;
-  color: #FF7B00;
+  color: var(--raider);
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -234,9 +234,9 @@ const calculatePriceUSD = (vbucks) => {
   flex-direction: column;
   gap: 12px;
   padding: 15px;
-  background: rgba(255, 107, 0, 0.1);
+  background: rgba(255, 122, 26, 0.1);
   border-radius: 8px;
-  border: 1px solid rgba(255, 107, 0, 0.3);
+  border: 1px solid rgba(255, 122, 26, 0.3);
 }
 
 .price-row {
@@ -276,8 +276,8 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .account-message {
-  background: rgba(255, 140, 0, 0.1);
-  border: 1px solid rgba(255, 140, 0, 0.3);
+  background: rgba(255, 122, 26, 0.1);
+  border: 1px solid rgba(255, 122, 26, 0.3);
   padding: 12px;
   border-radius: 8px;
   font-size: 20px;
@@ -295,14 +295,14 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .account-link {
-  color: #ffb55b;
+  color: #ffb066;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .account-link:hover {
-  color: #FFA500;
+  color: var(--raider);
   text-decoration: underline;
 }
 
@@ -330,13 +330,13 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.5);
+  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.5);
 }
 
 .btn-secondary {
@@ -346,9 +346,9 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 107, 0, 0.1);
-  border-color: #FF7B00;
-  color: #FF7B00;
+  background: rgba(255, 122, 26, 0.1);
+  border-color: var(--raider);
+  color: var(--raider);
 }
 
 @media (max-width: 768px) {

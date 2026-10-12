@@ -74,6 +74,7 @@
 import { ref, computed } from 'vue';
 import CheckoutModal from './CheckoutModal.vue';
 import { useReactiveLanguage } from '../utils/useLanguage';
+import { calculatePriceMXN, calculatePriceUSD, sumVbucks, sumMXN, sumUSD } from '../utils/pricing';
 
 const { t } = useReactiveLanguage();
 
@@ -99,33 +100,9 @@ const removeItem = (index) => {
   emit('remove-item', index);
 };
 
-const calculatePriceMXN = (vbucks) => {
-  return Math.floor((vbucks / 100) * 7.5);
-};
-
-const calculatePriceUSD = (vbucks) => {
-  return Math.floor((vbucks / 100) * 0.45);
-};
-
-const totalVbucks = computed(() => {
-  return props.items.reduce((sum, item) => sum + (item.price || 0), 0);
-});
-
-const totalMXN = computed(() => {
-  return props.items.reduce((sum, item) => {
-    if (item.mxn) return sum + parseFloat(item.mxn);
-    if (item.price > 0) return sum + parseFloat(calculatePriceMXN(item.price));
-    return sum;
-  }, 0);
-});
-
-const totalUSD = computed(() => {
-  return props.items.reduce((sum, item) => {
-    if (item.usd) return sum + parseFloat(item.usd);
-    if (item.price > 0) return sum + parseFloat(calculatePriceUSD(item.price));
-    return sum;
-  }, 0);
-});
+const totalVbucks = computed(() => sumVbucks(props.items));
+const totalMXN = computed(() => sumMXN(props.items));
+const totalUSD = computed(() => sumUSD(props.items));
 </script>
 
 <style scoped>
@@ -147,7 +124,7 @@ const totalUSD = computed(() => {
   bottom: 0;
   width: 100%;
   max-width: 400px;
-  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
+  background: var(--modal-bg);
   display: flex;
   flex-direction: column;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
@@ -271,7 +248,7 @@ const totalUSD = computed(() => {
 }
 
 .item-price {
-  color: #FF8C00;
+  color: var(--raider);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -289,7 +266,7 @@ const totalUSD = computed(() => {
 }
 
 .item-usd {
-  color: #FFCC80;
+  color: #ffb066;
   font-size: 15px;
 }
 
@@ -340,22 +317,22 @@ const totalUSD = computed(() => {
 }
 
 .total-vbucks {
-  color: #FF8C00;
+  color: var(--raider);
 }
 
 .total-mxn {
-  color: #FFB347;
+  color: #ffb066;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-usd {
-  color: #FFCC80;
+  color: #ffb066;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .checkout-btn {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
   border: none;
   padding: 14px;
   border-radius: 8px;
@@ -368,7 +345,7 @@ const totalUSD = computed(() => {
 
 .checkout-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.4);
 }
 
 @media (max-width: 768px) {

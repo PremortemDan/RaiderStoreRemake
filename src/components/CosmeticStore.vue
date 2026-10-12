@@ -156,8 +156,10 @@ import PurchaseModal from './PurchaseModal.vue';
 import BundleCard from './BundleCard.vue';
 import BundlePurchaseModal from './BundlePurchaseModal.vue';
 import { useReactiveLanguage, getLanguage } from '../utils/useLanguage';
+import { useCart } from '../composables/useCart';
 
 const { t, lang } = useReactiveLanguage();
+const { addToCart } = useCart();
 
 // Mapeo de nuestro código de idioma al código de la API de Fortnite
 const apiLangMap = {
@@ -467,9 +469,7 @@ const openPurchaseModal = (item) => {
 };
 
 const handleAddToCart = (cosmetic) => {
-  // Emitir evento hacia el componente padre (App.vue) con el producto
-  const event = new CustomEvent('add-to-cart', { detail: cosmetic });
-  window.dispatchEvent(event);
+  addToCart(cosmetic);
 };
 
 const fetchCosmetics = async () => {
@@ -725,7 +725,7 @@ watch(lang, () => {
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 10px 0;
-  background: linear-gradient(135deg, #FF6B00, #FF8C42);
+  background: var(--grad-brand);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -756,7 +756,7 @@ watch(lang, () => {
   
   /* 3. El peso máximo estándar es 900 */
   font-weight: 900; 
-  letter-spacing: -4px;       /* Junta un poco las letras */
+  letter-spacing: -0.5px;       /* Junta un poco las letras */
   line-height: 1;
   font-style: oblique;
   
@@ -778,7 +778,7 @@ watch(lang, () => {
   
   /* 3. El peso máximo estándar es 900 */
   font-weight: 900; 
-  letter-spacing: -4px;       /* Junta un poco las letras */
+  letter-spacing: -0.5px;       /* Junta un poco las letras */
   line-height: 1;
   font-style: oblique;
   text-transform: uppercase;
@@ -802,16 +802,16 @@ watch(lang, () => {
 .cosmetics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px 20px;
-  row-gap: 160px;
+  gap: 24px 20px;
+  row-gap: 24px;
 }
 
 /* Ajustar a 4 columnas exactas */
 @media (min-width: 1024px) {
   .cosmetics-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px 20px;
-    row-gap: 100px;
+    gap: 24px 20px;
+    row-gap: 24px;
   }
   .series-title {
     font-size: 40px;
@@ -822,8 +822,8 @@ watch(lang, () => {
 @media (max-width: 1023px) and (min-width: 768px) {
   .cosmetics-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 30px 20px;
-    row-gap: 60px;
+    gap: 24px 20px;
+    row-gap: 24px;
   }
    .series-title {
     font-size: 25px;
@@ -836,7 +836,7 @@ watch(lang, () => {
   .cosmetics-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    row-gap: 40px;
+    row-gap: 24px;
   }
    .series-title {
     font-size: 18px;
@@ -944,17 +944,17 @@ watch(lang, () => {
 }
 
 .category-dropdown__trigger:hover {
-  border-color: rgba(255, 140, 0, 0.5);
-  color: #FF8C00;
-  background: rgba(255, 140, 0, 0.5);
+  border-color: rgba(255, 122, 26, 0.5);
+  color: var(--raider);
+  background: rgba(255, 122, 26, 0.5);
 }
 
 .category-dropdown__trigger.open {
-  border-color: #FF8C00;
-  color: #FF8C00;
-  background: #2a1a0a;
+  border-color: var(--raider);
+  color: var(--raider);
+  background: var(--dusk-700);
   border-radius: 16px 16px 0 0;
-  box-shadow: 0 6px 18px rgba(255, 140, 0, 0.25);
+  box-shadow: 0 6px 18px rgba(255, 122, 26, 0.25);
 }
 
 .category-dropdown__icon {
@@ -974,8 +974,8 @@ watch(lang, () => {
   margin: 0;
   padding: 6px;
   list-style: none;
-  background: #2a1a0a;
-  border: 2px solid #FF8C00;
+  background: var(--dusk-700);
+  border: 2px solid var(--raider);
   border-top: none;
   border-radius: 0 0 16px 16px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
@@ -990,7 +990,7 @@ watch(lang, () => {
 }
 
 .category-dropdown__panel::-webkit-scrollbar-thumb {
-  background: rgba(255, 140, 0, 0.4);
+  background: rgba(255, 122, 26, 0.4);
   border-radius: 999px;
 }
 
@@ -1016,17 +1016,17 @@ watch(lang, () => {
 }
 
 .category-dropdown__option:hover {
-  background: rgba(255, 140, 0, 0.16);
-  color: #FF8C00;
+  background: rgba(255, 122, 26, 0.16);
+  color: var(--raider);
 }
 
 .category-dropdown__option.selected {
-  color: #FF8C00;
+  color: var(--raider);
 }
 
 .category-dropdown__check {
   flex-shrink: 0;
-  color: #FF8C00;
+  color: var(--raider);
 }
 
 /* Transición del panel desplegable */

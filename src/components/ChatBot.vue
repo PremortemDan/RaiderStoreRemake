@@ -1,7 +1,7 @@
 <template>
   <div class="chatbot-container">
     <!-- Botón flotante para abrir chat -->
-    <button v-if="!isOpen" class="chat-toggle-btn" @click="toggleChat" :title="t('chatAbrir')">
+    <button v-if="!isOpen" class="chat-toggle-btn" @click="toggleChat" :title="t('chatAbrir')" :aria-label="t('chatAbrir')">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
@@ -11,7 +11,7 @@
     <div v-if="isOpen" class="chat-panel">
       <div class="chat-header">
         <div class="header-content">
-          <img src="../assets/salvador.jpeg" alt="Salvador" class="salvador-avatar-header" />
+          <img src="../assets/salvador.webp" alt="Salvador" class="salvador-avatar-header" width="48" height="48" />
           <div class="header-text">
             <h3>{{ t('chatTitulo') }}</h3>
             <p class="status">{{ t('chatDisponible') }}</p>
@@ -74,25 +74,9 @@ onMounted(() => {
   messages.value[0].content = t('chatBienvenida');
 });
 
-const systemPrompt = `Eres Salvador, el asistente de ayuda, soló para resolver dudas de RaiderStore, una tienda de cosméticos de Fortnite. 
-Tu personalidad es la de un mexicano joven y amigable que habla con jerga y modismos mexicanos naturalmente.
-Debes ser útil, amable y profesional, pero manteniendo un tono casual y divertido.
-
-Información sobre la tienda:
-- Vendemos cosméticos originales de Fortnite (skins, emotes, pickaxes, wraps, etc.)
-- Los precios están en V-Bucks convertimos automáticamente a MXN y USD
-- los pagos pagos se hacen por WhatsApp
-- Los clientes deben agregar nuestras cuentas como amigos en Epic Games
-- diles que necesitan añadir de amigos las cuentas RSPAVOS, que pueden usar este link: https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g
-- una ves hecho el pedido, tiene que esperar 48 horas si es la primera vez que añadió las cuentas RSPAVOS.
-- si tiene problemas para añadir las cuentas mediante el link, puede añadirlas manualmente con el nombre de usuario RSPAVOS,
-RSPAVOS2, RSPAVOS3, RSPAVOS4, RSPAVOS5, RSPAVOS6, RSPAVOS7, RSPAVOS8, RSPAVOS9, RSPAVOS10, RSPAVOS11, RSPAVOS12, cualquiera de esas son validad.
-- si ya habias añadido las cuentas RSPAVOS el pedido es mucho mas rapido, puede tardar entre 1-3 horas dependiendo del pedido.
-- Si tienes algun problema o duda, mejor contacta por WhatsApp directamente.
-
-Usa expresiones mexicanas.
-Sé breve en tus respuestas (máximo 2-3 oraciones) pero siempre útil.
-Si no sabes algo, sugiere que contacten por WhatsApp directamente.`;
+// Las instrucciones de Salvador (system prompt) y la clave de la API viven ahora en el
+// servidor (api/chat.js). Así ya no quedan expuestas en el código del navegador.
+const MAX_HISTORY = 10;
 
 const toggleChat = () => {
   isOpen.value = !isOpen.value;
@@ -122,47 +106,32 @@ const sendMessage = async () => {
   isLoading.value = true;
 
   try {
-    const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
-    
-    if (!apiKey || apiKey === 'your_deepseek_api_key_here') {
-      messages.value.push({
-        role: 'assistant',
-        content: t('chatErrorApi')
-      });
-      isLoading.value = false;
+    const history = messages.value
+      .filter((m) => m.content)
+      .slice(-MAX_HISTORY)
+      .map(({ role, content }) => ({ role, content }));
+
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: history })
+    });
+
+    // 503 = el servidor no tiene la clave configurada
+    if (response.status === 503) {
+      messages.value.push({ role: 'assistant', content: t('chatErrorApi') });
       return;
     }
-
-    const response = await fetch('https://api.deepseek.com/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          ...messages.value
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      })
-    });
 
     if (!response.ok) {
       throw new Error(`API Error: ${response.status}`);
     }
 
     const data = await response.json();
-    const assistantMessage = data.choices[0].message.content;
 
     messages.value.push({
       role: 'assistant',
-      content: assistantMessage
+      content: data.reply
     });
   } catch (error) {
     console.error('Error al conectar con la API:', error);
@@ -195,8 +164,8 @@ const sendMessage = async () => {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
   border: none;
   cursor: pointer;
   display: flex;
@@ -208,7 +177,7 @@ const sendMessage = async () => {
 
 .chat-toggle-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 122, 26, 0.4);
 }
 
 .chat-panel {
@@ -217,7 +186,7 @@ const sendMessage = async () => {
   right: 20px;
   width: 380px;
   height: 600px;
-  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
+  background: var(--modal-bg);
   max-height: 600px;
   border-radius: 20px;
   display: flex;
@@ -265,7 +234,7 @@ const sendMessage = async () => {
   height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #FF8C00;
+  border: 2px solid var(--raider);
 }
 
 .header-text h3 {
@@ -344,8 +313,8 @@ const sendMessage = async () => {
 }
 
 .message.user .message-content {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
   font-weight: 600;
 }
 
@@ -366,7 +335,7 @@ const sendMessage = async () => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #FF8C00;
+  background: var(--raider);
   animation: typing 1.4s infinite;
 }
 
@@ -409,8 +378,8 @@ const sendMessage = async () => {
 }
 
 .chat-input:focus {
-  border-color: #FF8C00;
-  box-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
+  border-color: var(--raider);
+  box-shadow: 0 0 8px rgba(255, 122, 26, 0.3);
 }
 
 .chat-input::placeholder {
@@ -427,8 +396,8 @@ const sendMessage = async () => {
   height: 40px;
   padding: 0;
   border: none;
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -440,7 +409,7 @@ const sendMessage = async () => {
 
 .send-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 122, 26, 0.4);
 }
 
 .send-btn:disabled {

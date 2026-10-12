@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import CosmeticStore from './components/CosmeticStore.vue';
 import PasesCard from './components/PasesCard.vue';
 import PavosCard from './components/PavosCard.vue';
@@ -11,283 +11,53 @@ import OthersPurchaseModal from './components/OthersPurchaseModal.vue';
 import ShoppingCart from './components/ShoppingCart.vue';
 import ChatBot from './components/ChatBot.vue';
 import { useLanguage, useReactiveLanguage } from './utils/useLanguage';
-import paseDeBatalla from './assets/paseDeBatalla.png';
-import PaseOG from './assets/PaseOG.png';
-import PaseLego from './assets/PaseLego.png';
-import PaseFestival from './assets/PaseFestival.png';
-import pavosImg from './assets/pavos.png';
-import crewImg from './assets/crew.png';
-import otrosImg from './assets/otros.svg';
+import { useCart } from './composables/useCart';
+import { pases, crew, recargas, otros } from './data/products';
+import { WHATSAPP_URL, FACEBOOK_URL, WALLPAPER_INTERVAL_MS } from './config';
 import whatsapplogo from './assets/whatsapplogo.png';
 import facebooklogo from './assets/facebooklogo.png';
-import Geminilogo from './assets/Gemini.png';
-import AmazonPrimelogo from './assets/AmazonPrime.png';
-import fortnitewallpaper1 from './assets/fortnitewallpaper1.jpg';
-import fortnitewallpaper2 from './assets/fortnitewallpaper2.jpg';
-import fortnitewallpaper3 from './assets/fortnitewallpaper3.jpg';
+import raiderLogo from './assets/RaiderLogo.webp';
+import fortnitewallpaper1 from './assets/fortnitewallpaper1.webp';
+import fortnitewallpaper2 from './assets/fortnitewallpaper2.webp';
+import fortnitewallpaper3 from './assets/fortnitewallpaper3.webp';
 
-const whatsappUrl = import.meta.env.VITE_WHATSAPP_URL || '';
-const facebookUrl = import.meta.env.VITE_FACEBOOK_URL || '';
-
-// Fondos de pantalla rotativos
-const wallpapers = [fortnitewallpaper1, fortnitewallpaper2, fortnitewallpaper3];
-const currentWallpaper = ref(0);
-
-let wallpaperInterval = null;
-
-onMounted(() => {
-  wallpaperInterval = setInterval(() => {
-    currentWallpaper.value = (currentWallpaper.value + 1) % wallpapers.length;
-  }, 8000);
-});
-
-const CART_STORAGE_KEY = 'raiderstore_cart';
-
-const cartItems = ref(JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]'));
-const showCart = ref(false);
-const searchQuery = ref('');
 const { t } = useLanguage();
 const { t: rt } = useReactiveLanguage();
+const { items: cartItems, addToCart, removeFromCart } = useCart();
+
+// ===== Fondo de pantalla rotativo =====
+// Las imágenes ya vienen desenfocadas (sin filter: blur en CSS) para no sobrecargar la GPU.
+const wallpapers = [fortnitewallpaper1, fortnitewallpaper2, fortnitewallpaper3];
+const currentWallpaper = ref(0);
+let wallpaperInterval = null;
+
+// ===== Estado de la interfaz =====
+const tabs = [
+  { id: 'skins', label: 'skinsTab' },
+  { id: 'pases', label: 'pasesTab' },
+  { id: 'recargas', label: 'recargasTab' },
+  { id: 'crew', label: 'crewTab' },
+  { id: 'otros', label: 'otrosTab' }
+];
 
 const activeTab = ref('skins');
+const searchQuery = ref('');
+const showCart = ref(false);
+const chatOpen = ref(false);
+
 const showPurchaseModal = ref(false);
-const showCrewModal = ref(false);
 const selectedItem = ref(null);
+const showCrewModal = ref(false);
 const selectedCrewItem = ref(null);
 const showOthersModal = ref(false);
 const selectedOtherItem = ref(null);
-const chatOpen = ref(false);
-
-// Datos de pases
-const pases = ref([
-  {
-    id: 'bp',
-    name: 'Pase de Batalla',
-    price: 800,
-    mxn: '115.00',
-    usd: '6.61',
-    rarity: 'rare',
-    type: 'default',
-    imageUrl: paseDeBatalla
-  },
-  {
-    id: 'og',
-    name: 'Pase OG',
-    price: 800,
-    mxn: '115.00',
-    usd: '6.61',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: PaseOG
-  },
-  {
-    id: 'lego',
-    name: 'Pase LEGO',
-    price: 1200,
-    mxn: '145.00',
-    usd: '8.39',
-    rarity: 'epic',
-    type: 'default',
-    imageUrl: PaseLego
-  },
-  {
-    id: 'festival',
-    name: 'Pase Festival',
-    price: 1200,
-    mxn: '145.00',
-    usd: '8.39',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: PaseFestival
-  }
-]);
-
-// Datos de Crew de Fortnite
-const crew = ref([
-  {
-    id: 'crew-1',
-    name: '1 Mes de crew',
-    label: '1 mes de Crew',
-    price: 0,
-    mxn: '89.00',
-    usd: '5.15',
-    rarity: 'rare',
-    type: 'default',
-    imageUrl: crewImg
-  },
-  {
-    id: 'crew-3',
-    name: '3 Meses de crew',
-    label: '3 meses de Crew',
-    price: 0,
-    mxn: '199.00',
-    usd: '11.51',
-    rarity: 'epic',
-    type: 'default',
-    imageUrl: crewImg
-  },
-  {
-    id: 'crew-6',
-    name: '6 Meses de crew',
-    label: '6 meses de Crew',
-    price: 0,
-    mxn: '350.00',
-    usd: '20.25',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: crewImg
-  }
-]);
-
-// Datos de recargas de pavos
-const recargas = ref([
-  {
-    id: 'recarga-800',
-    name: '800 V-Bucks',
-    price: 800,
-    mxn: '115.00',
-    usd: '6.79',
-    rarity: 'uncommon',
-    type: 'default',
-    imageUrl: pavosImg
-  },
-  {
-    id: 'recarga-2400',
-    name: '2,400 V-Bucks',
-    price: 2400,
-    mxn: '249.00',
-    usd: '14.71',
-    rarity: 'rare',
-    type: 'default',
-    imageUrl: pavosImg
-  },
-  {
-    id: 'recarga-4500',
-    name: '4,500 V-Bucks',
-    price: 4500,
-    mxn: '399.00',
-    usd: '23.56',
-    rarity: 'epic',
-    type: 'default',
-    imageUrl: pavosImg
-  },
-  {
-    id: 'recarga-12500',
-    name: '12,500 V-Bucks',
-    price: 12500,
-    mxn: '849.00',
-    usd: '50.14',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: pavosImg
-  },
-  {
-    id: 'recarga-14900',
-    name: '14,900 V-Bucks',
-    price: 14900,
-    mxn: '1040.00',
-    usd: '61.42',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: pavosImg
-  },
-  {
-    id: 'recarga-25000',
-    name: '25,000 V-Bucks',
-    price: 25000,
-    mxn: '1640.00',
-    usd: '96.85',
-    rarity: 'mythic',
-    type: 'default',
-    imageUrl: pavosImg
-  }
-]);
-
-// Datos de la sección "Otros" (servicios de streaming, cuentas, etc.)
-// EJEMPLO: ajusta los valores, precios e instrucciones según tus productos.
-const otros = ref([
-  {
-    id: 'otros-disney-30-dias',
-    name: 'Disney+ 30 Dias',
-    label: 'Disney+ 30 Dias',
-    price: 0,
-    mxn: '65.00',
-    usd: '3.70',
-    rarity: 'epic',
-    type: 'default',
-    imageUrl: 'https://disney.images.edge.bamgrid.com/ripcut-delivery/v2/variant/disney/C67C35CF0EB8C168A861956E743C6CCD26BFB17B93227234F3CD1A81BB728F35/compose?format=webp&width=640',
-    dispositivos: 1,
-    dias: 30,
-    instrucciones: 'Perfil para un dispositivo por 30 días'
-  },
-  {
-    id: 'otros-Gemini-pro-18-meses',
-    name: 'Gemini Pro 18 meses',
-    label: 'Gemini Pro 18 meses',
-    price: 0,
-    mxn: '100.00',
-    usd: '5.83',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: Geminilogo,
-    dispositivos: 1,
-    dias: 540,
-    instrucciones: 'Código de activación para correo principal o secundario, garantía 5 meses.'
-  },
-  {
-    id: 'otros-hbo-30-dias',
-    name: 'HBO Max 30 Dias',
-    label: 'HBO Max 30 Dias',
-    price: 0,
-    mxn: '65.00',
-    usd: '3.79',
-    rarity: 'rare',
-    type: 'default',
-    imageUrl: 'https://beam-images.warnermediacdn.com/2025-07/mob.png?host=wbd-dotcom-drupal-prd-us-east-1.s3.amazonaws.com',
-    dispositivos: 1,
-    dias: 30,
-    instrucciones: 'Un perfil por 30 Días, 1 dispositivo, 4k ultra HD, Audio Dolby atmos.'
-  },
-  {
-    id: 'otros-amazon-prime-30-dias',
-    name: 'Amazon Prime 30 Dias',
-    label: 'Amazon Prime 30  Dias',
-    price: 0,
-    mxn: '65.00',
-    usd: '3.79',
-    rarity: 'legendary',
-    type: 'default',
-    imageUrl: AmazonPrimelogo,
-    dispositivos: 1,
-    dias: 30,
-    instrucciones: 'Resolución 4k, 30 días'
-  }
-]);
-
-// Persistir carrito en localStorage cada vez que cambie
-watch(cartItems, (newItems) => {
-  localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newItems));
-}, { deep: true });
-
-// Escuchar evento de agregar al carrito
-onMounted(() => {
-  window.addEventListener('add-to-cart', (event) => {
-    const cosmetic = event.detail;
-    cartItems.value.push(cosmetic);
-    console.log('Producto añadido al carrito:', cosmetic.name);
-  });
-});
-
-const toggleCart = () => {
-  showCart.value = !showCart.value;
-};
 
 const closeCart = () => {
   showCart.value = false;
 };
 
-const removeFromCart = (index) => {
-  cartItems.value.splice(index, 1);
+const toggleCart = () => {
+  showCart.value = !showCart.value;
 };
 
 const openPurchaseModal = (item) => {
@@ -295,21 +65,9 @@ const openPurchaseModal = (item) => {
   showPurchaseModal.value = true;
 };
 
-const addItemToCart = (item) => {
-  const event = new CustomEvent('add-to-cart', { detail: item });
-  window.dispatchEvent(event);
-  showPurchaseModal.value = false;
-};
-
 const openCrewModal = (item) => {
   selectedCrewItem.value = item;
   showCrewModal.value = true;
-};
-
-const addCrewToCart = (item) => {
-  const event = new CustomEvent('add-to-cart', { detail: item });
-  window.dispatchEvent(event);
-  showCrewModal.value = false;
 };
 
 const openOthersModal = (item) => {
@@ -317,9 +75,19 @@ const openOthersModal = (item) => {
   showOthersModal.value = true;
 };
 
+// Los tres modales agregan al carrito y se cierran
+const addItemToCart = (item) => {
+  addToCart(item);
+  showPurchaseModal.value = false;
+};
+
+const addCrewToCart = (item) => {
+  addToCart(item);
+  showCrewModal.value = false;
+};
+
 const addOtherToCart = (item) => {
-  const event = new CustomEvent('add-to-cart', { detail: item });
-  window.dispatchEvent(event);
+  addToCart(item);
   showOthersModal.value = false;
 };
 
@@ -330,12 +98,38 @@ const onChatToggle = (isOpen) => {
 const reloadPage = () => {
   window.location.reload();
 };
+
+// Escape cierra el carrito y los modales abiertos desde esta pantalla
+const onKeydown = (event) => {
+  if (event.key !== 'Escape') return;
+  showCart.value = false;
+  showPurchaseModal.value = false;
+  showCrewModal.value = false;
+  showOthersModal.value = false;
+};
+
+onMounted(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion) {
+    wallpaperInterval = setInterval(() => {
+      currentWallpaper.value = (currentWallpaper.value + 1) % wallpapers.length;
+    }, WALLPAPER_INTERVAL_MS);
+  }
+  window.addEventListener('keydown', onKeydown);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(wallpaperInterval);
+  window.removeEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>
   <div id="app">
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
+
     <!-- Fondo de pantalla rotativo -->
-    <div class="wallpaper-background">
+    <div class="wallpaper-background" aria-hidden="true">
       <div
         v-for="(wallpaper, index) in wallpapers"
         :key="index"
@@ -349,12 +143,21 @@ const reloadPage = () => {
     <nav class="navbar">
       <div class="navbar-container-right">
         <div class="logo">
-          <img src="./assets/RaiderStore.png" alt="RaiderStore Logo" width="300" height="50" @click="reloadPage">
+          <img
+            src="./assets/RaiderStore.png"
+            alt="RaiderStore"
+            width="300"
+            height="50"
+            role="link"
+            tabindex="0"
+            @click="reloadPage"
+            @keydown.enter="reloadPage"
+          >
         </div>
       </div>
       <div class="navbar-container">
         <div class="search-container">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
@@ -363,68 +166,72 @@ const reloadPage = () => {
             type="text"
             class="search-input"
             :placeholder="t('buscar')"
+            :aria-label="t('buscar')"
           />
         </div>
         <div class="cart-button-wrapper">
-          <svg class="cart-icon" :class="{ 'cart-active': cartItems.length > 0 }" @click="toggleCart" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-          <span v-if="cartItems.length > 0" class="cart-badge">{{ cartItems.length }}</span>
+          <button
+            type="button"
+            class="cart-button"
+            :aria-label="t('carritoCompras')"
+            @click="toggleCart"
+          >
+            <svg class="cart-icon" :class="{ 'cart-active': cartItems.length > 0 }" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+          </button>
+          <span v-if="cartItems.length > 0" class="cart-badge" aria-hidden="true">{{ cartItems.length }}</span>
         </div>
       </div>
     </nav>
 
-    <!-- Banner con logo y tabs de servicios -->
+    <!-- Banner con logo y pestañas de servicios -->
     <div class="services-banner">
-      <img src="./assets/RaiderLogo.png" alt="Raider Logo" class="raider-logo" @click="reloadPage" />
-      <div class="services-tabs">
+      <div class="banner-intro">
+        <img
+          :src="raiderLogo"
+          alt="Raider"
+          class="raider-logo"
+          width="200"
+          height="200"
+          role="link"
+          tabindex="0"
+          @click="reloadPage"
+          @keydown.enter="reloadPage"
+        />
+        <div class="banner-copy">
+          <p class="banner-title">Elige, agrega al carrito y confirma por WhatsApp</p>
+          <p class="banner-sub">
+            Primer pedido: hasta 48 h mientras se activa la amistad con nuestras cuentas.
+            Si ya las agregaste, llega entre 1 y 3 horas.
+          </p>
+        </div>
+      </div>
+      <div class="services-tabs" role="tablist">
         <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          type="button"
+          role="tab"
           class="service-tab"
-          :class="{ active: activeTab === 'skins' }"
-          @click="activeTab = 'skins'"
+          :class="{ active: activeTab === tab.id }"
+          :aria-selected="activeTab === tab.id"
+          @click="activeTab = tab.id"
         >
-           {{ t('skinsTab') }}
-        </button>
-        <button
-          class="service-tab"
-          :class="{ active: activeTab === 'pases' }"
-          @click="activeTab = 'pases'"
-        >
-           {{ t('pasesTab') }}
-        </button>
-        <button
-          class="service-tab"
-          :class="{ active: activeTab === 'recargas' }"
-          @click="activeTab = 'recargas'"
-        >
-           {{ t('recargasTab') }}
-        </button>
-        <button
-          class="service-tab"
-          :class="{ active: activeTab === 'crew' }"
-          @click="activeTab = 'crew'"
-        >
-           {{ t('crewTab') }}
-        </button>
-        <button
-          class="service-tab"
-          :class="{ active: activeTab === 'otros' }"
-          @click="activeTab = 'otros'"
-        >
-           {{ t('otrosTab') }}
+          {{ t(tab.label) }}
         </button>
       </div>
     </div>
 
-    <!-- Pestaña Skins y Packs (por defecto) -->
-    <main v-if="activeTab === 'skins'" class="main-content">
+    <!-- Skins y Packs (por defecto) -->
+    <main v-if="activeTab === 'skins'" id="contenido" class="main-content">
       <CosmeticStore :searchQuery="searchQuery" />
     </main>
 
-    <!-- Pestaña Pases de Batalla -->
-    <main v-if="activeTab === 'pases'" class="main-content">
+    <!-- Pases de Batalla -->
+    <main v-else-if="activeTab === 'pases'" id="contenido" class="main-content">
       <section class="pases-section">
         <h2 class="series-title">{{ t('pasesBatalla') }}</h2>
         <div class="cosmetics-grid">
@@ -438,8 +245,8 @@ const reloadPage = () => {
       </section>
     </main>
 
-    <!-- Pestaña Recargas de Pavos -->
-    <main v-if="activeTab === 'recargas'" class="main-content">
+    <!-- Recargas de Pavos -->
+    <main v-else-if="activeTab === 'recargas'" id="contenido" class="main-content">
       <section class="pases-section">
         <h2 class="series-title">{{ t('recargasPavos') }}</h2>
         <div class="cosmetics-grid recargas-grid">
@@ -453,8 +260,8 @@ const reloadPage = () => {
       </section>
     </main>
 
-    <!-- Pestaña Crew de Fortnite -->
-    <main v-if="activeTab === 'crew'" class="main-content">
+    <!-- Crew de Fortnite -->
+    <main v-else-if="activeTab === 'crew'" id="contenido" class="main-content">
       <section class="pases-section">
         <h2 class="series-title">{{ t('crewFortnite') }}</h2>
         <div class="cosmetics-grid">
@@ -468,8 +275,8 @@ const reloadPage = () => {
       </section>
     </main>
 
-    <!-- Pestaña Otros -->
-    <main v-if="activeTab === 'otros'" class="main-content">
+    <!-- Otros (streaming y suscripciones) -->
+    <main v-else-if="activeTab === 'otros'" id="contenido" class="main-content">
       <section class="pases-section">
         <h2 class="series-title">{{ t('otrosTitulo') }}</h2>
         <div class="cosmetics-grid">
@@ -499,7 +306,7 @@ const reloadPage = () => {
       @add-to-cart="addOtherToCart"
     />
 
-    <!-- Modal de Compra (Pases, Recargas y Crew) -->
+    <!-- Modal de Compra (Pases y Recargas) -->
     <PurchaseModal
       :isOpen="showPurchaseModal"
       :cosmetic="selectedItem"
@@ -516,25 +323,29 @@ const reloadPage = () => {
       @remove-item="removeFromCart"
     />
 
-    <!-- Botones flotantes de redes sociales -->
-    <div v-if="!showCart && !showPurchaseModal && !showCrewModal && !showOthersModal && !chatOpen" class="social-floating">
+    <!-- Botones flotantes de redes sociales (solo si hay enlace configurado) -->
+    <div v-if="(WHATSAPP_URL || FACEBOOK_URL) && !showCart && !showPurchaseModal && !showCrewModal && !showOthersModal && !chatOpen" class="social-floating">
       <a
-        :href="whatsappUrl || '#'"
+        v-if="WHATSAPP_URL"
+        :href="WHATSAPP_URL"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         class="social-float-btn whatsapp"
         title="WhatsApp"
+        aria-label="WhatsApp"
       >
-        <img :src="whatsapplogo" alt="WhatsApp" />
+        <img :src="whatsapplogo" alt="" />
       </a>
       <a
-        :href="facebookUrl || '#'"
+        v-if="FACEBOOK_URL"
+        :href="FACEBOOK_URL"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         class="social-float-btn facebook"
         title="Facebook"
+        aria-label="Facebook"
       >
-        <img :src="facebooklogo" alt="Facebook" />
+        <img :src="facebooklogo" alt="" />
       </a>
     </div>
 
@@ -544,10 +355,28 @@ const reloadPage = () => {
 </template>
 
 <style scoped>
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 2000;
+  padding: 8px 14px;
+  background: var(--raider);
+  color: var(--ink-on-brand);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  left: 8px;
+}
+
 .navbar {
-  background-color: #111111c3;
+  background-color: rgba(16, 13, 32, 0.88);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  padding: 0 0px;
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -555,28 +384,23 @@ const reloadPage = () => {
   box-sizing: border-box;
 }
 
-.navbar-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  height: 60px;
+.navbar {
+  justify-content: space-between;
+  padding: 0 max(20px, calc((100% - 1200px) / 2 + 20px));
 }
-.navbar-container-right {
-  max-width: 1200px;
-  margin: 0 auto;
+
+.navbar-container {
   display: flex;
   align-items: center;
-  justify-content: left;
+  justify-content: flex-end;
+  gap: 8px;
   height: 60px;
 }
 
-.logo span {
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+.navbar-container-right {
+  display: flex;
+  align-items: center;
+  height: 60px;
 }
 
 .logo img {
@@ -589,6 +413,26 @@ const reloadPage = () => {
   align-items: center;
 }
 
+.cart-button {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cart-button:focus-visible,
+.service-tab:focus-visible,
+.logo img:focus-visible,
+.raider-logo:focus-visible,
+.social-float-btn:focus-visible {
+  outline: 3px solid var(--raider);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
 .cart-icon {
   width: 30px;
   padding: 0 10px;
@@ -597,9 +441,8 @@ const reloadPage = () => {
   color: #9ca3af;
 }
 
-.cart-icon:hover {
-  color: #FF6B00;
-  cursor: pointer;
+.cart-button:hover .cart-icon {
+  color: var(--raider);
   transform: scale(1.1);
 }
 
@@ -607,16 +450,16 @@ const reloadPage = () => {
   color: #ffffff;
 }
 
-.cart-icon.cart-active:hover {
-  color: #FF6B00;
+.cart-button:hover .cart-icon.cart-active {
+  color: var(--raider);
 }
 
 .cart-badge {
   position: absolute;
   top: 25px;
   right: -8px;
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -626,8 +469,9 @@ const reloadPage = () => {
   font-size: 12px;
   font-weight: 700;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(255, 122, 26, 0.4);
   z-index: 10;
+  pointer-events: none;
 }
 
 .search-container {
@@ -635,15 +479,15 @@ const reloadPage = () => {
   padding: 0 0 0 10px;
   align-items: center;
   gap: 0;
-  background-color: #222;
-  border: 1px solid #333;
+  background-color: var(--dusk-700);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   overflow: hidden;
   transition: border-color 0.2s;
 }
 
 .search-container:focus-within {
-  border-color: #555;
+  border-color: var(--raider);
 }
 
 .search-input {
@@ -661,77 +505,110 @@ const reloadPage = () => {
   color: #888;
 }
 
-.search-btn {
-  padding: 8px 12px;
-  border: none;
-  border-left: 1px solid #333;
-  background: transparent;
-  color: #aaa;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.search-btn:hover {
-  background-color: #333;
-  color: #fff;
-}
-
 /* ========== Banner de servicios ========== */
 .services-banner {
-  text-align: center;
-  padding: 15px 20px 5px 20px;
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 18px 20px 6px;
+  box-sizing: border-box;
+}
+
+.banner-intro {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 16px;
 }
 
 .raider-logo {
-  width: 200px;
+  width: 124px;
   height: auto;
-  margin-bottom: 8px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  flex-shrink: 0;
   cursor: pointer;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
 }
 
+.banner-copy {
+  max-width: 54ch;
+}
+
+.banner-title {
+  margin: 0 0 6px;
+  color: var(--chrome-100);
+  font: 700 34px/1.05 var(--display);
+  letter-spacing: 0.01em;
+}
+
+.banner-sub {
+  margin: 0;
+  color: var(--chrome-300);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Pestañas: placas inclinadas como en la tienda del juego. El texto va recto. */
 .services-tabs {
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 4px 10px;
+  scrollbar-width: none;
+}
+
+.services-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .service-tab {
-  padding: 10px 24px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  position: relative;
+  isolation: isolate;
+  flex-shrink: 0;
+  padding: 11px 26px 9px;
+  border: 0;
+  background: none;
+  color: var(--chrome-300);
+  font: 700 20px/1 var(--display);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.service-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(23, 19, 43, 0.82);
+  border-bottom: 3px solid rgba(255, 255, 255, 0.14);
+  transform: skewX(-10deg);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .service-tab:hover {
-  border-color: rgba(255, 140, 0, 0.5);
-  color: #FF8C00;
-  background: rgba(255, 140, 0, 0.1);
+  color: #fff;
+}
+
+.service-tab:hover::before {
+  background: rgba(43, 35, 84, 0.95);
+  border-bottom-color: var(--raider);
 }
 
 .service-tab.active {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  border-color: #FF8C00;
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+  color: var(--ink-on-brand);
+}
+
+.service-tab.active::before {
+  background: var(--grad-brand);
+  border-bottom-color: #fff;
 }
 
 /* ========== Contenido principal ========== */
 .main-content {
+  box-sizing: border-box;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px 20px 40px 20px;
@@ -753,32 +630,32 @@ const reloadPage = () => {
   white-space: nowrap;
   color: #ffffff;
   font-size: 50px;
-  font-weight: 900;
-  letter-spacing: -2px;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1;
-  font-style: oblique;
+  font-style: normal;
   text-transform: uppercase;
   text-align: left;
   width: 100%;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
+  font-family: var(--display);
 }
 
 .cosmetics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px 20px;
-  row-gap: 160px;
+  gap: 24px 20px;
+  row-gap: 24px;
 }
 
 .recargas-grid {
-  row-gap: 40px;
+  row-gap: 24px;
 }
 
 @media (min-width: 1024px) {
   .cosmetics-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px 20px;
-    row-gap: 100px;
+    gap: 24px 20px;
+    row-gap: 24px;
   }
   .series-title {
     font-size: 40px;
@@ -790,8 +667,8 @@ const reloadPage = () => {
 @media (max-width: 1023px) and (min-width: 768px) {
   .cosmetics-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px 20px;
-    row-gap: 80px;
+    gap: 24px 20px;
+    row-gap: 24px;
   }
   .series-title {
     font-size: 25px;
@@ -803,25 +680,38 @@ const reloadPage = () => {
 @media (max-width: 767px) {
   .cosmetics-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-    row-gap: 30px;
+    gap: 24px 10px;
+    row-gap: 24px;
   }
   .recargas-grid {
     grid-template-columns: repeat(2, 1fr);
-    row-gap: 20px;
+    row-gap: 24px;
   }
   .series-title {
-    font-size: 18px;
+    font-size: 26px;
     padding-bottom: 20px;
     letter-spacing: -1px;
     white-space: normal;
   }
   .service-tab {
-    padding: 8px 16px;
-    font-size: 11px;
+    padding: 9px 18px 7px;
+    font-size: 17px;
+  }
+  .services-banner {
+    padding: 12px 14px 4px;
+  }
+  .banner-intro {
+    gap: 12px;
+    margin-bottom: 10px;
   }
   .raider-logo {
-    width: 140px;
+    width: 78px;
+  }
+  .banner-title {
+    font-size: 21px;
+  }
+  .banner-sub {
+    font-size: 12px;
   }
 }
 
@@ -863,11 +753,6 @@ const reloadPage = () => {
     padding: 4px 8px;
   }
 
-  .world-icon {
-    width: 18px;
-    padding: 0 3px;
-  }
-
   .cart-icon {
     width: 18px;
     padding: 0 6px;
@@ -876,11 +761,8 @@ const reloadPage = () => {
   .cart-badge {
     top: 30px;
     right: -4px;
-    background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-    color: #ffffff;
     width: 15px;
     height: 15px;
-    border-radius: 50%;
   }
 }
 
@@ -901,8 +783,8 @@ const reloadPage = () => {
   background-repeat: no-repeat;
   opacity: 0;
   transition: opacity 1.5s ease-in-out;
-  filter: blur(8px);
   transform: scale(1.1) translateX(-3%);
+  will-change: opacity, transform;
 }
 
 .wallpaper-layer.active {
@@ -922,7 +804,16 @@ const reloadPage = () => {
 .wallpaper-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(180deg, rgba(23, 19, 43, 0.72) 0%, rgba(16, 13, 32, 0.92) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper-layer,
+  .wallpaper-layer.active {
+    animation: none;
+    transition: none;
+    transform: scale(1.1);
+  }
 }
 
 /* ========== Botones flotantes de redes sociales ========== */

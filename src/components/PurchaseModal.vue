@@ -120,7 +120,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
+  background: var(--modal-bg);
   border-radius: 12px;
   padding: 40px;
   max-width: 500px;
@@ -215,7 +215,7 @@ const calculatePriceUSD = (vbucks) => {
 
 .price-label {
   font-weight: 600;
-  color: #FFB347;
+  color: #ffb066;
   font-size: 30px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
@@ -236,15 +236,15 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .price-value {
-  color: #FF8C00;
+  color: var(--raider);
   font-weight: 700;
   font-size: 30px;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .account-message {
-  background: rgba(255, 140, 0, 0.1);
-  border: 1px solid rgba(255, 140, 0, 0.3);
+  background: rgba(255, 122, 26, 0.1);
+  border: 1px solid rgba(255, 122, 26, 0.3);
   padding: 12px;
   border-radius: 8px;
   font-size: 20px;
@@ -254,7 +254,7 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .account-link {
-  color: #ffcb8a;
+  color: #ffb066;
   text-decoration: none;
   font-weight: 700;
   transition: all 0.3s ease;
@@ -262,7 +262,7 @@ const calculatePriceUSD = (vbucks) => {
 
 .account-link:hover {
   text-decoration: underline;
-  color: #FFA500;
+  color: var(--raider);
 }
 
 .action-buttons {
@@ -287,13 +287,13 @@ const calculatePriceUSD = (vbucks) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.4);
 }
 
 .btn-secondary {

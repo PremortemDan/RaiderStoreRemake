@@ -83,6 +83,10 @@
           </label>
         </div>
 
+        <p v-if="phoneError" class="important-message" role="alert">
+          No se pudo abrir WhatsApp: falta configurar el número de contacto de la tienda.
+        </p>
+
         <!-- Botones de acción -->
         <div class="action-buttons">
           <button 
@@ -104,6 +108,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useReactiveLanguage } from '../utils/useLanguage';
+import { calculatePriceMXN, calculatePriceUSD, sumVbucks, sumMXN, sumUSD } from '../utils/pricing';
+import { WHATSAPP_PHONE } from '../config';
 
 const { t } = useReactiveLanguage();
 
@@ -126,36 +132,16 @@ const friendsAdded = ref(false);
 const closeModal = () => {
   username.value = '';
   friendsAdded.value = false;
+  phoneError.value = false;
   emit('close');
 };
 
-const calculatePriceMXN = (vbucks) => {
-  return Math.floor((vbucks / 100) * 7.5);
-};
+const totalVbucks = computed(() => sumVbucks(props.items));
+const totalMXN = computed(() => sumMXN(props.items).toFixed(2));
+const totalUSD = computed(() => sumUSD(props.items).toFixed(2));
 
-const calculatePriceUSD = (vbucks) => {
-  return Math.floor((vbucks / 100) * 0.45);
-};
-
-const totalVbucks = computed(() => {
-  return props.items.reduce((sum, item) => sum + (item.price || 0), 0);
-});
-
-const totalMXN = computed(() => {
-  return props.items.reduce((sum, item) => {
-    if (item.mxn) return sum + parseFloat(item.mxn);
-    if (item.price > 0) return sum + parseFloat(calculatePriceMXN(item.price));
-    return sum;
-  }, 0).toFixed(2);
-});
-
-const totalUSD = computed(() => {
-  return props.items.reduce((sum, item) => {
-    if (item.usd) return sum + parseFloat(item.usd);
-    if (item.price > 0) return sum + parseFloat(calculatePriceUSD(item.price));
-    return sum;
-  }, 0).toFixed(2);
-});
+// Aviso si falta el número de WhatsApp (antes se usaba un número de ejemplo)
+const phoneError = ref(false);
 
 // Detectar tipos de items en el carrito
 const hasBundleOrCosmeticOrPases = computed(() => {
@@ -222,15 +208,17 @@ const proceedToWhatsApp = () => {
     message += `*${t('msjCuentaAnadida')}*`;
   }
 
-  // Obtener número de teléfono desde .env
-  const phoneNumber = import.meta.env.VITE_WHATSAPP_PHONE || '5215512345678';
-  
-  // Codificar mensaje para URL
+  // El número viene de VITE_WHATSAPP_PHONE. Sin número no se abre WhatsApp:
+  // antes caía a un número de ejemplo y el pedido llegaba a un desconocido.
+  if (!WHATSAPP_PHONE) {
+    phoneError.value = true;
+    return;
+  }
+  phoneError.value = false;
+
   const encodedMessage = encodeURIComponent(message);
-  
-  // Redirigir a WhatsApp
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-  window.open(whatsappUrl, '_blank');
+  const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMessage}`;
+  window.open(whatsappUrl, '_blank', 'noopener');
   
   // Cerrar modal
   closeModal();
@@ -253,7 +241,7 @@ const proceedToWhatsApp = () => {
 }
 
 .modal-content {
-  background: linear-gradient(135deg, #4A1800 0%, #E85D04 100%);
+  background: var(--modal-bg);
   border-radius: 12px;
   padding: 40px;
   max-width: 600px;
@@ -327,7 +315,7 @@ const proceedToWhatsApp = () => {
   margin: 0 0 16px 0;
   font-size: 22px;
   font-weight: 700;
-  color: #FF8C00;
+  color: var(--raider);
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -347,7 +335,7 @@ const proceedToWhatsApp = () => {
   padding: 10px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  border-left: 3px solid #FF8C00;
+  border-left: 3px solid var(--raider);
 }
 
 .product-name {
@@ -364,7 +352,7 @@ const proceedToWhatsApp = () => {
 }
 
 .vbucks-price {
-  color: #FF8C00;
+  color: var(--raider);
   font-size: 17px;
   font-weight: 700;
   display: flex;
@@ -379,13 +367,13 @@ const proceedToWhatsApp = () => {
 }
 
 .real-price {
-  color: #FFB347;
+  color: #ffb066;
   font-size: 17px;
   font-weight: 700;
 }
 
 .real-price-usd {
-  color: #FFCC80;
+  color: #ffb066;
   font-size: 17px;
   font-weight: 700;
 }
@@ -407,17 +395,17 @@ const proceedToWhatsApp = () => {
 }
 
 .total-vbucks {
-  color: #FF8C00;
+  color: var(--raider);
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-mxn {
-  color: #FFB347;
+  color: #ffb066;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
 .total-usd {
-  color: #FFCC80;
+  color: #ffb066;
   font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
 }
 
@@ -449,13 +437,13 @@ const proceedToWhatsApp = () => {
 
 .username-input:focus {
   outline: none;
-  border-color: #FF8C00;
-  box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+  border-color: var(--raider);
+  box-shadow: 0 0 10px rgba(255, 122, 26, 0.3);
 }
 
 .important-message {
-  background: rgba(255, 140, 0, 0.1);
-  border: 1px solid rgba(255, 140, 0, 0.3);
+  background: rgba(255, 122, 26, 0.1);
+  border: 1px solid rgba(255, 122, 26, 0.3);
   padding: 12px;
   border-radius: 8px;
   font-size: 17px;
@@ -464,7 +452,7 @@ const proceedToWhatsApp = () => {
 }
 
 .add-friend-link {
-  color: #FF8C00;
+  color: var(--raider);
   text-decoration: none;
   font-weight: 700;
   transition: all 0.3s ease;
@@ -472,7 +460,7 @@ const proceedToWhatsApp = () => {
 
 .add-friend-link:hover {
   text-decoration: underline;
-  color: #FFA500;
+  color: var(--raider);
 }
 
 .checkbox-section {
@@ -495,7 +483,7 @@ const proceedToWhatsApp = () => {
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #FF8C00;
+  accent-color: var(--raider);
 }
 
 .action-buttons {
@@ -516,13 +504,13 @@ const proceedToWhatsApp = () => {
 }
 
 .btn-confirm {
-  background: linear-gradient(135deg, #FF8C00 0%, #D35400 100%);
-  color: #ffffff;
+  background: var(--grad-brand);
+  color: var(--ink-on-brand);
 }
 
 .btn-confirm:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.4);
 }
 
 .btn-confirm:disabled {
