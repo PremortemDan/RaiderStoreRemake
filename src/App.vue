@@ -969,7 +969,17 @@ onBeforeUnmount(() => {
     margin-top: 14px;
   }
 
+  /* En móvil se ven todas las pestañas a la vez, en varias filas */
+  .services-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    overflow: visible;
+  }
+
   .service-tab {
+    flex: 1 1 auto;
+    justify-content: center;
     height: 38px;
     padding: 0 12px;
     font-size: 13px;

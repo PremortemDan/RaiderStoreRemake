@@ -17,20 +17,39 @@
     </div>
 
     <div v-else>
-      <!-- Accesos rápidos a cada sección -->
-      <nav v-if="sectionsList.length > 1" class="filter-bar" :aria-label="t('filtros')">
-        <div class="chips">
-          <button
-            v-for="section in sectionsList"
-            :key="section.id"
-            type="button"
-            class="chip"
-            :class="{ selected: selectedSection === section.id }"
-            @click="selectSection(section.id)"
-          >
-            {{ section.label }}
-          </button>
-        </div>
+      <!-- Menú desplegable para saltar a cada sección -->
+      <nav v-if="sectionsList.length > 1" ref="filterMenu" class="filter-bar" :aria-label="t('filtros')">
+        <button
+          type="button"
+          class="filter-trigger"
+          :class="{ open: isFilterOpen }"
+          :aria-expanded="isFilterOpen"
+          aria-controls="filter-panel"
+          @click="isFilterOpen = !isFilterOpen"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+          <span class="filter-trigger__text">
+            <span class="filter-trigger__hint">{{ t('filtros') }}</span>
+            <span class="filter-trigger__label">{{ filterLabel }}</span>
+          </span>
+          <span class="filter-trigger__count">{{ sectionsList.length }}</span>
+          <svg class="filter-trigger__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+
+        <Transition name="dropdown">
+          <div v-if="isFilterOpen" id="filter-panel" class="filter-panel">
+            <button
+              v-for="section in sectionsList"
+              :key="section.id"
+              type="button"
+              class="chip"
+              :class="{ selected: selectedSection === section.id }"
+              @click="selectSection(section.id)"
+            >
+              {{ section.label }}
+            </button>
+          </div>
+        </Transition>
       </nav>
 
       <div v-if="sectionsList.length === 0 && searchQuery" class="state-box">
@@ -130,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
 import PurchaseModal from './PurchaseModal.vue';
 import BundleCard from './BundleCard.vue';
@@ -243,7 +262,28 @@ const scrollToSection = (id) => {
 
 const selectSection = (id) => {
   selectedSection.value = id;
+  isFilterOpen.value = false;
   scrollToSection(id);
+};
+
+// ===== Menú desplegable de secciones =====
+const isFilterOpen = ref(false);
+const filterMenu = ref(null);
+
+const filterLabel = computed(() => {
+  const current = sectionsList.value.find((section) => section.id === selectedSection.value);
+  return current ? current.label : t('todasLasCategorias');
+});
+
+// Se cierra al tocar fuera o con Escape
+const onDocumentClick = (event) => {
+  if (isFilterOpen.value && filterMenu.value && !filterMenu.value.contains(event.target)) {
+    isFilterOpen.value = false;
+  }
+};
+
+const onKeydown = (event) => {
+  if (event.key === 'Escape') isFilterOpen.value = false;
 };
 
 const countItems = (section) =>
@@ -677,6 +717,13 @@ const loadFallbackData = () => {
 
 onMounted(() => {
   fetchCosmetics();
+  document.addEventListener('click', onDocumentClick);
+  window.addEventListener('keydown', onKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', onDocumentClick);
+  window.removeEventListener('keydown', onKeydown);
 });
 
 // Re-fetch cuando cambia el idioma
@@ -765,35 +812,116 @@ watch(lang, () => {
   font-size: 40px;
 }
 
-/* ===== Barra de chips de secciones ===== */
+/* ===== Menú desplegable de secciones ===== */
 .filter-bar {
   position: sticky;
   top: 76px;
   z-index: 50;
-  margin: -6px -20px 24px;
+  margin: -6px -20px 22px;
   padding: 10px 20px;
   background: linear-gradient(180deg, var(--bg) 70%, transparent);
 }
 
-.chips {
+.filter-trigger {
   display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  mask-image: linear-gradient(90deg, #000 92%, transparent);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 380px;
+  height: 52px;
+  padding: 0 14px 0 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.chips::-webkit-scrollbar {
-  display: none;
+.filter-trigger:hover,
+.filter-trigger.open {
+  border-color: var(--brand);
+}
+
+.filter-trigger.open {
+  box-shadow: 0 0 0 4px var(--brand-50);
+}
+
+.filter-trigger > svg:first-child {
+  flex-shrink: 0;
+  color: var(--brand);
+}
+
+.filter-trigger__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.filter-trigger__hint {
+  color: var(--ink-3);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.filter-trigger__label {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.filter-trigger__count {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--brand-50);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.filter-trigger__chevron {
+  flex-shrink: 0;
+  color: var(--ink-3);
+  transition: transform 0.25s ease;
+}
+
+.filter-trigger.open .filter-trigger__chevron {
+  transform: rotate(180deg);
+}
+
+.filter-panel {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 20px;
+  right: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: min(60vh, 420px);
+  padding: 14px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  overscroll-behavior: contain;
 }
 
 .chip {
-  flex-shrink: 0;
   height: 36px;
   padding: 0 14px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--surface-2);
   color: var(--ink-2);
   font-size: 13px;
   font-weight: 700;
@@ -811,6 +939,19 @@ watch(lang, () => {
   border-color: var(--brand);
   background: var(--brand);
   color: #fff;
+}
+
+/* Animación del panel */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform-origin: top;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
 }
 
 /* ===== Secciones ===== */
@@ -881,25 +1022,27 @@ watch(lang, () => {
 }
 
 @media (max-width: 767px) {
-  /* En móvil se muestran todas las secciones a la vez (en varias filas).
-     Deja de ser fija para no tapar media pantalla al hacer scroll. */
   .filter-bar {
-    position: static;
-    margin: 0 0 20px;
-    padding: 0;
-    background: none;
+    top: 58px;
+    margin: -6px -10px 16px;
+    padding: 8px 10px;
   }
 
-  .chips {
-    flex-wrap: wrap;
+  .filter-trigger {
+    max-width: none;
+    height: 48px;
+  }
+
+  .filter-panel {
+    left: 10px;
+    right: 10px;
     gap: 6px;
-    overflow: visible;
-    mask-image: none;
+    padding: 12px;
   }
 
   .chip {
-    height: 30px;
-    padding: 0 11px;
+    height: 32px;
+    padding: 0 12px;
     font-size: 12px;
   }
 
