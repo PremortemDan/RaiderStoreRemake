@@ -13,3 +13,6 @@ export const CART_STORAGE_KEY = 'raiderstore_cart';
 
 // Segundos entre cambios del fondo de pantalla
 export const WALLPAPER_INTERVAL_MS = 8000;
+
+// Enlace para agregar de amigo a las cuentas RSPAVOS (requisito para recibir regalos)
+export const ADD_FRIENDS_URL = 'https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g';

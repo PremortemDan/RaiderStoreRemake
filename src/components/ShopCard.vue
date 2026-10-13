@@ -1,5 +1,7 @@
 <script setup>
 import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import VbucksIcon from './VbucksIcon.vue';
+import { rarityKey as toRarityKey } from '../utils/rarity';
 
 // Tarjeta única para todos los productos (skins, packs, pases, V-Bucks, Crew y streaming).
 // Cada componente *Card.vue solo traduce sus datos a estas propiedades.
@@ -25,16 +27,7 @@ const props = defineProps({
 
 defineEmits(['select']);
 
-const KNOWN_RARITIES = [
-  'common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic',
-  'dark', 'frozen', 'lava', 'shadow', 'slurp', 'marvel', 'dc', 'icon', 'gaminglegends', 'starwars'
-];
-
-const rarityKey = computed(() => {
-  const value = String(props.rarity || '').toLowerCase();
-  const normalized = value === 'darkv2' ? 'dark' : value;
-  return KNOWN_RARITIES.includes(normalized) ? normalized : 'common';
-});
+const rarityKey = computed(() => toRarityKey(props.rarity));
 
 // 115.00 -> "115", 1040 -> "1,040", 6.61 -> "6.61"
 const formatMoney = (value) => {
@@ -103,6 +96,9 @@ onBeforeUnmount(stopSlideshow);
           loading="eager"
           decoding="async"
         />
+        <div class="shop-card__dots" aria-hidden="true">
+          <span v-for="(slide, index) in slides" :key="index" :class="{ on: index === activeIndex }"></span>
+        </div>
       </template>
       <img
         v-else
@@ -121,21 +117,20 @@ onBeforeUnmount(stopSlideshow);
       <p v-if="meta" class="shop-card__meta">{{ meta }}</p>
       <p v-if="detail" class="shop-card__detail">{{ detail }}</p>
 
-      <div class="shop-card__price">
-        <div class="shop-card__mxn">
-          <span class="shop-card__amount">${{ mxnText }}</span>
-          <span class="shop-card__cur">MXN</span>
+      <div class="shop-card__foot">
+        <div class="shop-card__price">
+          <span class="price-tag shop-card__amount">${{ mxnText }}<small>MXN</small></span>
+          <div class="shop-card__sub">
+            <span v-if="vbucks > 0" class="vb-chip">
+              <VbucksIcon :size="15" />
+              {{ vbucksText }}
+            </span>
+            <span class="shop-card__usd">${{ usdText }} USD</span>
+          </div>
         </div>
-        <div class="shop-card__sub">
-          <span v-if="vbucks > 0" class="shop-card__vb">
-            <svg width="18" height="18" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="100" cy="100" r="80" fill="#fff" />
-              <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D" />
-            </svg>
-            {{ vbucksText }}
-          </span>
-          <span class="shop-card__usd">${{ usdText }} USD</span>
-        </div>
+        <span class="shop-card__add" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+        </span>
       </div>
     </div>
   </div>
@@ -148,19 +143,19 @@ onBeforeUnmount(stopSlideshow);
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
+  padding: 8px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  background: var(--dusk-700);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 14px 24px -14px rgba(8, 6, 20, 0.8);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .shop-card:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 0 0 2px var(--rar),
-    0 16px 32px -12px color-mix(in srgb, var(--rar) 60%, transparent);
+    0 0 0 2px color-mix(in srgb, var(--rar) 55%, transparent),
+    0 18px 36px -14px color-mix(in srgb, var(--rar) 55%, transparent);
 }
 
 .shop-card:focus-visible {
@@ -194,17 +189,23 @@ onBeforeUnmount(stopSlideshow);
 /* ===== Arte ===== */
 .shop-card__art {
   position: relative;
-  height: 250px;
+  aspect-ratio: 6 / 5;
   overflow: hidden;
+  border-radius: var(--r-md);
   background:
-    radial-gradient(120% 80% at 50% 28%, color-mix(in srgb, var(--rar) 55%, transparent) 0%, transparent 70%),
-    linear-gradient(180deg, color-mix(in srgb, var(--rar) 22%, var(--dusk-800)) 0%, var(--dusk-800) 100%);
+    radial-gradient(90% 70% at 50% 30%, color-mix(in srgb, var(--rar) 70%, white) 0%, transparent 72%),
+    linear-gradient(180deg, color-mix(in srgb, var(--rar) 45%, white) 0%, color-mix(in srgb, var(--rar) 85%, black) 100%);
 }
 
 .shop-card__img {
   display: block;
   width: 100%;
   height: 100%;
+  transition: transform 0.4s ease;
+}
+
+.shop-card:hover .shop-card__img {
+  transform: scale(1.04);
 }
 
 .shop-card__img.is-cover {
@@ -214,8 +215,8 @@ onBeforeUnmount(stopSlideshow);
 
 .shop-card__img.is-contain {
   object-fit: contain;
-  padding: 22px;
-  box-sizing: border-box;
+  padding: 18%;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.25));
 }
 
 /* Carrusel de imágenes de render: apiladas con fundido */
@@ -223,38 +224,63 @@ onBeforeUnmount(stopSlideshow);
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease, transform 0.4s ease;
 }
 
 .shop-card__slide.is-active {
   opacity: 1;
 }
 
-/* Etiqueta inclinada, igual que las de la tienda del juego */
+/* Los renders son cuadrados con el contenido en la parte de arriba: se amplían un poco y se recorta abajo */
+.shop-card__slide.is-cover {
+  left: -6%;
+  width: 112%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.shop-card__dots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  transform: translateX(-50%);
+}
+
+.shop-card__dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.shop-card__dots span.on {
+  width: 16px;
+  background: #fff;
+}
+
 .shop-card__badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 8px;
   z-index: 2;
-  isolation: isolate;
-  padding: 5px 14px 4px;
-  color: var(--ink-on-brand);
-  font: 700 16px/1 var(--display);
-  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--sun);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
-.shop-card__badge::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--grad-brand);
-  transform: skewX(-10deg);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
-}
-
-.shop-card__badge.tone-chrome::before {
-  background: linear-gradient(135deg, #f1f3f8, #b9c0d3);
+.shop-card__badge.tone-chrome {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
 }
 
 /* ===== Cuerpo ===== */
@@ -262,18 +288,16 @@ onBeforeUnmount(stopSlideshow);
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px 16px 16px;
-  background: linear-gradient(180deg, var(--dusk-800), var(--dusk-700));
-  border-bottom: 4px solid var(--rar);
+  gap: 4px;
+  padding: 12px 8px 6px;
 }
 
 .shop-card__name {
-  margin: 0;
-  color: var(--chrome-100);
-  font: 700 22px/1.1 var(--display);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -281,16 +305,19 @@ onBeforeUnmount(stopSlideshow);
 }
 
 .shop-card__name.is-lg {
-  font-size: 32px;
-  line-height: 1;
+  font-size: 20px;
 }
 
 .shop-card__meta,
 .shop-card__detail {
-  margin: 0;
-  color: var(--chrome-500);
+  color: var(--ink-3);
   font-size: 13px;
-  line-height: 1.35;
+  line-height: 1.4;
+}
+
+.shop-card__meta {
+  font-weight: 700;
+  color: var(--ink-2);
 }
 
 .shop-card__detail {
@@ -300,108 +327,78 @@ onBeforeUnmount(stopSlideshow);
   overflow: hidden;
 }
 
-/* ===== Precio: lo que paga el cliente va primero ===== */
-.shop-card__price {
+/* ===== Precio + botón ===== */
+.shop-card__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
   margin-top: auto;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.shop-card__mxn {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
+.shop-card__price {
+  min-width: 0;
 }
 
 .shop-card__amount {
-  color: #fff;
-  font: 700 34px/1 var(--display);
-}
-
-.shop-card__cur {
-  color: var(--chrome-500);
-  font: 700 16px/1 var(--display);
+  font-size: 30px;
 }
 
 .shop-card__sub {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 12px;
-  margin-top: 8px;
-}
-
-/* Precio en V-Bucks: placa inclinada con el azul-plata de la moneda */
-.shop-card__vb {
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 12px 2px 10px;
-  color: var(--coin);
-  font: 700 18px/1.2 var(--display);
-}
-
-.shop-card__vb::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: rgba(142, 208, 240, 0.14);
-  border-left: 3px solid var(--coin);
-  transform: skewX(-10deg);
+  gap: 4px 8px;
+  margin-top: 6px;
 }
 
 .shop-card__usd {
-  color: var(--chrome-500);
-  font-size: 13px;
+  color: var(--ink-3);
+  font-size: 12px;
+  font-weight: 600;
 }
 
-/* ===== Tablet ===== */
-@media (max-width: 1023px) {
-  .shop-card__art {
-    height: 190px;
-  }
+.shop-card__add {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-50);
+  color: var(--brand);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
 
-  .shop-card__name {
-    font-size: 19px;
-  }
-
-  .shop-card__name.is-lg {
-    font-size: 26px;
-  }
-
-  .shop-card__amount {
-    font-size: 30px;
-  }
+.shop-card:hover .shop-card__add {
+  background: var(--brand);
+  color: #fff;
+  transform: rotate(90deg);
 }
 
 /* ===== Móvil: dos columnas ===== */
 @media (max-width: 767px) {
   .shop-card {
-    border-radius: 8px;
+    padding: 6px;
+    border-radius: 18px;
   }
 
   .shop-card__art {
-    height: 140px;
-  }
-
-  .shop-card__img.is-contain {
-    padding: 14px;
+    border-radius: 13px;
   }
 
   .shop-card__body {
-    gap: 4px;
-    padding: 10px 12px 12px;
+    padding: 10px 6px 4px;
   }
 
   .shop-card__name {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .shop-card__name.is-lg {
-    font-size: 21px;
+    font-size: 17px;
   }
 
   .shop-card__meta,
@@ -410,32 +407,21 @@ onBeforeUnmount(stopSlideshow);
   }
 
   .shop-card__amount {
-    font-size: 26px;
+    font-size: 25px;
   }
 
-  .shop-card__cur {
-    font-size: 14px;
+  .shop-card__add {
+    width: 32px;
+    height: 32px;
   }
 
-  .shop-card__vb {
-    font-size: 15px;
-    padding: 1px 8px 1px 8px;
-  }
-
-  .shop-card__vb svg {
-    width: 15px;
-    height: 15px;
+  .shop-card__add svg {
+    width: 16px;
+    height: 16px;
   }
 
   .shop-card__usd {
     font-size: 11px;
-  }
-
-  .shop-card__badge {
-    top: 6px;
-    left: 6px;
-    padding: 3px 9px 2px;
-    font-size: 13px;
   }
 }
 </style>

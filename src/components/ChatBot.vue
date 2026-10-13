@@ -2,22 +2,25 @@
   <div class="chatbot-container">
     <!-- Botón flotante para abrir chat -->
     <button v-if="!isOpen" class="chat-toggle-btn" @click="toggleChat" :title="t('chatAbrir')" :aria-label="t('chatAbrir')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.6A8.5 8.5 0 1 1 21 12z"></path>
+        <path d="M8.5 12h.01M12 12h.01M15.5 12h.01"></path>
       </svg>
     </button>
 
     <!-- Panel del chat -->
-    <div v-if="isOpen" class="chat-panel">
+    <div v-if="isOpen" class="chat-panel" role="dialog" :aria-label="t('chatTitulo')">
       <div class="chat-header">
         <div class="header-content">
-          <img src="../assets/salvador.webp" alt="Salvador" class="salvador-avatar-header" width="48" height="48" />
+          <img src="../assets/salvador.webp" alt="Salvador" class="salvador-avatar-header" width="44" height="44" />
           <div class="header-text">
             <h3>{{ t('chatTitulo') }}</h3>
-            <p class="status">{{ t('chatDisponible') }}</p>
+            <p class="status"><span class="status-dot"></span>{{ t('chatDisponible') }}</p>
           </div>
         </div>
-        <button class="close-chat-btn" @click="toggleChat">✕</button>
+        <button type="button" class="close-chat-btn" aria-label="Cerrar chat" @click="toggleChat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
       </div>
 
       <div class="chat-messages">
@@ -40,7 +43,7 @@
           @keyup.enter="sendMessage"
           :disabled="isLoading"
         />
-        <button class="send-btn" @click="sendMessage" :disabled="isLoading || !userInput.trim()">
+        <button type="button" class="send-btn" aria-label="Enviar" @click="sendMessage" :disabled="isLoading || !userInput.trim()">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -154,144 +157,146 @@ const sendMessage = async () => {
 <style scoped>
 .chatbot-container {
   position: fixed;
-  bottom: 20px;
   right: 20px;
+  bottom: 20px;
   z-index: 998;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .chat-toggle-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--grad-brand);
-  color: var(--ink-on-brand);
-  border: none;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--grad-brand);
+  color: #fff;
+  box-shadow: 0 12px 26px -8px rgba(91, 76, 255, 0.75);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-radius 0.2s ease;
 }
 
 .chat-toggle-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(255, 122, 26, 0.4);
+  transform: translateY(-2px);
+  border-radius: 50%;
 }
 
 .chat-panel {
   position: fixed;
-  bottom: 20px;
   right: 20px;
-  width: 380px;
-  height: 600px;
-  background: var(--modal-bg);
-  max-height: 600px;
-  border-radius: 20px;
+  bottom: 20px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  animation: slideUp 0.3s ease-out;
+  width: 380px;
+  height: 600px;
+  max-height: calc(100svh - 40px);
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  animation: chat-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.1);
 }
 
-@keyframes slideUp {
+@keyframes chat-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
 .chat-header {
-  padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 14px 16px;
+  background: var(--grad-brand);
+  color: #fff;
 }
 
-.header-content h3 {
-  margin: 0 0 4px 0;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.header-content .status {
-  margin: 0;
+.header-content {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .salvador-avatar-header {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--raider);
 }
 
 .header-text h3 {
-  margin: 0 0 4px 0;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
 }
 
 .header-text .status {
-  margin: 0;
-  color: #90ee90;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 12px;
   font-weight: 600;
 }
 
-.close-chat-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #ffffff;
-  font-size: 20px;
-  width: 32px;
-  height: 32px;
+.status-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  cursor: pointer;
+  background: #4ade80;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+}
+
+.close-chat-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .close-chat-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  padding: 16px;
+  overflow-y: auto;
+  background: var(--surface-2);
 }
 
 .message {
   display: flex;
-  animation: fadeIn 0.3s ease;
+  animation: msg-in 0.25s ease;
 }
 
-@keyframes fadeIn {
+@keyframes msg-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
@@ -304,38 +309,41 @@ const sendMessage = async () => {
 }
 
 .message-content {
-  max-width: 70%;
+  max-width: 80%;
   padding: 10px 14px;
-  border-radius: 12px;
-  word-wrap: break-word;
-  line-height: 1.4;
+  border-radius: 18px;
   font-size: 14px;
+  line-height: 1.45;
+  word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .message.user .message-content {
-  background: var(--grad-brand);
-  color: var(--ink-on-brand);
+  border-bottom-right-radius: 6px;
+  background: var(--brand);
+  color: #fff;
   font-weight: 600;
 }
 
 .message.assistant .message-content {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-left-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
 }
 
 .typing {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 12px 14px !important;
+  padding: 14px 16px !important;
 }
 
 .typing span {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--raider);
+  background: var(--brand);
   animation: typing 1.4s infinite;
 }
 
@@ -349,41 +357,44 @@ const sendMessage = async () => {
 
 @keyframes typing {
   0%, 60%, 100% {
-    opacity: 0.5;
+    opacity: 0.4;
     transform: translateY(0);
   }
   30% {
     opacity: 1;
-    transform: translateY(-8px);
+    transform: translateY(-5px);
   }
 }
 
 .chat-input-section {
-  padding: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .chat-input {
   flex: 1;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-  font-size: 13px;
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 14px;
   outline: none;
-  transition: all 0.3s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .chat-input:focus {
-  border-color: var(--raider);
-  box-shadow: 0 0 8px rgba(255, 122, 26, 0.3);
+  border-color: var(--brand);
+  background: var(--surface);
 }
 
 .chat-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--ink-3);
 }
 
 .chat-input:disabled {
@@ -392,132 +403,55 @@ const sendMessage = async () => {
 }
 
 .send-btn {
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: none;
-  background: var(--grad-brand);
-  color: var(--ink-on-brand);
-  border-radius: 8px;
-  cursor: pointer;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  font-weight: 700;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--grad-brand);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .send-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 122, 26, 0.4);
+  transform: scale(1.06);
 }
 
 .send-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* ========== RESPONSIVE: Tablet ========== */
-@media (max-width: 768px) {
-  .chat-panel {
-    width: 90%;
-    max-height: calc(100vh - 100px);
-    height: auto;
-    bottom: 80px;
-    right: 5%;
-    left: 5%;
-  }
-
-  .header-content h3 {
-    font-size: 15px;
-  }
-
-  .message-content {
-    max-width: 80%;
-    font-size: 13px;
-    padding: 8px 12px;
-  }
-
-  .chat-input {
-    font-size: 12px;
-    padding: 8px 10px;
-  }
-
-  .send-btn {
-    width: 36px;
-    height: 36px;
-  }
-}
-
-/* ========== RESPONSIVE: Móvil ========== */
+/* ========== Móvil: hoja inferior ========== */
 @media (max-width: 480px) {
   .chatbot-container {
-    bottom: 10px;
-    right: 10px;
+    right: 12px;
+    bottom: 12px;
   }
 
   .chat-toggle-btn {
     width: 50px;
     height: 50px;
+    border-radius: 18px;
   }
 
   .chat-panel {
-    width: 100%;
-    max-height: calc(100vh - 60px);
-    height: auto;
-    bottom: 0;
     right: 0;
+    bottom: 0;
     left: 0;
-    border-radius: 20px 20px 0 0;
-  }
-
-  .chat-header {
-    padding: 12px;
-    flex-shrink: 0;
-  }
-
-  .header-content h3 {
-    font-size: 14px;
-    margin-bottom: 2px;
-  }
-
-  .header-content .status {
-    font-size: 11px;
-  }
-
-  .close-chat-btn {
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-  }
-
-  .chat-messages {
-    padding: 12px;
-    gap: 10px;
-    flex: 1;
-    min-height: 200px;
-  }
-
-  .message-content {
-    max-width: 85%;
-    font-size: 12px;
-    padding: 8px 10px;
-  }
-
-  .chat-input-section {
-    padding: 10px;
-    gap: 6px;
-    flex-shrink: 0;
+    width: 100%;
+    height: 85svh;
+    max-height: none;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
   }
 
   .chat-input {
-    font-size: 12px;
-    padding: 8px 10px;
-  }
-
-  .send-btn {
-    width: 36px;
-    height: 36px;
+    font-size: 16px;
   }
 }
 </style>

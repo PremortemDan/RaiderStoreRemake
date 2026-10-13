@@ -1,74 +1,48 @@
 <template>
   <section class="store-section">
     <div v-if="loading" class="loading">
-      <div class="spinner"></div>
+      <div class="skeleton-grid" aria-hidden="true">
+        <div v-for="n in 8" :key="n" class="skeleton-card">
+          <div class="skeleton-art"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      </div>
       <p class="loading-text">{{ t('cargandoCosmeticos') }}</p>
     </div>
 
-    <div v-else-if="error" class="error">
+    <div v-else-if="error" class="state-box">
+      <span class="state-emoji" aria-hidden="true">😵</span>
       <p>{{ error }}</p>
     </div>
 
     <div v-else>
-      <div class="filter-bar">
-        <div class="category-dropdown" ref="filterDropdown">
+      <!-- Accesos rápidos a cada sección -->
+      <nav v-if="sectionsList.length > 1" class="filter-bar" :aria-label="t('filtros')">
+        <div class="chips">
           <button
+            v-for="section in sectionsList"
+            :key="section.id"
             type="button"
-            class="category-dropdown__trigger"
-            :class="{ open: isFilterOpen }"
-            @click="toggleFilterDropdown"
+            class="chip"
+            :class="{ selected: selectedSection === section.id }"
+            @click="selectSection(section.id)"
           >
-            <span class="category-dropdown__label">{{ filterLabel }}</span>
-            <svg
-              class="category-dropdown__icon"
-              :class="{ open: isFilterOpen }"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+            {{ section.label }}
           </button>
-
-          <transition name="dropdown">
-            <ul v-if="isFilterOpen" class="category-dropdown__panel">
-              <li
-                v-for="section in sectionsList"
-                :key="section.id"
-                class="category-dropdown__option"
-                :class="{ selected: selectedSection === section.id }"
-                @click="selectSection(section.id)"
-              >
-                <span>{{ section.label }}</span>
-                <svg
-                  v-if="selectedSection === section.id"
-                  class="category-dropdown__check"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-              </li>
-            </ul>
-          </transition>
         </div>
+      </nav>
+
+      <div v-if="sectionsList.length === 0 && searchQuery" class="state-box">
+        <span class="state-emoji" aria-hidden="true">🔍</span>
+        <p>{{ t('sinResultados') }} para “{{ searchQuery }}”</p>
       </div>
 
       <section v-if="filteredBundles.length > 0" id="section-featured" class="series-section">
-        <h2 class="series-title">{{ t('packsDestacados') }}</h2>
+        <div class="series-head">
+          <h2 class="series-title">{{ t('packsDestacados') }}</h2>
+          <span class="series-count">{{ filteredBundles.length }}</span>
+        </div>
         <div class="cosmetics-grid">
           <BundleCard
             v-for="bundle in filteredBundles"
@@ -80,7 +54,10 @@
       </section>
 
       <section v-if="newCosmetics.length > 0" id="section-new" class="series-section">
-        <h2 class="series-title">{{ t('loMasNuevo') }}</h2>
+        <div class="series-head">
+          <h2 class="series-title">{{ t('loMasNuevo') }}</h2>
+          <span class="series-count">{{ newCosmetics.length }}</span>
+        </div>
         <div class="cosmetics-grid">
           <CosmeticCard
             v-for="cosmetic in newCosmetics"
@@ -92,7 +69,10 @@
       </section>
 
       <section v-for="section in groupedBySeriesCosmetics" :key="section.name" :id="sectionId(section.name)" class="series-section">
-        <h2 class="series-title">{{ section.name }}</h2>
+        <div class="series-head">
+          <h2 class="series-title">{{ section.name }}</h2>
+          <span class="series-count">{{ countItems(section) }}</span>
+        </div>
 
         <!-- Cosméticos sin conjunto (set) dentro de la sección -->
         <div v-if="section.cosmetics.length || section.bundles.length" class="cosmetics-grid">
@@ -150,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import CosmeticCard from './CosmeticCard.vue';
 import PurchaseModal from './PurchaseModal.vue';
 import BundleCard from './BundleCard.vue';
@@ -253,18 +233,6 @@ const sectionsList = computed(() => {
 });
 
 const selectedSection = ref(null);
-const isFilterOpen = ref(false);
-const filterDropdown = ref(null);
-
-// Etiqueta del botón: la sección seleccionada o "Filtros" por defecto
-const filterLabel = computed(() => {
-  const current = sectionsList.value.find(s => s.id === selectedSection.value);
-  return current ? current.label : t('filtros');
-});
-
-const toggleFilterDropdown = () => {
-  isFilterOpen.value = !isFilterOpen.value;
-};
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id);
@@ -275,15 +243,13 @@ const scrollToSection = (id) => {
 
 const selectSection = (id) => {
   selectedSection.value = id;
-  isFilterOpen.value = false;
   scrollToSection(id);
 };
 
-const handleClickOutside = (event) => {
-  if (filterDropdown.value && !filterDropdown.value.contains(event.target)) {
-    isFilterOpen.value = false;
-  }
-};
+const countItems = (section) =>
+  section.cosmetics.length +
+  section.bundles.length +
+  section.subsections.reduce((n, sub) => n + sub.cosmetics.length + sub.bundles.length, 0);
 
 // Filtrar cosméticos por búsqueda
 const filteredCosmetics = computed(() => {
@@ -711,11 +677,6 @@ const loadFallbackData = () => {
 
 onMounted(() => {
   fetchCosmetics();
-  document.addEventListener('click', handleClickOutside);
-});
-
-onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
 });
 
 // Re-fetch cuando cambia el idioma
@@ -727,408 +688,224 @@ watch(lang, () => {
 <style scoped>
 .store-section {
   position: relative;
-  padding: 40px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
-.store-header {
-  margin-bottom: 40px;
-  text-align: center;
-}
-
-.store-header h2 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  background: var(--grad-brand);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ===== Cargando: tarjetas esqueleto ===== */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
 }
 
 .loading-text {
-  margin: 0;
-  color: #ffffff;
-  font-size: 18px;
+  color: var(--ink-3);
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.Sponsor{
-    display: flex;
-    align-items: left;
-    justify-content: left;
-    gap: 8px;
-}
-
-.store-subtitle {
-  margin: 0; 
-  padding-bottom: 50px;
-  
-  /* 2. Forzamos a que el texto NO rompa línea */
-  white-space: nowrap; 
-  
-  color: #ffffff;
-  font-size: 50px;
-  
-  /* 3. El peso máximo estándar es 900 */
-  font-weight: 900; 
-  letter-spacing: -0.5px;       /* Junta un poco las letras */
-  line-height: 1;
-  font-style: oblique;
-  
-  /* 4. Opcional: Centrarlo si es necesario */
-  text-align: left;
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
   width: 100%;
+}
+
+.skeleton-card {
+  padding: 8px 8px 16px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-art,
+.skeleton-line {
+  background: linear-gradient(90deg, var(--surface-3) 0%, var(--surface-2) 50%, var(--surface-3) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s linear infinite;
+}
+
+.skeleton-art {
+  aspect-ratio: 6 / 5;
+  border-radius: var(--r-md);
+}
+
+.skeleton-line {
+  height: 14px;
+  margin: 14px 8px 0;
+  border-radius: 999px;
+}
+
+.skeleton-line.short {
+  width: 45%;
+  height: 22px;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* ===== Estados vacíos / error ===== */
+.state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 56px 20px;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink-2);
+  font-weight: 600;
+  text-align: center;
+}
+
+.state-emoji {
+  font-size: 40px;
+}
+
+/* ===== Barra de chips de secciones ===== */
+.filter-bar {
+  position: sticky;
+  top: 76px;
+  z-index: 50;
+  margin: -6px -20px 24px;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, var(--bg) 70%, transparent);
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  mask-image: linear-gradient(90deg, #000 92%, transparent);
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.chip:hover {
+  border-color: var(--brand-100);
+  color: var(--brand);
+}
+
+.chip.selected {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+/* ===== Secciones ===== */
+.series-section {
+  margin-bottom: 48px;
+  scroll-margin-top: 140px;
+}
+
+.series-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
 .series-title {
-  margin: 0 0 55px 0; 
-  padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  
-  /* 2. Forzamos a que el texto NO rompa línea */
-  white-space: nowrap; 
-  
-  color: #ffffff;
-  font-size: 100px;
-  
-  /* 3. El peso máximo estándar es 900 */
-  font-weight: 900; 
-  letter-spacing: -0.5px;       /* Junta un poco las letras */
-  line-height: 1;
-  font-style: oblique;
-  text-transform: uppercase;
-  
-  /* 4. Opcional: Centrarlo si es necesario */
-  text-align: left;
-  width: 100%;
+  font-size: 26px;
 }
 
-.Store-sponsor {
-  margin: 0;
-  font-size: 20px;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-  text-align: left;
+.series-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--brand-50);
+  color: var(--brand);
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0px; 
-  padding-bottom: 20px;
+}
+
+.series-subsection {
+  margin-top: 26px;
+}
+
+.series-subsection:first-of-type {
+  margin-top: 0;
+}
+
+.cosmetics-grid + .series-subsection {
+  margin-top: 26px;
+}
+
+.subsection-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: var(--ink-2);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.subsection-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
 .cosmetics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px 20px;
-  row-gap: 24px;
-}
-
-/* Ajustar a 4 columnas exactas */
-@media (min-width: 1024px) {
-  .cosmetics-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px 20px;
-    row-gap: 24px;
-  }
-  .series-title {
-    font-size: 40px;
-    letter-spacing: -1px;
-  }
-}
-
-@media (max-width: 1023px) and (min-width: 768px) {
-  .cosmetics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px 20px;
-    row-gap: 24px;
-  }
-   .series-title {
-    font-size: 25px;
-    margin-bottom: 25px;
-    letter-spacing: -1px;
-  }
-}
-
-@media (max-width: 767px) {
-  .cosmetics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    row-gap: 24px;
-  }
-   .series-title {
-    font-size: 18px;
-    margin-bottom: 25px;
-    letter-spacing: -1px;
-  }
-
-  .store-header h2 {
-    font-size: 18px;
-  }
-
-  .store-section {
-    padding: 10px 8px;
-  }
-
-  .store-header {
-    margin-bottom: 10px;
-  }
-
-  .Sponsor img {
-    width: 18px;
-    height: 18px;
-  }
-
-  .Store-sponsor {
-    font-size: 10px;
-    padding-bottom: 6px;
-  }
-}
-
-
-.loading,
-.error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  text-align: center;
-}
-
-.spinner {
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid #ffffff;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.error {
-  color: #f87171;
-  font-size: 18px;
-  ont-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.error p {
-  margin: 0;
-}
-
-/* Filtro por secciones */
-.filter-bar {
-  position: sticky;
-  top: 68px;
-  z-index: 50;
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-
-.category-dropdown {
-  position: relative;
-  min-width: 220px;
-}
-
-.category-dropdown__trigger {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  padding: 10px 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.category-dropdown__trigger:hover {
-  border-color: rgba(255, 122, 26, 0.5);
-  color: var(--raider);
-  background: rgba(255, 122, 26, 0.5);
-}
-
-.category-dropdown__trigger.open {
-  border-color: var(--raider);
-  color: var(--raider);
-  background: var(--dusk-700);
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 6px 18px rgba(255, 122, 26, 0.25);
-}
-
-.category-dropdown__icon {
-  flex-shrink: 0;
-  transition: transform 0.22s ease;
-}
-
-.category-dropdown__icon.open {
-  transform: rotate(180deg);
-}
-
-.category-dropdown__panel {
-  position: absolute;
-  top: calc(100% - 2px);
-  left: 0;
-  width: 100%;
-  margin: 0;
-  padding: 6px;
-  list-style: none;
-  background: var(--dusk-700);
-  border: 2px solid var(--raider);
-  border-top: none;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
-  z-index: 20;
-  max-height: 340px;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
-
-.category-dropdown__panel::-webkit-scrollbar {
-  width: 6px;
-}
-
-.category-dropdown__panel::-webkit-scrollbar-thumb {
-  background: rgba(255, 122, 26, 0.4);
-  border-radius: 999px;
-}
-
-.category-dropdown__panel::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.category-dropdown__option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  color: #d3d3d3;
-  font-size: 14px;
-  font-weight: 700;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.category-dropdown__option:hover {
-  background: rgba(255, 122, 26, 0.16);
-  color: var(--raider);
-}
-
-.category-dropdown__option.selected {
-  color: var(--raider);
-}
-
-.category-dropdown__check {
-  flex-shrink: 0;
-  color: var(--raider);
-}
-
-/* Transición del panel desplegable */
-.dropdown-enter-active,
-.dropdown-leave-active {
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  transform-origin: top;
-}
-
-.dropdown-enter-from,
-.dropdown-leave-to {
-  opacity: 0;
-  transform: translateY(-8px) scale(0.98);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
 }
 
 @media (max-width: 767px) {
   .filter-bar {
-    position: sticky;
-    top: 52px;
-    justify-content: stretch;
-    margin-bottom: 20px;
+    top: 58px;
+    margin: -6px -10px 16px;
+    padding: 8px 10px;
   }
 
-  .category-dropdown {
-    width: 100%;
-    min-width: 0;
+  .chip {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
   }
 
-  .category-dropdown__trigger {
-    padding: 8px 16px;
-    font-size: 13px;
-  }
-}
-
-/* Estilos para secciones de series */
-.series-section {
-  margin-bottom: 80px;
-  scroll-margin-top: 120px;
-}
-
-.series-subsection {
-  margin-bottom: 50px;
-}
-
-.subsection-title {
-  margin: 0;
-  padding-bottom: 30px;
-  white-space: normal;
-  color: #ffffff;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: -1px;
-  line-height: 1.1;
-  font-style: oblique;
-  text-transform: uppercase;
-  text-align: left;
-  width: 100%;
-}
-
-@media (max-width: 1023px) and (min-width: 768px) {
-  .subsection-title {
-    font-size: 22px;
-  }
-}
-
-
-
-@media (max-width: 767px) {
-  .series-title {
-    font-size: 18px;
-    margin-bottom: 25px;
-    letter-spacing: -1px;
-    white-space: normal;
-  }
-  
   .series-section {
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+    scroll-margin-top: 110px;
   }
 
-  .series-subsection {
-    margin-bottom: 25px;
+  .series-title {
+    font-size: 20px;
   }
 
-  .subsection-title {
-    font-size: 18px;
-    padding-bottom: 20px;
+  .cosmetics-grid,
+  .skeleton-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
 </style>

@@ -6,105 +6,119 @@
 }
 
 /* ==========================================================================
-   Sistema de diseño "Atardecer Raider"
-   Los colores salen del logo: cielo violeta pizarra, naranja Raider, aro cromado
-   y el azul-plata de los V-Bucks. Cambia un valor aquí y se actualiza todo el sitio.
+   Sistema de diseño "Cielo Raider"
+   Claro, redondeado y amigable. La barra de navegación es oscura para que el
+   logo blanco luzca. Cambia un valor aquí y se actualiza todo el sitio.
    ========================================================================== */
 :root {
-  /* Fondos (de más oscuro a más claro) */
-  --dusk-900: #100d20;
-  --dusk-800: #17132b;
-  --dusk-700: #211b3d;
-  --dusk-600: #2b2354;
+  /* Fondos y superficies */
+  --bg: #f3f5fb;
+  --surface: #ffffff;
+  --surface-2: #f6f7fc;
+  --surface-3: #eceffa;
+  --line: #e3e7f3;
+  --line-strong: #cfd5e8;
 
   /* Texto */
-  --chrome-100: #f1f3f8;
-  --chrome-300: #c9cfdd;
-  --chrome-500: #9aa1b5;
+  --ink: #15172e;
+  --ink-2: #4a4f6c;
+  --ink-3: #7c8199;
+  --ink-inverse: #ffffff;
 
-  /* Marca: solo para acciones y para lo legendario */
-  --raider: #ff7a1a;
-  --raider-hi: #ff8c1a;
-  --raider-lo: #d9540a;
-  --ink-on-brand: #1a1020;
-  --grad-brand: linear-gradient(135deg, #ff8c1a 0%, #d9540a 100%);
+  /* Marca */
+  --brand: #5b4cff;
+  --brand-600: #4a3be6;
+  --brand-50: #eeecff;
+  --brand-100: #dedaff;
+  --grad-brand: linear-gradient(135deg, #6d5cff 0%, #4a3be6 55%, #3b82f6 100%);
+  --sun: #ffb800;
+  --sun-50: #fff6dc;
+  --mint: #12b981;
+  --mint-50: #e3f8f0;
+  --danger: #ef4461;
+  --danger-50: #fdebef;
+  --night: #15172e;
 
   /* V-Bucks */
-  --coin: #8ed0f0;
+  --coin: #2f7fe0;
+  --coin-50: #e6f1fd;
 
-  /* Superficies de modales, carrito y chat */
-  --modal-bg: linear-gradient(160deg, #2b2354 0%, #17132b 75%);
-
-  /* Rarezas: el color real del juego, con el naranja de marca en "legendario" */
+  /* Rarezas: el color real del juego */
   --rar-common: #8b93a7;
-  --rar-uncommon: #5dbb3f;
-  --rar-rare: #3fa9f5;
-  --rar-epic: #b45ce6;
-  --rar-legendary: #ff7a1a;
-  --rar-mythic: #ffd23f;
+  --rar-uncommon: #4fae32;
+  --rar-rare: #2f9bf0;
+  --rar-epic: #a64fe0;
+  --rar-legendary: #f2851d;
+  --rar-mythic: #f1b90f;
   /* Series y colaboraciones */
   --rar-dark: #8a4fd6;
   --rar-frozen: #4fb6f0;
   --rar-lava: #f2542d;
-  --rar-shadow: #7a7f96;
-  --rar-slurp: #19d3b0;
+  --rar-shadow: #6e7390;
+  --rar-slurp: #14c3a2;
   --rar-marvel: #e0343b;
   --rar-dc: #3b82f6;
-  --rar-icon: #36cfc9;
+  --rar-icon: #2dbdb7;
   --rar-gaminglegends: #7c5cff;
-  --rar-starwars: #6fa8dc;
+  --rar-starwars: #5b93cc;
+
+  /* Forma */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --shadow-sm: 0 1px 2px rgba(21, 23, 46, 0.06), 0 2px 8px rgba(21, 23, 46, 0.05);
+  --shadow-md: 0 4px 10px rgba(21, 23, 46, 0.06), 0 14px 32px -8px rgba(21, 23, 46, 0.14);
+  --shadow-lg: 0 24px 60px -12px rgba(21, 23, 46, 0.32);
 
   /* Tipografía */
   --display: 'Burbank Big Condensed', 'Arial Narrow', 'Arial Black', sans-serif;
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-
-  /* Compatibilidad con variables anteriores */
-  --accent: var(--raider);
-  --bg: var(--dusk-900);
+  --sans: 'Plus Jakarta Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
 
   font: 16px/1.5 var(--sans);
-  color-scheme: dark;
-  color: var(--chrome-300);
-  background: var(--dusk-900);
+  color-scheme: light;
+  color: var(--ink-2);
+  background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  background: var(--bg);
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: var(--ink);
   font-family: var(--sans);
-  font-weight: 500;
-  color: var(--chrome-100);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 p {
   margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+a {
+  color: var(--brand);
 }
 
 #app {
@@ -112,12 +126,292 @@ p {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 :focus-visible {
-  outline: 2px solid var(--raider);
+  outline: 3px solid var(--brand);
   outline-offset: 2px;
+}
+
+::selection {
+  background: var(--brand-100);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Piezas compartidas (botones, avisos, precios)
+   Las usan modales, carrito y checkout para no repetir estilos.
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--grad-brand);
+  color: var(--ink-inverse);
+  box-shadow: 0 8px 20px -8px rgba(91, 76, 255, 0.7);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 12px 26px -8px rgba(91, 76, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+.btn-whatsapp {
+  background: #1fbe5c;
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(31, 190, 92, 0.75);
+}
+
+.btn-whatsapp:hover:not(:disabled) {
+  background: #18a94f;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: var(--surface-3);
+  color: var(--ink);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--line);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--line);
+}
+
+.notice {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  background: var(--brand-50);
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.notice svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--brand);
+}
+
+.notice a {
+  color: var(--brand-600);
+  font-weight: 700;
+}
+
+.notice--warn {
+  background: var(--sun-50);
+}
+
+.notice--warn svg {
+  color: #d99a00;
+}
+
+.notice--danger {
+  background: var(--danger-50);
+}
+
+.notice--danger svg {
+  color: var(--danger);
+}
+
+.vb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 5px;
+  border-radius: 999px;
+  background: var(--coin-50);
+  color: var(--coin);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.vb-chip svg {
+  flex-shrink: 0;
+}
+
+.price-tag {
+  color: var(--ink);
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.price-tag small {
+  margin-left: 4px;
+  color: var(--ink-3);
+  font-family: var(--sans);
+  font-size: 0.42em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+
+/* ==========================================================================
+   Ficha de producto (contenido de los modales de compra)
+   --rar se define en línea con el color de la rareza del producto.
+   ========================================================================== */
+.sheet-art {
+  --rar: var(--brand);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 280px;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(70% 70% at 50% 35%, color-mix(in srgb, var(--rar) 65%, white) 0%, transparent 75%),
+    linear-gradient(180deg, color-mix(in srgb, var(--rar) 40%, white) 0%, color-mix(in srgb, var(--rar) 85%, black) 100%);
+}
+
+.sheet-art img {
+  max-width: 78%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.3));
+}
+
+.sheet-art.is-cover {
+  padding: 0;
+}
+
+.sheet-art.is-cover img {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  filter: none;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 24px 24px;
+}
+
+.sheet-kicker {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.sheet-title {
+  font-size: 24px;
+}
+
+.sheet-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sheet-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.sheet-price .price-tag {
+  font-size: 42px;
+}
+
+.sheet-price-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-left: auto;
+  color: var(--ink-3);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .sheet-art {
+    height: 220px;
+  }
+
+  .sheet-body {
+    padding: 18px 18px 22px;
+  }
+
+  .sheet-title {
+    font-size: 21px;
+  }
+
+  .sheet-price .price-tag {
+    font-size: 36px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,6 +419,8 @@ p {
   *::before,
   *::after {
     scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

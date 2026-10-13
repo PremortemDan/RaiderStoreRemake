@@ -1,71 +1,61 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
-      <button class="close-btn" @click="closeModal">✕</button>
-      
-      <div class="modal-body">
-        <!-- Imagen del producto -->
-        <div class="product-image">
-          <img :src="cosmetic.imageUrl" :alt="cosmetic.name" />
+  <BaseModal :open="isOpen" :label="cosmetic?.name" @close="closeModal">
+    <template v-if="cosmetic">
+      <div class="sheet-art" :class="{ 'is-cover': isCosmetic }" :style="{ '--rar': rarityColor(cosmetic.rarity) }">
+        <img :src="cosmetic.imageUrl" :alt="cosmetic.name" />
+      </div>
+
+      <div class="sheet-body">
+        <div class="sheet-head">
+          <span v-if="cosmetic.type && cosmetic.type !== 'default'" class="sheet-kicker">{{ cosmetic.type }}</span>
+          <h2 class="sheet-title">{{ cosmetic.name }}</h2>
         </div>
 
-        <!-- Información del producto -->
-        <div class="product-info">
-          <h2 class="product-name">{{ cosmetic.name }}</h2>
-          
-          <!-- Precios -->
-          <div class="prices-section">
-            <div class="price-row">
-              <span class="price-label">{{ t('precioVbucks') }}:</span>
-              <div class="price-display">
-                <svg class="pavos-icon" width="20" height="20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="100" cy="100" r="80" fill="white"/>
-                  <path d="M65 75 L88 135 H112 L135 75 H115 L100 115 L85 75 Z" fill="#003B8D"/> </svg>
-                <span>{{ cosmetic.price }}</span>
-              </div>
-            </div>
-
-            <div class="price-row">
-              <span class="price-label">{{ t('mxn') }}:</span>
-              <span class="price-value">${{ cosmetic.mxn || calculatePriceMXN(cosmetic.price) }}</span>
-            </div>
-
-            <div class="price-row">
-              <span class="price-label">{{ t('usd') }}:</span>
-              <span class="price-value">${{ cosmetic.usd || calculatePriceUSD(cosmetic.price) }}</span>
-            </div>
+        <!-- Precios -->
+        <div class="sheet-price">
+          <span class="price-tag">${{ cosmetic.mxn || calculatePriceMXN(cosmetic.price) }}<small>{{ t('mxn') }}</small></span>
+          <div class="sheet-price-sub">
+            <span v-if="cosmetic.price > 0" class="vb-chip">
+              <VbucksIcon :size="16" />
+              {{ cosmetic.price.toLocaleString('es-MX') }}
+            </span>
+            <span>${{ cosmetic.usd || calculatePriceUSD(cosmetic.price) }} {{ t('usd') }}</span>
           </div>
+        </div>
 
-          <!-- Mensaje de cuenta -->
-          <div v-if="customAccountMessage" class="account-message">
-            <p>{{ customAccountMessage }}</p>
-          </div>
-          <div v-else class="account-message">
-            <p>{{ t('accountMsg') }} <a href="https://epiclim.cloud/agregar/k8352buX_cNBqCqr3rFd7g" target="_blank" class="account-link">{{ t('hazloAqui') }}</a></p>
-          </div>
+        <!-- Mensaje de cuenta -->
+        <div v-if="customAccountMessage" class="notice">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></svg>
+          <p>{{ customAccountMessage }}</p>
+        </div>
+        <div v-else class="notice">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z" /></svg>
+          <p>{{ t('accountMsg') }} <a :href="ADD_FRIENDS_URL" target="_blank" rel="noopener noreferrer">{{ t('hazloAqui') }}</a></p>
+        </div>
 
-          <!-- Botones de acción -->
-          <div class="action-buttons">
-            <button class="btn btn-primary" @click="addToCart">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              {{ t('anadirCarrito') }}
-            </button>
-            <button class="btn btn-secondary" @click="closeModal">
-              {{ t('cancelar') }}
-            </button>
-          </div>
+        <!-- Botones de acción -->
+        <div class="sheet-actions">
+          <button type="button" class="btn btn-primary" @click="addToCart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+            {{ t('anadirCarrito') }}
+          </button>
+          <button type="button" class="btn btn-ghost" @click="closeModal">
+            {{ t('cancelar') }}
+          </button>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import BaseModal from './BaseModal.vue';
+import VbucksIcon from './VbucksIcon.vue';
 import { useReactiveLanguage } from '../utils/useLanguage';
+import { calculatePriceMXN, calculatePriceUSD } from '../utils/pricing';
+import { rarityColor } from '../utils/rarity';
+import { ADD_FRIENDS_URL } from '../config';
 
 const { t } = useReactiveLanguage();
 
@@ -76,7 +66,7 @@ const props = defineProps({
   },
   cosmetic: {
     type: Object,
-    required: true
+    default: null
   },
   customAccountMessage: {
     type: String,
@@ -86,6 +76,9 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'add-to-cart']);
 
+// Los cosméticos de la API traen arte a sangre; pases y pavos son iconos con fondo transparente
+const isCosmetic = computed(() => Boolean(props.cosmetic?.offerId));
+
 const closeModal = () => {
   emit('close');
 };
@@ -94,302 +87,4 @@ const addToCart = () => {
   emit('add-to-cart', props.cosmetic);
   closeModal();
 };
-
-const calculatePriceMXN = (vbucks) => {
-  return Math.floor((vbucks / 100) * 7.5);
-};
-
-const calculatePriceUSD = (vbucks) => {
-  return Math.floor((vbucks / 100) * 0.45);
-};
 </script>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
-}
-
-.modal-content {
-  background: var(--modal-bg);
-  border-radius: 12px;
-  padding: 40px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
-}
-
-.modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.product-image {
-  text-align: center;
-}
-
-.product-image img {
-  max-width: 250px;
-  max-height: 300px;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-.product-info {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.product-name {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffffff;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-  text-align: center;
-}
-
-.prices-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  border-radius: 10px;
-}
-
-.price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #ffffff;
-  font-size: 16px;
-}
-
-.price-label {
-  font-weight: 600;
-  color: #ffb066;
-  font-size: 30px;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.price-display {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 700;
-  font-size: 30px;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.pavos-icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.price-value {
-  color: var(--raider);
-  font-weight: 700;
-  font-size: 30px;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.account-message {
-  background: rgba(255, 122, 26, 0.1);
-  border: 1px solid rgba(255, 122, 26, 0.3);
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 20px;
-  color: #e0e0e0;
-  line-height: 1.5;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.account-link {
-  color: #ffb066;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
-
-.account-link:hover {
-  text-decoration: underline;
-  color: var(--raider);
-}
-
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn {
-  padding: 14px 24px;
-  font-size: 20px;
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: 'Burbank Big Condensed', 'Arial Black', sans-serif;
-}
-
-.btn-primary {
-  background: var(--grad-brand);
-  color: var(--ink-on-brand);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.4);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .modal-content {
-    padding: 20px;
-    max-width: 100%;
-    width: 95%;
-    max-height: 95vh;
-    overflow-y: auto;
-  }
-
-  .modal-body {
-    gap: 16px;
-  }
-
-  .product-name {
-    font-size: 20px;
-  }
-
-  .product-image img {
-    max-width: 150px;
-    max-height: 200px;
-  }
-  .price-display {
-  font-size: 20px;
-
- }
-
-  .price-row {
-    font-size: 20px;
-  }
-
-  .price-label {
-    font-size: 20px;
-  }
-
-  .price-value {
-    font-size: 20px;
-  }
-
-  .account-message {
-    font-size: 18px;
-    padding: 10px;
-  }
-
-  .btn {
-    padding: 12px 16px;
-    font-size: 16px;
-  }
-
-  .close-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal-content {
-    padding: 16px;
-    width: 100%;
-    margin: 10px;
-  }
-
-  .product-name {
-    font-size: 18px;
-  }
-
-  .product-image img {
-    max-width: 120px;
-    max-height: 160px;
-  }
-
-  .prices-section {
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .price-row {
-    font-size: 13px;
-  }
-
-  .btn {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-}
-</style>
