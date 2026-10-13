@@ -136,7 +136,7 @@ const totalUSD = computed(() => sumUSD(props.items));
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(21, 23, 46, 0.4);
+  background: var(--backdrop);
   backdrop-filter: blur(4px);
 }
 

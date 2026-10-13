@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(21, 23, 46, 0.45);
+  background: var(--backdrop);
   backdrop-filter: blur(6px);
 }
 
@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
   top: 14px;
   right: 14px;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
   box-shadow: var(--shadow-sm);
 }
 

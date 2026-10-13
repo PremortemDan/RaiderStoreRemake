@@ -114,7 +114,7 @@ const addToCart = () => {
   gap: 6px;
   padding: 6px 11px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--rar) 12%, white);
+  background: color-mix(in srgb, var(--rar) 16%, var(--surface));
   color: var(--ink);
   font-size: 13px;
   font-weight: 700;

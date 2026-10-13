@@ -881,15 +881,25 @@ watch(lang, () => {
 }
 
 @media (max-width: 767px) {
+  /* En móvil se muestran todas las secciones a la vez (en varias filas).
+     Deja de ser fija para no tapar media pantalla al hacer scroll. */
   .filter-bar {
-    top: 58px;
-    margin: -6px -10px 16px;
-    padding: 8px 10px;
+    position: static;
+    margin: 0 0 20px;
+    padding: 0;
+    background: none;
+  }
+
+  .chips {
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow: visible;
+    mask-image: none;
   }
 
   .chip {
-    height: 32px;
-    padding: 0 12px;
+    height: 30px;
+    padding: 0 11px;
     font-size: 12px;
   }
 

@@ -38,6 +38,12 @@
   --danger: #ef4461;
   --danger-50: #fdebef;
   --night: #15172e;
+  /* Texto fijo oscuro para fondos que siempre son claros (amarillo, blanco) */
+  --ink-fixed: #15172e;
+  /* Barra de navegación y pestaña activa */
+  --nav-bg: rgba(21, 23, 46, 0.92);
+  --tab-active-bg: #15172e;
+  --backdrop: rgba(21, 23, 46, 0.45);
 
   /* V-Bucks */
   --coin: #2f7fe0;
@@ -76,13 +82,51 @@
   --sans: 'Plus Jakarta Sans', system-ui, 'Segoe UI', Roboto, sans-serif;
 
   font: 16px/1.5 var(--sans);
-  color-scheme: light;
+  color-scheme: light dark;
   color: var(--ink-2);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ==========================================================================
+   Modo oscuro: sigue la preferencia del dispositivo.
+   Solo se redefinen tokens; los componentes no necesitan cambios.
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0f1d;
+    --surface: #181a2e;
+    --surface-2: #1f2238;
+    --surface-3: #272a45;
+    --line: #2c3050;
+    --line-strong: #3b4068;
+
+    --ink: #f1f2fa;
+    --ink-2: #bcc0d8;
+    --ink-3: #868ba8;
+
+    --brand: #8b7dff;
+    --brand-600: #a99fff;
+    --brand-50: rgba(139, 125, 255, 0.14);
+    --brand-100: rgba(139, 125, 255, 0.3);
+    --sun-50: rgba(255, 184, 0, 0.12);
+    --mint-50: rgba(18, 185, 129, 0.14);
+    --danger-50: rgba(239, 68, 97, 0.16);
+    --coin: #7cbcff;
+    --coin-50: rgba(58, 142, 240, 0.18);
+
+    --nav-bg: rgba(30, 32, 58, 0.88);
+    --tab-active-bg: #5b4cff;
+    --backdrop: rgba(4, 5, 12, 0.65);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 14px 32px -8px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 24px 60px -12px rgba(0, 0, 0, 0.7);
+  }
 }
 
 *,

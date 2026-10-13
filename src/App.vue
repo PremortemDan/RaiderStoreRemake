@@ -432,7 +432,7 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   padding: 8px 8px 8px 22px;
   border-radius: 20px;
-  background: rgba(21, 23, 46, 0.92);
+  background: var(--nav-bg);
   backdrop-filter: blur(14px) saturate(1.4);
   box-shadow: 0 12px 30px -12px rgba(21, 23, 46, 0.5);
 }
@@ -492,7 +492,7 @@ onBeforeUnmount(() => {
   border: 0;
   border-radius: 14px;
   background: #fff;
-  color: var(--ink);
+  color: var(--ink-fixed);
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
@@ -511,8 +511,8 @@ onBeforeUnmount(() => {
   height: 28px;
   padding: 0 8px;
   border-radius: 10px;
-  background: var(--surface-3);
-  color: var(--ink-2);
+  background: #eceffa;
+  color: #4a4f6c;
   font-size: 13px;
 }
 
@@ -752,7 +752,7 @@ onBeforeUnmount(() => {
 }
 
 .service-tab.active {
-  background: var(--night);
+  background: var(--tab-active-bg);
   color: #fff;
 }
 
@@ -806,6 +806,14 @@ onBeforeUnmount(() => {
   height: auto;
   filter: brightness(0) saturate(100%) invert(9%) sepia(19%) saturate(2400%) hue-rotate(207deg);
   opacity: 0.85;
+}
+
+/* En modo oscuro el logo se queda blanco */
+@media (prefers-color-scheme: dark) {
+  .footer-logo {
+    filter: none;
+    opacity: 0.7;
+  }
 }
 
 /* ========== Botones flotantes de redes sociales ========== */

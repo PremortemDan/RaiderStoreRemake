@@ -270,7 +270,7 @@ onBeforeUnmount(stopSlideshow);
   padding: 5px 10px;
   border-radius: 999px;
   background: var(--sun);
-  color: var(--ink);
+  color: var(--ink-fixed);
   font-size: 12px;
   font-weight: 800;
   line-height: 1;
@@ -280,7 +280,7 @@ onBeforeUnmount(stopSlideshow);
 
 .shop-card__badge.tone-chrome {
   background: rgba(255, 255, 255, 0.92);
-  color: var(--ink);
+  color: var(--ink-fixed);
 }
 
 /* ===== Cuerpo ===== */

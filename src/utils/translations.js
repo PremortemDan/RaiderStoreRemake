@@ -46,13 +46,13 @@ export const translations = {
     usuario: 'Usuario Epic Games:',
     placeholderUsuario: 'Tu nombre de usuario...',
     cuentaAnadida: 'Cuenta añadida:',
-    importantes: 'IMPORTANTE debes añadir de amigo a algunas las cuentas de RaiderStore a tu usuario ( RSPAVOS, RSPAVOS2, RSPAVOS3, RSPAVOS4, RSPAVOS5, RSPAVOS6, RSPAVOS7, RSPAVOS8, RSPAVOS9, RSPAVOS10, RSPAVOS11, RSPAVOS12). Si aun no lo has hecho,',
+    importantes: 'IMPORTANTE debes añadir de amigo a algunas las cuentas de RaiderStore a tu usuario ( RSPAVOS, RSPAVOS2, RSPAVOS3, RSPAVOS4, RSPAVOS5, RSPAVOS6, RSPAVOS7, RSPAVOS8, RSPAVOS9, RSPAVOS10, RSPAVOS11, RSPAVOS12, RSPAVOS13, RSPAVOS14, RSPAVOS15). Si aun no lo has hecho,',
     hazloAqui: 'hazlo aquí',
     siHeAnadido: 'Sí he añadido de amigo las cuentas de RaiderStore (RSPAVOS)',
     confirmarBtn: 'Confirmar Compra',
     
     // Modal purchase
-    accountMsg: 'Tu pedido se envía como regalo. Para recibirlo, agrega a nuestras cuentas RSPAVOS (del 1 al 12). Si todavía no las has agregado',
+    accountMsg: 'Tu pedido se envía como regalo. Para recibirlo, agrega a nuestras cuentas RSPAVOS (del 1 al 15). Si todavía no las has agregado',
     accountMsgPavos: 'Para el proceso se requiere acceso a la cuenta de epic games o xbox, no tiene ningun tipo de riesgo se puede en principales, secundarias y nuevas',
     
     // Checkout condicional
